@@ -1,4 +1,3 @@
 rootProject.name = 'openapi-generatr-root'
 
 include 'openapi-generatr'
-include 'gradle-plugin-test'
