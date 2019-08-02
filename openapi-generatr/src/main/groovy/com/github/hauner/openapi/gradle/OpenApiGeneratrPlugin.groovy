@@ -36,8 +36,7 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
     private LinkedHashMap<String, GeneratrData> loadGeneratrs (project) {
         Map<String, GeneratrData> generators = [:]
 
-        ServiceLoader<OpenApiGeneratr> services = ServiceLoader.load (OpenApiGeneratr.class)
-        services.each { generatr ->
+        GeneratrLoader.load ().each { generatr ->
             String name = generatr.name
             Class<?> options = generatr.optionsType
             def extension = project.extensions.create ("generatr${name.capitalize ()}", options)
