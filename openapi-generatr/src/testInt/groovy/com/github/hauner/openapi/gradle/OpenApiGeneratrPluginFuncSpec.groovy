@@ -1,0 +1,66 @@
+package com.github.hauner.openapi.gradle
+
+import org.gradle.testkit.runner.GradleRunner
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import spock.lang.Specification
+import spock.lang.Unroll
+
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+
+
+class OpenApiGeneratrPluginFuncSpec extends Specification {
+
+    @Rule
+    TemporaryFolder testProjectDir
+
+    File buildFile
+
+    def setup() {
+        buildFile = testProjectDir.newFile('build.gradle')
+    }
+
+    @Unroll
+    void "generate task calls generatr with gradle #gradleVersion" () {
+        def intTestOption = "I'm an option!"
+        def intTest2Option = "I'm another option!"
+
+        buildFile << """
+            plugins {
+              id 'com.github.hauner.openapi.openapiGeneratr'
+            }
+            
+            generatrIntTest {
+              anOption = "$intTestOption"
+            }
+
+            generatrIntTest2 {
+              anotherOption = "$intTest2Option"
+            }
+        """
+
+        when:
+        def result = GradleRunner.create()
+            .withGradleVersion(gradleVersion)
+            .withProjectDir(testProjectDir.root)
+            .withArguments('generateIntTestApi', 'generateIntTest2Api')
+            .withPluginClasspath ([
+                new File("./build/classes/groovy/main/"),
+                new File("./build/classes/groovy/testInt/"),
+                new File("./build/resources/main/"),
+                new File("./build/resources/testInt/")
+            ])
+            .withDebug (true)
+            .build()
+
+        then:
+        result.output.contains(intTestOption)
+        result.task(':generateIntTestApi').outcome == SUCCESS
+        result.output.contains(intTest2Option)
+        result.task(':generateIntTest2Api').outcome == SUCCESS
+
+        where:
+        gradleVersion << ['5.2.1']
+    }
+
+}
