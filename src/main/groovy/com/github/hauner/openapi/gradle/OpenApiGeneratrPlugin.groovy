@@ -48,6 +48,6 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
 
     class GeneratrData {
         OpenApiGeneratr generatr
-        def /* options type */ options
+        def /* options extension object */ options
     }
 }
