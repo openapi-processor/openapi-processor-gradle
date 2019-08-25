@@ -14,3 +14,8 @@ project. The options objects class is provided by the `OpenApiGeneratr.getOption
 For example given a generatr with the name `openapi-generatr-spring` the gradle project will get a
  - `generateSpringApi` gradle task
  - and an `generatrSpring` options object
+
+# Sample project
+
+See `openapi-generatr-spring-mvc-sample` for a complete spring boot sample project.
+
