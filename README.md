@@ -11,6 +11,6 @@ provides a gradle plugin that uses com.github.hauner.openapi.api.OpenApiGeneratr
 For any found generatr it will add a `generate<id.capitalize()>Api` task and a `generatr<id.capitalize()>` configuration object to the gradle
 project. The options objects class is provided by the `OpenApiGeneratr.getOptionsType()` method.
 
-For example given a generatr with the name openapi-generatr-spring the gradle project will get a
+For example given a generatr with the name `openapi-generatr-spring` the gradle project will get a
  - `generateSpringApi` gradle task
  - and an `generatrSpring` options object
