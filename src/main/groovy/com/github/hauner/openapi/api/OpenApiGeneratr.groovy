@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,14 @@
 
 package com.github.hauner.openapi.api
 
+/**
+ * To make an openapi-generatr available to the generatr-gradle plugin it must
+ * - implement this interface
+ * - provide a META-INF/services/com.github.hauner.openapi.api.OpenApiGeneratr property file in
+ *   its resources with the class name of the implementing class.
+ *
+ * @author Martin Hauner
+ */
 interface OpenApiGeneratr<T> {
 
     /**

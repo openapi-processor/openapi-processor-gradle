@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,11 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 
+/**
+ * Gradle plugin. Currently just provides a task and options object to run any generatr.
+ *
+ * @author Martin Hauner
+ */
 class OpenApiGeneratrPlugin implements Plugin<Project> {
 
     @Override

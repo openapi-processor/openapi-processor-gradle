@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/hauner/openapi-generatr
+ * Copyright 2019 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,11 @@ package com.github.hauner.openapi.gradle
 
 import com.github.hauner.openapi.api.OpenApiGeneratr
 
+/**
+ * Find the generatrs using the ServiceLoader.
+ *
+ * @author Martin Hauner
+ */
 class GeneratrLoader {
 
     static Iterable<OpenApiGeneratr<?>> load() {
