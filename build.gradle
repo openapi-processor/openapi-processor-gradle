@@ -17,7 +17,8 @@ dependencies {
     implementation localGroovy()
 
     testImplementation ('org.spockframework:spock-core:1.3-groovy-2.5') {
-        exclude module: 'groovy-all'
+        // avoid conflict with localGroovy()
+        exclude group: 'org.codehaus.groovy'
     }
     testImplementation 'net.bytebuddy:byte-buddy:1.9.13'
 }
@@ -32,7 +33,7 @@ check.dependsOn testInt
 gradlePlugin {
     plugins {
         generatrPlugin {
-            id = 'com.github.hauner.openapi.openapiGeneratr'
+            id = 'com.github.hauner.openapi-generatr'
             implementationClass = 'com.github.hauner.openapi.gradle.OpenApiGeneratrPlugin'
         }
     }
