@@ -43,7 +43,7 @@ class OpenApiGeneratrPluginFuncSpec extends Specification {
 
         buildFile << """
             plugins {
-              id 'com.github.hauner.openapi.openapiGeneratr'
+              id 'com.github.hauner.openapi-generatr'
             }
             
             generatrIntTest {
