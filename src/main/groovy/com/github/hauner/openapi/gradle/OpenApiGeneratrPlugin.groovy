@@ -43,7 +43,7 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
                 "generate${name.capitalize ()}Api") { Task task ->
                 doLast {
                     try {
-                        runGeneratr (data)
+                        this.runGeneratr (data)
                     } catch (Exception e) {
                         logger.error (task.name, e)
                     }
