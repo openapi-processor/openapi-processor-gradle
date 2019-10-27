@@ -1,11 +1,12 @@
 plugins {
     id 'groovy'
     id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '0.10.1'
     id 'org.unbroken-dome.test-sets' version '2.1.1'
 }
 
 group 'com.github.hauner.openapi'
-version '0.1-SNAPSHOT'
+version '0.1.0'
 
 targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -34,7 +35,16 @@ gradlePlugin {
     plugins {
         generatrPlugin {
             id = 'com.github.hauner.openapi-generatr'
+            displayName = 'Gradle openapi-generatr plugin'
+            description = 'plugin to run openapi-generatr-x generators, e.g. openapi-generatr-spring'
             implementationClass = 'com.github.hauner.openapi.gradle.OpenApiGeneratrPlugin'
         }
     }
+}
+
+
+pluginBundle {
+    website = 'https://github.com/hauner/openapi-generatr-gradle'
+    vcsUrl = 'https://github.com/hauner/openapi-generatr-gradle'
+    tags = ['openapi']
 }
