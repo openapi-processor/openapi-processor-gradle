@@ -47,8 +47,8 @@ class OpenApiGeneratrPluginSpec extends Specification {
         getExtensions () >> container
 
         // fake task configuration
-        task (_, _ as Closure) >> {
-            taskConfig = it.get(1) as Closure
+        task (_, _, _ as Closure) >> {
+            taskConfig = it.get(2) as Closure
             taskConfig.delegate = task
             taskConfig.call (task)
         }
@@ -85,9 +85,9 @@ class OpenApiGeneratrPluginSpec extends Specification {
 
         then:
         1 * container.create ('generatrOne', TestOptions)
-        1 * project.task ('generateOneApi', _ as Closure)
+        1 * project.task (_, 'generateOne', _ as Closure)
         1 * container.create ('generatrTwo', TestOptions)
-        1 * project.task ('generateTwoApi', _ as Closure)
+        1 * project.task (_,'generateTwo', _ as Closure)
     }
 
     void "added generate task calls the generatr" () {

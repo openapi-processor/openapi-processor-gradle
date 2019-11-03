@@ -59,7 +59,7 @@ class OpenApiGeneratrPluginFuncSpec extends Specification {
         def result = GradleRunner.create()
             .withGradleVersion(gradleVersion)
             .withProjectDir(testProjectDir.root)
-            .withArguments('generateIntTestApi', 'generateIntTest2Api')
+            .withArguments('generateIntTest', 'generateIntTest2')
             .withPluginClasspath ([
                 new File("./build/classes/groovy/main/"),
                 new File("./build/classes/groovy/testInt/"),
@@ -71,9 +71,9 @@ class OpenApiGeneratrPluginFuncSpec extends Specification {
 
         then:
         result.output.contains(intTestOption)
-        result.task(':generateIntTestApi').outcome == SUCCESS
+        result.task(':generateIntTest').outcome == SUCCESS
         result.output.contains(intTest2Option)
-        result.task(':generateIntTest2Api').outcome == SUCCESS
+        result.task(':generateIntTest2').outcome == SUCCESS
 
         where:
         gradleVersion << ['5.2.1']

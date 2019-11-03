@@ -39,8 +39,8 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
             def data = generatorEntry.value
 
             project.task (
-                [group: 'openapi', description: "generate api sources with openapi-generatr-$name"],
-                "generate${name.capitalize ()}Api") { Task task ->
+                [group: 'openapi', description: "generate sources with openapi-generatr-$name"],
+                "generate${name.capitalize ()}") { Task task ->
                 doLast {
                     try {
                         this.runGeneratr (data)
