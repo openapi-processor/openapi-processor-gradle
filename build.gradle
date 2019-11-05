@@ -17,16 +17,10 @@ repositories {
     }
 }
 
-configurations {
-    api
-    implementation.extendsFrom api
-}
-
 dependencies {
     implementation localGroovy()
 
-    // needed at runtime, see copyApi
-    api 'com.github.hauner.openapi:openapi-generatr-api:1.0.0.B1'
+    compileOnly 'com.github.hauner.openapi:openapi-generatr-api:1.0.0.B1'
 
     testImplementation ('org.spockframework:spock-core:1.3-groovy-2.5') {
         // avoid conflict with localGroovy()
@@ -42,10 +36,10 @@ testSets {
 
 check.dependsOn testInt
 
-// copy classes of api dependencies to build/classes so they are included in the plugin jar
+// avoid runtime dependency on the generatr-api by merging it into the plugin jar
 task copyApi (type: Copy) {
     from {
-        configurations.api.collect { zipTree (it) }
+        configurations.compileOnly.collect { zipTree (it) }
     }
     into ("$buildDir/classes/groovy/main")
     include ('**/*.class')
@@ -55,15 +49,6 @@ compileJava {
     compileJava.dependsOn ('copyApi')
 }
 
-//jar {
-//    dependsOn (configurations.api)
-//
-//    with copySpec {
-//      from {
-//          configurations.api.collect { zipTree(it) }
-//      }
-//    }
-//}
 
 gradlePlugin {
     plugins {
