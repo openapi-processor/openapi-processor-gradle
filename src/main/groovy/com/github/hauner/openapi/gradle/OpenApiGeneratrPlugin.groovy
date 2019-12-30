@@ -31,8 +31,9 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
 
     @Override
     void apply (Project project) {
-        // todo check gradle version 5.2+
-        // todo check max gradle version 6.0 ?
+        if (!isSupportedGradleVersion (project)) {
+            return
+        }
 
         def cfg = createConfiguration (project)
         def ext = createExtension (project)
@@ -41,6 +42,18 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
         addDependency (project, cfg)
 
         project.afterEvaluate (createTasksBuilderAction (ext))
+    }
+
+    private boolean isSupportedGradleVersion (Project project) {
+        String version = project.gradle.gradleVersion
+
+        if (version < "5.2" || version >= "6.0") {
+            project.logger.error ("the current gradle version is ${version}")
+            project.logger.error ("com.github.hauner.openapi-generatr requires 5.2 or newer but less than 6.0")
+            return false
+        }
+
+        return true
     }
 
     private OpenApiGeneratrExtension createExtension (Project project) {
