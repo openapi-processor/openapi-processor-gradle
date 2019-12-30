@@ -148,6 +148,9 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
                 task.setGeneratrName (name)
                 task.setGeneratrProps (props)
 
+                task.setGroup ('openapi generatr')
+                task.setDescription ("generate sources from api with openapi-generatr-$name")
+
                 task.setApiDir (getInputDirectory ())
                 task.setTargetDir (getOutputDirectory ())
             }
