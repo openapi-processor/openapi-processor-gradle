@@ -1,1 +1,6 @@
 rootProject.name = 'openapi-generatr-gradle'
+
+include 'generatr-one'
+include 'generatr-two'
+
+//includeBuild '../openapi-generatr-api'

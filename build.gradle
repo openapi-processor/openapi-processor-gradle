@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.github.hauner.openapi'
-version '1.0.0.B2'
+version '1.0.0.M3'
 
 targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -20,12 +20,15 @@ repositories {
 dependencies {
     implementation localGroovy()
 
-    compileOnly 'com.github.hauner.openapi:openapi-generatr-api:1.0.0.B1'
+    compileOnly 'com.github.hauner.openapi:openapi-generatr-api:1.0.0.B2'
 
     testImplementation ('org.spockframework:spock-core:1.3-groovy-2.5') {
         // avoid conflict with localGroovy()
         exclude group: 'org.codehaus.groovy'
     }
+
+//    testImplementation 'org.objenesis:objenesis:3.1'
+//    testImplementation 'cglib:cglib-nodep:3.3.0'
     testImplementation 'net.bytebuddy:byte-buddy:1.9.13'
 }
 
@@ -35,18 +38,11 @@ testSets {
 }
 
 check.dependsOn testInt
+testInt.dependsOn ':generatr-one:build'
+testInt.dependsOn ':generatr-two:build'
 
-// avoid runtime dependency on the generatr-api by merging it into the plugin jar
-task copyApi (type: Copy) {
-    from {
-        configurations.compileOnly.collect { zipTree (it) }
-    }
-    into ("$buildDir/classes/groovy/main")
-    include ('**/*.class')
-}
-
-compileJava {
-    compileJava.dependsOn ('copyApi')
+testInt {
+    systemProperty "PROJECT_DIR", "$projectDir"
 }
 
 

@@ -16,13 +16,14 @@
 
 package com.github.hauner.openapi.gradle
 
-import com.github.hauner.openapi.api.OpenApiGeneratr
+import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.artifacts.DependencySet
 
 /**
- * Gradle plugin. Currently just provides a task and options object to run any generatr.
+ * OpenAPI Generatr Gradle plugin.
  *
  * @author Martin Hauner
  */
@@ -30,47 +31,157 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
 
     @Override
     void apply (Project project) {
-        addGeneratrs (loadGeneratrs (project), project)
+        if (!isSupportedGradleVersion (project)) {
+            return
+        }
+
+        def cfg = createConfiguration (project)
+        def ext = createExtension (project)
+
+        addRepository (project)
+        addDependency (project, cfg)
+
+        project.afterEvaluate (createTasksBuilderAction (ext))
     }
 
-    private Map<String, GeneratrData> addGeneratrs (LinkedHashMap<String, GeneratrData> generators, project) {
-        generators.each { generatorEntry ->
-            def name = generatorEntry.key
-            def data = generatorEntry.value
+    private boolean isSupportedGradleVersion (Project project) {
+        String version = project.gradle.gradleVersion
 
-            project.task (
-                [group: 'openapi', description: "generate sources with openapi-generatr-$name"],
-                "generate${name.capitalize ()}") { Task task ->
-                doLast {
-                    try {
-                        this.runGeneratr (data)
-                    } catch (Exception e) {
-                        logger.error (task.name, e)
-                    }
+        if (version < "5.2") {
+            project.logger.error ("the current gradle version is ${version}")
+            project.logger.error ("com.github.hauner.openapi-generatr requires gradle 5.2+")
+            return false
+        }
+
+        return true
+    }
+
+    private OpenApiGeneratrExtension createExtension (Project project) {
+        project.extensions.create ('openapiGeneratr', OpenApiGeneratrExtension)
+    }
+
+    private Configuration createConfiguration (Project project) {
+        Configuration cfg = project.getConfigurations ().create ("openapiGeneratr")
+        cfg.setVisible (false)
+        cfg.setTransitive (true)
+        cfg.setDescription ("the dependencies required for the openapi generatr plugin.")
+        cfg
+    }
+
+    private addDependency (Project project, Configuration cfg) {
+        def handler = project.getDependencies()
+
+        cfg.withDependencies (new Action<DependencySet>() {
+            @Override
+            void execute(DependencySet dependencies) {
+                [
+                    handler.create("com.github.hauner.openapi:openapi-generatr-api:1.0.0.B1")
+                ].each {
+                    dependencies.add (it)
+                }
+            }
+        })
+    }
+
+    private addRepository (Project project) {
+        project.repositories {
+            mavenCentral()
+            maven {
+                url "https://dl.bintray.com/hauner/openapi-generatr"
+                content {
+                   includeGroupByRegex "com\\.github\\.hauner\\.openapi.*"
                 }
             }
         }
     }
 
-    private runGeneratr (GeneratrData data) {
-        data.generatr.run (data.options)
-    }
+    /**
+     * Provides an Action that create a 'generate{GeneratrName}' task for each configured generatr.
+     */
+    private Action<Project> createTasksBuilderAction (OpenApiGeneratrExtension extension) {
+        new Action<Project>() {
 
-    private LinkedHashMap<String, GeneratrData> loadGeneratrs (project) {
-        Map<String, GeneratrData> generators = [:]
+            @Override
+            void execute (Project project) {
+                registerTasks (project)
+                configureTasks (project)
+            }
 
-        GeneratrLoader.load ().each { generatr ->
-            String name = generatr.name
-            Class<?> options = generatr.optionsType
-            def extension = project.extensions.create ("generatr${name.capitalize ()}", options)
-            generators.put (name, new GeneratrData (generatr: generatr, options: extension))
+            private Map<String, Map> registerTasks (Project project) {
+                extension.generatrs.get ().each { entry ->
+                    project.tasks.register (
+                        "generate${entry.key.capitalize ()}",
+                        OpenApiGeneratrTask,
+                        createTaskBuilderAction (entry.key, entry.value, extension))
+                }
+            }
+
+            private void configureTasks (Project project) {
+                def cfg = project.configurations.getByName ('openapiGeneratr')
+
+                project.tasks.withType(OpenApiGeneratrTask).configureEach(new Action<OpenApiGeneratrTask>() {
+                    @Override
+                    void execute(OpenApiGeneratrTask task) {
+                        task.configure {
+                            task.dependencies = cfg
+                        }
+                    }
+                })
+
+            }
+
         }
-
-        generators
     }
 
-    class GeneratrData {
-        OpenApiGeneratr generatr
-        def /* options extension object */ options
+    /**
+     * Provides an Action that configures 'generate{GeneratrName}' task from its configuration in
+     * the OpenApiGeneratrExtension object.
+     */
+    private Action<OpenApiGeneratrTask> createTaskBuilderAction(
+        String name, Map<String, ?> props, OpenApiGeneratrExtension extension) {
+
+        new Action<OpenApiGeneratrTask>()  {
+            public static final String TARGET_DIR = 'targetDir'
+
+            @Override
+            void execute (OpenApiGeneratrTask task) {
+                task.setGeneratrName (name)
+                task.setGeneratrProps (props)
+
+                task.setGroup ('openapi generatr')
+                task.setDescription ("generate sources from api with openapi-generatr-$name")
+
+                task.setApiDir (getInputDirectory ())
+                task.setTargetDir (getOutputDirectory ())
+
+                copyApiPath (task)
+            }
+
+            private String getInputDirectory () {
+                if (!extension.apiPath.present) {
+                    return null
+                }
+
+                new File(extension.apiPath.get ()).parent
+            }
+
+            private String getOutputDirectory () {
+                props.get (TARGET_DIR)
+            }
+
+            private copyApiPath (OpenApiGeneratrTask task) {
+                // copy common api path to generatr props
+                if (!props.containsKey ('apiPath')) {
+                    if (!extension.apiPath.present) {
+                        task.logger.warn ("'openapiGeneratr.apiPath' or 'openapiGeneratr.${name}.apiPath' not set!")
+                        return
+                    }
+
+                    props.put ('apiPath', extension.apiPath.get ())
+                }
+            }
+
+        }
     }
+
 }
