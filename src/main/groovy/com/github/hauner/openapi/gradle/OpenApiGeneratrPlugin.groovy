@@ -47,9 +47,9 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
     private boolean isSupportedGradleVersion (Project project) {
         String version = project.gradle.gradleVersion
 
-        if (version < "5.2" || version >= "6.0") {
+        if (version < "5.2") {
             project.logger.error ("the current gradle version is ${version}")
-            project.logger.error ("com.github.hauner.openapi-generatr requires 5.2 or newer but less than 6.0")
+            project.logger.error ("com.github.hauner.openapi-generatr requires gradle 5.2+")
             return false
         }
 
