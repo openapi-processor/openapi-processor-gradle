@@ -14,11 +14,16 @@ See [`Using Gradle`][generatr-spring-gradle] in the documentation of [openapi-ge
 
 See [`openapi-generatr-spring-mvc-sample`][generatr-spring-mvc] for a complete spring boot sample project.
 
+# plugins.gradle.org
+
+The plugin at the [plugin portal][generatr-plugin].
 
 [badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
 [generatr-license]: https://github.com/hauner/openapi-generatr-gradle/blob/master/LICENSE
 [badge-ci]: https://github.com/hauner/openapi-generatr-gradle/workflows/ci/badge.svg
 [workflow-ci]: https://github.com/hauner/openapi-generatr-gradle/actions?query=workflow%3Aci
+
+[generatr-plugin]: https://plugins.gradle.org/plugin/com.github.hauner.openapi-generatr
 
 [generatr-api]: https://github.com/hauner/openapi-generatr-api
 [generatr-spring]: https://github.com/hauner/openapi-generatr-spring
