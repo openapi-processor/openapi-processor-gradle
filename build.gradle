@@ -49,7 +49,7 @@ gradlePlugin {
         generatrPlugin {
             id = 'com.github.hauner.openapi-generatr'
             displayName = 'Gradle openapi-generatr plugin'
-            description = 'plugin to run openapi-generatr-x generators, e.g. openapi-generatr-spring'
+            description = 'plugin to run openapi-generatr-x generators, e.g. openapi-generatr-spring (requires gradle 5.2+)'
             implementationClass = 'com.github.hauner.openapi.gradle.OpenApiGeneratrPlugin'
         }
     }

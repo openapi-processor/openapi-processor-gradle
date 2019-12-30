@@ -4,7 +4,7 @@
 # com.github.hauner.openapi.gradle 
 
 a gradle plugin based on the [openapi-generatr-api][generatr-api] to handle all configured openapi-generatrs
-without explicit dependency on a generatr.
+without explicit dependency on a generatr. Requires Gradle 5.2 or better.
 
 # Usage
 
