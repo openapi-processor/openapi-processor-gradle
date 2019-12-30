@@ -93,7 +93,10 @@ openapiGeneratr {
         where:
         // minimum required version 5.2
         gradleVersion << [
-            '5.2', '5.2.1'
+            '5.2', '5.2.1',
+            '5.3', '5.3.1',
+            '5.4', '5.4.1',
+            '5.5', '5.5.1'
         ]
     }
 
