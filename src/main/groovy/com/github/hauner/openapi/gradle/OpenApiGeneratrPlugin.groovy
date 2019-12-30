@@ -153,6 +153,8 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
 
                 task.setApiDir (getInputDirectory ())
                 task.setTargetDir (getOutputDirectory ())
+
+                copyApiPath (task)
             }
 
             private String getInputDirectory () {
@@ -165,6 +167,18 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
 
             private String getOutputDirectory () {
                 props.get (TARGET_DIR)
+            }
+
+            private copyApiPath (OpenApiGeneratrTask task) {
+                // copy common api path to generatr props
+                if (!props.containsKey ('apiPath')) {
+                    if (!extension.apiPath.present) {
+                        task.logger.warn ("'openapiGeneratr.apiPath' or 'openapiGeneratr.${name}.apiPath' not set!")
+                        return
+                    }
+
+                    props.put ('apiPath', extension.apiPath.get ())
+                }
             }
 
         }
