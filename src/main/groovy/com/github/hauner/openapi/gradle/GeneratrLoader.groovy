@@ -25,8 +25,8 @@ import com.github.hauner.openapi.api.OpenApiGeneratr
  */
 class GeneratrLoader {
 
-    static Iterable<OpenApiGeneratr<?>> load() {
-        ServiceLoader<OpenApiGeneratr> generatrs = ServiceLoader.load (OpenApiGeneratr.class)
+    static Iterable<OpenApiGeneratr> load(ClassLoader classLoader) {
+        ServiceLoader<OpenApiGeneratr> generatrs = ServiceLoader.load (OpenApiGeneratr, classLoader)
         if (generatrs.empty) {
             return []
         }

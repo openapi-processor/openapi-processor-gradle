@@ -31,52 +31,70 @@ class OpenApiGeneratrPluginFuncSpec extends Specification {
     TemporaryFolder testProjectDir
 
     File buildFile
+    File openapiFile
+    String projectDir
 
     def setup() {
+        projectDir = System.properties['PROJECT_DIR']
         buildFile = testProjectDir.newFile('build.gradle')
+
+        testProjectDir.newFolder ('src', 'api')
+        openapiFile = testProjectDir.newFile ('src/api/openapi.yaml')
     }
 
     @Unroll
     void "generate task calls generatr with gradle #gradleVersion" () {
-        def intTestOption = "I'm an option!"
-        def intTest2Option = "I'm another option!"
+        openapiFile << """\
+property: value
+"""
 
-        buildFile << """
-            plugins {
-              id 'com.github.hauner.openapi-generatr'
-            }
+        buildFile << """\
+plugins {
+  id 'com.github.hauner.openapi-generatr'
+}
+
+dependencies {
+    openapiGeneratr files("${projectDir}/generatr-one/build/libs/generatr-one.jar")
+    openapiGeneratr files("${projectDir}/generatr-two/build/libs/generatr-two.jar")
+}
             
-            generatrIntTest {
-              anOption = "$intTestOption"
-            }
+openapiGeneratr {
+    apiPath = "\${projectDir}/src/api/openapi.yaml"
 
-            generatrIntTest2 {
-              anotherOption = "$intTest2Option"
-            }
-        """
+    one {
+        targetDir "\${buildDir}/one"
+    }
+
+    two {
+        targetDir "\${buildDir}/two"
+    }
+}
+"""
 
         when:
         def result = GradleRunner.create()
             .withGradleVersion(gradleVersion)
             .withProjectDir(testProjectDir.root)
-            .withArguments('generateIntTest', 'generateIntTest2')
+            .withArguments('--stacktrace', 'generateOne', 'generateTwo')
             .withPluginClasspath ([
-                new File("./build/classes/groovy/main/"),
-                new File("./build/classes/groovy/testInt/"),
-                new File("./build/resources/main/"),
-                new File("./build/resources/testInt/")
+                new File("${projectDir}/build/classes/groovy/main/"),
+                new File("${projectDir}/build/resources/main/")
             ])
             .withDebug (true)
             .build()
 
         then:
-        result.output.contains(intTestOption)
-        result.task(':generateIntTest').outcome == SUCCESS
-        result.output.contains(intTest2Option)
-        result.task(':generateIntTest2').outcome == SUCCESS
+        result.task(':generateOne').outcome == SUCCESS
+        result.output.contains("generatr one did run !")
+
+        result.task(':generateTwo').outcome == SUCCESS
+        result.output.contains("generatr one did run !")
 
         where:
-        gradleVersion << ['5.2.1']
+        // minimum required version 5.2
+        gradleVersion << [
+            '5.2', '5.2.1'
+        ]
     }
 
 }

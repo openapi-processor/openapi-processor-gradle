@@ -1,0 +1,15 @@
+plugins {
+    id 'groovy'
+}
+
+repositories {
+    maven {
+        url  "https://dl.bintray.com/hauner/openapi-generatr"
+    }
+}
+
+dependencies {
+    implementation localGroovy()
+
+    compileOnly 'com.github.hauner.openapi:openapi-generatr-api:1.0.0.B2'
+}
