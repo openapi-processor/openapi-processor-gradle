@@ -20,6 +20,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.workers.IsolationMode
@@ -61,15 +62,17 @@ class OpenApiGeneratrTask extends DefaultTask {
     /**
      * name of the generatr.
      */
+    @Internal
     String generatrName
 
     /**
      * properties configured by the generatr closure in the OpenApiGeneratrExtension.
      */
+    @Internal
     Map<String, ?> generatrProps
 
-
-    WorkerExecutor workerExecutor
+    @Internal
+    final WorkerExecutor workerExecutor
 
     @Inject
     OpenApiGeneratrTask (WorkerExecutor workerExecutor) {
