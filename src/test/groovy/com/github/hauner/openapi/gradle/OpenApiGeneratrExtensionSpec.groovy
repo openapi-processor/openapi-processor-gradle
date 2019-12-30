@@ -59,4 +59,14 @@ class OpenApiGeneratrExtensionSpec extends Specification {
         ex.generatrs.get ().test2.two == "b2"
     }
 
+    void "handle apiPath when given as GString" () {
+        def projectDir = "projectDir"
+
+        when:
+        def ex = new OpenApiGeneratrExtension (objectFactory)
+        ex.apiPath "${projectDir}/src/api/openapi.yaml"
+
+        then:
+        ex.apiPath.get () == 'projectDir/src/api/openapi.yaml'
+    }
 }

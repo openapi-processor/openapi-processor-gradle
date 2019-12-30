@@ -61,6 +61,12 @@ class OpenApiGeneratrExtension {
     }
 
     def methodMissing(String name, def args) {
+        // apiPath may be a GString in a groovy build script
+        if (name == 'apiPath') {
+            apiPath.set (args[0].toString ())
+            return
+        }
+
         def builder = new MapBuilder()
         builder.with (args[0] as Closure)
         generatrs.put (name, builder.get ())
