@@ -27,8 +27,6 @@ dependencies {
         exclude group: 'org.codehaus.groovy'
     }
 
-//    testImplementation 'org.objenesis:objenesis:3.1'
-//    testImplementation 'cglib:cglib-nodep:3.3.0'
     testImplementation 'net.bytebuddy:byte-buddy:1.9.13'
 }
 
