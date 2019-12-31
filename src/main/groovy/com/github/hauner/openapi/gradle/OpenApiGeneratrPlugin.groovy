@@ -75,7 +75,7 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
             @Override
             void execute(DependencySet dependencies) {
                 [
-                    handler.create("com.github.hauner.openapi:openapi-generatr-api:1.0.0.B1")
+                    handler.create("com.github.hauner.openapi:openapi-generatr-api:1.0.0.M3")
                 ].each {
                     dependencies.add (it)
                 }

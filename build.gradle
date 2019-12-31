@@ -20,7 +20,7 @@ repositories {
 dependencies {
     implementation localGroovy()
 
-    compileOnly 'com.github.hauner.openapi:openapi-generatr-api:1.0.0.B2'
+    compileOnly 'com.github.hauner.openapi:openapi-generatr-api:1.0.0.M3'
 
     testImplementation ('org.spockframework:spock-core:1.3-groovy-2.5') {
         // avoid conflict with localGroovy()
