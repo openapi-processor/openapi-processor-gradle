@@ -164,7 +164,7 @@ Here is a full example using the generatrs [spring][generatr-spring] & [json][ge
             // file name of the mapping yaml configuration file. Note that the yaml file name must end
             // with either {@code .yaml} or {@code .yml}.
             //
-            mapping = "$projectDir/openapi-generatr-spring.yaml"
+            mapping "$projectDir/openapi-generatr-spring.yaml"
     
             // show warnings from the open api parser.
             showWarnings true
