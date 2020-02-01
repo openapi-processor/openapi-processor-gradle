@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,31 @@
 
 package com.github.hauner.openapi.gradle
 
+import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 
 /**
- * Extension object of the plugin, ie.
+ * Extension object of the plugin. Used to configure the generatrs, e.g.
  * <pre>
  * openapiGeneratr {
  *     ...
- *     // generatr settings
+ *     apiPath "...."
+ *
+ *     spring {
+ *       generatr "..:...:..."
+ *       targetDir "..."
+ *
+ *       .. other
+ *     }
+ *
+ *     json {
+ *       generatr "..:...:..."
+ *       targetDir "..."
+ *
+ *       .. other
+ *     }
  *     ...
  * }
  * </pre>
@@ -35,16 +50,21 @@ import org.gradle.api.provider.Property
 class OpenApiGeneratrExtension {
 
     /**
-     * the path to the openapi yaml file.
+     * the path to the openapi yaml file. Used for all generatrs if not set in a nested generatr
+     * configuration.
      */
-    Property<String> apiPath
+    Property<String> api
 
     /**
-     * properties of nested generatr closures, e.g.
+     * properties of the nested generatr configurations by generatr name, e.g.
      * <pre>
      *  openapiGeneratr {
      *
      *      aGeneratr {
+     *          generatr "..:...:..."
+     *          targetDir "..."
+     *
+     *       .. other
      *          prop "abc"
      *          prop "xyz"
      *      }
@@ -52,24 +72,84 @@ class OpenApiGeneratrExtension {
      *  }
      * </pre>
      */
-    MapProperty<String, Map> generatrs
+    MapProperty<String, Generatr> generatrs
 
+    private Project project
 
-    OpenApiGeneratrExtension(ObjectFactory objectFactory) {
-        apiPath = objectFactory.property(String)
-        generatrs = objectFactory.mapProperty (String, Map)
+    OpenApiGeneratrExtension(Project project, ObjectFactory objectFactory) {
+        this.project = project
+        api = objectFactory.property(String)
+        generatrs = objectFactory.mapProperty (String, Generatr)
     }
 
-    def methodMissing(String name, def args) {
-        // apiPath may be a GString in a groovy build script
-        if (name == 'apiPath') {
-            apiPath.set (args[0].toString ())
-            return
+    def methodMissing (String name, def args) {
+        def arg = args[0]
+
+        // should be a nested generatr configuration
+        if (arg instanceof Closure) {
+
+            // apply it to a new Generatr () entry
+            def generatr = new Generatr (name)
+            arg.delegate = generatr
+
+            project.configure (project, wrapWithProjectDelegate (arg))
+            generatrs.put (name, generatr as Generatr)
+            return generatr
         }
 
-        def builder = new MapBuilder()
-        builder.with (args[0] as Closure)
-        generatrs.put (name, builder.get ())
+        throw new MissingMethodException(name, OpenApiGeneratrExtension, args)
+    }
+
+    /**
+     * wraps the given closure with a closure that delegates to the project.
+     *
+     * this makes it possible to use any of the different dependency formats as value to the
+     * 'generatr' property in a generatr configuration block, e.g.
+     * <pre>
+     *     ...
+     *     spring {
+     *         generatr files ("../some/lib.jar")
+     *         ....
+     *     }
+     *     ...
+     * </pre>
+     * or
+     * <pre>
+     *     ...
+     *     spring {
+     *         generatr "group:artifact:version"
+     *         ....
+     *     }
+     *     ...
+     * </pre>
+     *
+     * @param generatr configuration closure
+     * @return the created wrapper closure
+     */
+    private static Closure wrapWithProjectDelegate (Closure generatr) {
+        return {
+            generatr.run ()
+        }
+    }
+
+    void apiPath (String apiPath) {
+        api.set (apiPath)
+    }
+
+    void apiPath (GString apiPath) {
+        api.set (apiPath)
+    }
+
+    void setApiPath (String apiPath) {
+        api.set (apiPath)
+    }
+
+    void setApiPath (GString apiPath) {
+        api.set (apiPath)
+    }
+
+    Property<String> getApiPath () {
+        api
     }
 
 }

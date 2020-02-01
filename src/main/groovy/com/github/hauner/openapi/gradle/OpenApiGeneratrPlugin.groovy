@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
-import org.gradle.api.artifacts.DependencySet
+import org.gradle.api.artifacts.Dependency
 
 /**
  * OpenAPI Generatr Gradle plugin.
@@ -35,16 +35,13 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
             return
         }
 
-        def cfg = createConfiguration (project)
+        addOpenApiGeneratrRepository (project)
+
         def ext = createExtension (project)
-
-        addRepository (project)
-        addDependency (project, cfg)
-
         project.afterEvaluate (createTasksBuilderAction (ext))
     }
 
-    private boolean isSupportedGradleVersion (Project project) {
+    private static boolean isSupportedGradleVersion (Project project) {
         String version = project.gradle.gradleVersion
 
         if (version < "5.2") {
@@ -56,34 +53,11 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
         return true
     }
 
-    private OpenApiGeneratrExtension createExtension (Project project) {
-        project.extensions.create ('openapiGeneratr', OpenApiGeneratrExtension)
+    private static OpenApiGeneratrExtension createExtension (Project project) {
+        project.extensions.create ('openapiGeneratr', OpenApiGeneratrExtension, project)
     }
 
-    private Configuration createConfiguration (Project project) {
-        Configuration cfg = project.getConfigurations ().create ("openapiGeneratr")
-        cfg.setVisible (false)
-        cfg.setTransitive (true)
-        cfg.setDescription ("the dependencies required for the openapi generatr plugin.")
-        cfg
-    }
-
-    private addDependency (Project project, Configuration cfg) {
-        def handler = project.getDependencies()
-
-        cfg.withDependencies (new Action<DependencySet>() {
-            @Override
-            void execute(DependencySet dependencies) {
-                [
-                    handler.create("com.github.hauner.openapi:openapi-generatr-api:1.0.0.M3")
-                ].each {
-                    dependencies.add (it)
-                }
-            }
-        })
-    }
-
-    private addRepository (Project project) {
+    private addOpenApiGeneratrRepository (Project project) {
         project.repositories {
             mavenCentral()
             maven {
@@ -104,80 +78,75 @@ class OpenApiGeneratrPlugin implements Plugin<Project> {
             @Override
             void execute (Project project) {
                 registerTasks (project)
-                configureTasks (project)
             }
 
-            private Map<String, Map> registerTasks (Project project) {
+            private void registerTasks (Project project) {
                 extension.generatrs.get ().each { entry ->
-                    project.tasks.register (
-                        "generate${entry.key.capitalize ()}",
-                        OpenApiGeneratrTask,
-                        createTaskBuilderAction (entry.key, entry.value, extension))
+                    def name = "generate${entry.key.capitalize ()}"
+                    def action = createTaskBuilderAction (entry.key, entry.value, extension)
+
+                    project.tasks.register (name, OpenApiGeneratrTask, action)
                 }
             }
-
-            private void configureTasks (Project project) {
-                def cfg = project.configurations.getByName ('openapiGeneratr')
-
-                project.tasks.withType(OpenApiGeneratrTask).configureEach(new Action<OpenApiGeneratrTask>() {
-                    @Override
-                    void execute(OpenApiGeneratrTask task) {
-                        task.configure {
-                            task.dependencies = cfg
-                        }
-                    }
-                })
-
-            }
-
         }
     }
 
     /**
-     * Provides an Action that configures 'generate{GeneratrName}' task from its configuration in
-     * the OpenApiGeneratrExtension object.
+     * Creates an Action that configures a 'generate{GeneratrName}' task from its configuration.
      */
     private Action<OpenApiGeneratrTask> createTaskBuilderAction(
-        String name, Map<String, ?> props, OpenApiGeneratrExtension extension) {
+        String name, Generatr config, OpenApiGeneratrExtension extension) {
 
         new Action<OpenApiGeneratrTask>()  {
-            public static final String TARGET_DIR = 'targetDir'
 
             @Override
             void execute (OpenApiGeneratrTask task) {
                 task.setGeneratrName (name)
-                task.setGeneratrProps (props)
+                task.setGeneratrProps (config.other)
 
                 task.setGroup ('openapi generatr')
                 task.setDescription ("generate sources from api with openapi-generatr-$name")
 
+                copyApiPath (task)
                 task.setApiDir (getInputDirectory ())
                 task.setTargetDir (getOutputDirectory ())
 
-                copyApiPath (task)
+                def project = task.getProject ()
+                def handler = project.getDependencies ()
+                Dependency api = handler.create("com.github.hauner.openapi:openapi-generatr-api:1.0.0.M3")
+
+                if (!config.generatrLib) {
+                    task.logger.warn ("'openapiGeneratr.${name}.generatr' not set!")
+                }
+
+                Dependency dep = handler.create (config.generatrLib)
+
+                Configuration cfg = project.getConfigurations ().detachedConfiguration (api, dep)
+                cfg.setVisible (false)
+                cfg.setTransitive (true)
+                cfg.setDescription ("the dependencies of the generate${name.capitalize ()} task.")
+                task.dependencies = cfg
             }
 
             private String getInputDirectory () {
-                if (!extension.apiPath.present) {
-                    return null
-                }
-
-                new File(extension.apiPath.get ()).parent
+                String path = config.apiPath
+                def file = new File (path)
+                file.parent
             }
 
             private String getOutputDirectory () {
-                props.get (TARGET_DIR)
+                config.targetDir
             }
 
+            // copy common api path to generatr props if not set
             private copyApiPath (OpenApiGeneratrTask task) {
-                // copy common api path to generatr props
-                if (!props.containsKey ('apiPath')) {
+                if (!config.hasApiPath ()) {
                     if (!extension.apiPath.present) {
                         task.logger.warn ("'openapiGeneratr.apiPath' or 'openapiGeneratr.${name}.apiPath' not set!")
                         return
                     }
 
-                    props.put ('apiPath', extension.apiPath.get ())
+                    config.apiPath = extension.apiPath.get ()
                 }
             }
 
