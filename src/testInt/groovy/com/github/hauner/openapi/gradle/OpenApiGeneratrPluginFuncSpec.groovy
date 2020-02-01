@@ -53,21 +53,23 @@ plugins {
   id 'com.github.hauner.openapi-generatr'
 }
 
-dependencies {
-    openapiGeneratr files("${projectDir}/generatr-one/build/libs/generatr-one.jar")
-    openapiGeneratr files("${projectDir}/generatr-two/build/libs/generatr-two.jar")
-}
-            
 openapiGeneratr {
-    apiPath = "\${projectDir}/src/api/openapi.yaml"
+    apiPath "\${projectDir}/src/api/openapi.yaml"
 
     one {
+        generatr files("${projectDir}/generatr-one/build/libs/generatr-one.jar")
+
         targetDir "\${buildDir}/one"
+        other1 "value one"
     }
 
     two {
+        generatr files("${projectDir}/generatr-two/build/libs/generatr-two.jar")
+
         targetDir "\${buildDir}/two"
+        other2 "value two"
     }
+    
 }
 """
 
@@ -98,7 +100,7 @@ openapiGeneratr {
             '5.4', '5.4.1',
             '5.5', '5.5.1',
             '5.6', '5.6.1', '5.6.2', '5.6.3', '5.6.4',
-            '6.0', '6.0.1'
+            '6.0', '6.0.1', '6.1', '6.1.1'
         ]
     }
 

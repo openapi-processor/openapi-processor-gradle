@@ -85,7 +85,8 @@ class MapBuilder {
     @Override
     void setProperty(String propertyName, Object value) {
         if (props.containsKey (propertyName)) {
-            log.warn ("replacing property {} with value {} to value {}!", propertyName, props.get (propertyName), value)
+            log.warn ("replacing property {} with value {} to value {}!",
+                propertyName, props.get (propertyName), value)
         }
 
         props.put (propertyName, value)
