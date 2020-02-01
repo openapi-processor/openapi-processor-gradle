@@ -8,8 +8,8 @@ without explicit dependency on a generatr. Requires Gradle 5.2 or better.
 
 # gradle dsl
 
-For a more detailed description see [`Using Gradle`][generatr-spring-gradle] in the documentation of
- [openapi-generatr-spring][generatr-spring].
+A generatr-spring specific description is available in [`Using Gradle`][generatr-spring-gradle] in
+ the documentation of [openapi-generatr-spring][generatr-spring].
 
 The plugin adds a new configuration block `openapiGeneratr` to the gradle project. Each generatr is
 configured by a nested configuration block.
@@ -68,7 +68,7 @@ gradle `dependencies` block.
     Example using the preferred shortcut nation:
 
         spring {
-            generatr 'com.github.hauner.openapi:openapi-generatr-spring:1.0.0.M7'
+            generatr 'com.github.hauner.openapi:openapi-generatr-spring:<version>'
         }
 
   or like this to use an un-published generatr:
