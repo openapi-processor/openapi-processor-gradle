@@ -72,14 +72,14 @@ class OpenApiProcessorExtension {
      *  }
      * </pre>
      */
-    MapProperty<String, Processor> processor
+    MapProperty<String, Processor> processors
 
     private Project project
 
     OpenApiProcessorExtension (Project project, ObjectFactory objectFactory) {
         this.project = project
         api = objectFactory.property(String)
-        processor = objectFactory.mapProperty (String, Processor)
+        processors = objectFactory.mapProperty (String, Processor)
     }
 
     def methodMissing (String name, def args) {
@@ -89,12 +89,12 @@ class OpenApiProcessorExtension {
         if (arg instanceof Closure) {
 
             // apply it to a new Processor () entry
-            def processr = new Processor (name)
-            arg.delegate = processr
+            def processor = new Processor (name)
+            arg.delegate = processor
 
             project.configure (project, wrapWithProjectDelegate (arg))
-            processor.put (name, processr)
-            return processr
+            processors.put (name, processor)
+            return processor
         }
 
         throw new MissingMethodException(name, OpenApiProcessorExtension, args)

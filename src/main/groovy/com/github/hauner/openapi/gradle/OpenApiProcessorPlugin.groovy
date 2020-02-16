@@ -81,7 +81,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
             }
 
             private void registerTasks (Project project) {
-                extension.processor.get ().each { entry ->
+                extension.processors.get ().each { entry ->
                     def name = "process${entry.key.capitalize ()}"
                     def action = createTaskBuilderAction (entry.key, entry.value, extension)
 
@@ -142,7 +142,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
             private copyApiPath (OpenApiProcessorTask task) {
                 if (!config.hasApiPath ()) {
                     if (!extension.apiPath.present) {
-                        task.logger.warn ("'openapiGeneratr.apiPath' or 'openapiGeneratr.${name}.apiPath' not set!")
+                        task.logger.warn ("'openapiProcessor.apiPath' or 'openapiProcessor.${name}.apiPath' not set!")
                         return
                     }
 

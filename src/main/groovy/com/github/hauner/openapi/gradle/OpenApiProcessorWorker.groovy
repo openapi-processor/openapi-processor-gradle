@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original authors
+ * Copyright 2019-2020 the original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.github.hauner.openapi.gradle
 
-import com.github.hauner.openapi.api.OpenApiGeneratr
+import com.github.hauner.openapi.api.OpenApiProcessor
 
 import javax.inject.Inject
 
@@ -39,15 +39,19 @@ class OpenApiProcessorWorker implements Runnable {
 
     @Override
     void run () {
-        OpenApiGeneratr generatr = getGeneratr ()
-        generatr.run (processorProps)
+        try {
+            OpenApiProcessor processor = getProcessor ()
+            processor.run (processorProps)
+        } catch (Exception e) {
+            throw e
+        }
     }
 
-    private OpenApiGeneratr getGeneratr () {
-        OpenApiGeneratr generatr = ProcessorLoader.load (this.class.classLoader).find {
-            it.name == processorName
-        } as OpenApiGeneratr
-        generatr
+    private OpenApiProcessor getProcessor () {
+        OpenApiProcessor processor = ProcessorLoader.load (this.class.classLoader).find {
+            it.getName () == processorName
+        } as OpenApiProcessor
+        processor
     }
 
 }

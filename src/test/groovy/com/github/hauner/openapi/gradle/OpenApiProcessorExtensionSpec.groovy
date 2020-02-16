@@ -61,10 +61,10 @@ class OpenApiProcessorExtensionSpec extends Specification {
         }
 
         then:
-        ex.processor.get ().test.other.one == "a"
-        ex.processor.get ().test.other.two == "b"
-        ex.processor.get ().test2.other.one == "a2"
-        ex.processor.get ().test2.other.two == "b2"
+        ex.processors.get ().test.other.one == "a"
+        ex.processors.get ().test.other.two == "b"
+        ex.processors.get ().test2.other.one == "a2"
+        ex.processors.get ().test2.other.two == "b2"
     }
 
     void "handle apiPath when given as GString" () {
