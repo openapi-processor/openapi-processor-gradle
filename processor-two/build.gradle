@@ -1,15 +1,1 @@
-plugins {
-    id 'groovy'
-}
-
-repositories {
-    maven {
-        url  "https://dl.bintray.com/hauner/openapi-processor"
-    }
-}
-
-dependencies {
-    implementation localGroovy()
-
-    compileOnly 'com.github.hauner.openapi:openapi-processor-api:1.0.0.M4'
-}
+// configured by root project
