@@ -6,21 +6,21 @@ plugins {
 }
 
 group 'com.github.hauner.openapi'
-version '1.0.0.M5'
+version '1.0.0.M6'
 
 targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
     maven {
-        url  "https://dl.bintray.com/hauner/openapi-generatr"
+        url  "https://dl.bintray.com/hauner/openapi-processor"
     }
 }
 
 dependencies {
     implementation localGroovy()
 
-    compileOnly 'com.github.hauner.openapi:openapi-generatr-api:1.0.0.M3'
+    compileOnly 'com.github.hauner.openapi:openapi-processor-api:1.0.0.M4'
 
     testImplementation ('org.spockframework:spock-core:1.3-groovy-2.5') {
         // avoid conflict with localGroovy()
@@ -36,8 +36,8 @@ testSets {
 }
 
 check.dependsOn testInt
-testInt.dependsOn ':generatr-one:build'
-testInt.dependsOn ':generatr-two:build'
+testInt.dependsOn ':processor-one:build'
+testInt.dependsOn ':processor-two:build'
 
 testInt {
     systemProperty "PROJECT_DIR", "$projectDir"
@@ -46,18 +46,18 @@ testInt {
 
 gradlePlugin {
     plugins {
-        generatrPlugin {
-            id = 'com.github.hauner.openapi-generatr'
-            displayName = 'Gradle openapi-generatr plugin'
-            description = 'plugin to run openapi-generatr-x generators, e.g. openapi-generatr-spring (requires gradle 5.2+)'
-            implementationClass = 'com.github.hauner.openapi.gradle.OpenApiGeneratrPlugin'
+        processorPlugin {
+            id = 'com.github.hauner.openapi-processor'
+            displayName = 'Gradle openapi-processor plugin'
+            description = 'plugin to run openapi-processor-*, e.g. openapi-processor-spring (requires gradle 5.2+)'
+            implementationClass = 'com.github.hauner.openapi.gradle.OpenApiProcessorPlugin'
         }
     }
 }
 
 
 pluginBundle {
-    website = 'https://github.com/hauner/openapi-generatr-gradle'
-    vcsUrl = 'https://github.com/hauner/openapi-generatr-gradle'
+    website = 'https://github.com/hauner/openapi-processor-gradle'
+    vcsUrl = 'https://github.com/hauner/openapi-processor-gradle'
     tags = ['openapi']
 }

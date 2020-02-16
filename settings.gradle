@@ -1,6 +1,6 @@
-rootProject.name = 'openapi-generatr-gradle'
+rootProject.name = 'openapi-processor-gradle'
 
-include 'generatr-one'
-include 'generatr-two'
+include 'processor-one'
+include 'processor-two'
 
-//includeBuild '../openapi-generatr-api'
+//includeBuild '../openapi-processor-api'
