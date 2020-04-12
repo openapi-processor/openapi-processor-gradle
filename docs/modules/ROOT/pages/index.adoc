@@ -6,9 +6,7 @@
 :badge-ci: https://github.com/hauner/openapi-processor-gradle/workflows/ci/badge.svg
 :oapj-ci: https://github.com/hauner/openapi-processor-gradle/actions?query=workflow%3Aci
 :oapj-license: https://github.com/hauner/openapi-processor-gradle/blob/master/LICENSE
-:oap-gradle: https://github.com/hauner/openapi-processor-gradle
 :oap-api: https://github.com/hauner/openapi-processor-api
-:oap-plugin: https://plugins.gradle.org/plugin/com.github.hauner.openapi-processor
 
 //
 // content
