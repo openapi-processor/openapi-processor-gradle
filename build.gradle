@@ -8,8 +8,10 @@ plugins {
 group 'com.github.hauner.openapi'
 version '1.0.0.M7'
 
-targetCompatibility = JavaVersion.VERSION_1_8
-
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 allprojects {
     apply plugin: 'groovy'
