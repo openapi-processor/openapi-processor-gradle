@@ -23,7 +23,7 @@ allprojects {
 
     dependencies {
         implementation localGroovy()
-        compileOnly 'com.github.hauner.openapi:openapi-processor-api:1.0.0.M4'
+        compileOnly 'com.github.hauner.openapi:openapi-processor-api:1.0.0'
     }
 }
 
@@ -32,7 +32,7 @@ dependencies {
         exclude group: 'org.codehaus.groovy' // avoid conflict with localGroovy()
     }
 
-    testImplementation 'net.bytebuddy:byte-buddy:1.10.7'
+    testImplementation 'net.bytebuddy:byte-buddy:1.10.11'
 }
 
 
