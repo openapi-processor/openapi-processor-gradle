@@ -106,7 +106,7 @@ openapiProcessor {
             '6.3',
             '6.4', '6.4.1',
             '6.5'
-        ]
+        ].reverse ()
     }
 
 }
