@@ -18,7 +18,7 @@ package com.github.hauner.openapi.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.internal.provider.DefaultMapProperty
-import org.gradle.api.internal.provider.DefaultPropertyState
+import org.gradle.api.internal.provider.DefaultProperty
 import org.gradle.api.model.ObjectFactory
 import spock.lang.Specification
 
@@ -29,7 +29,7 @@ class OpenApiProcessorExtensionSpec extends Specification {
     def objectFactory = Mock (ObjectFactory)
 
     void setup () {
-        objectFactory.property (String) >> new DefaultPropertyState<String>(String)
+        objectFactory.property (String) >> new DefaultProperty<String>(String)
         objectFactory.mapProperty (String, Processor) >> new DefaultMapProperty<String, Object>(String, Processor)
     }
 
@@ -48,7 +48,7 @@ class OpenApiProcessorExtensionSpec extends Specification {
             c.delegate = args[0]
             c.run ()
         }
-        
+
         when:
         def ex = new OpenApiProcessorExtension (project, objectFactory)
         ex.test {
