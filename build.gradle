@@ -1,8 +1,8 @@
 plugins {
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.10.1'
-    id 'org.unbroken-dome.test-sets' version '2.2.1'
-    id "com.github.ben-manes.versions" version "0.27.0"
+    id 'com.gradle.plugin-publish' version '0.12.0'
+    id 'org.unbroken-dome.test-sets' version '3.0.1'
+    id "com.github.ben-manes.versions" version "0.28.0"
 }
 
 group 'com.github.hauner.openapi'
