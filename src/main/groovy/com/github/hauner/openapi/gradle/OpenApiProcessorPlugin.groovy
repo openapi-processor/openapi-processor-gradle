@@ -113,7 +113,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
                 def project = task.getProject ()
                 def handler = project.getDependencies ()
-                Dependency api = handler.create("com.github.hauner.openapi:openapi-processor-api:1.0.0.M4")
+                Dependency api = handler.create("com.github.hauner.openapi:openapi-processor-api:1.0.0")
 
                 if (!config.processorLib) {
                     task.logger.warn ("'openapiProcessor.${name}.processor' not set!")
