@@ -19,7 +19,26 @@ link:{oapj-license}[image:{badge-license}[]]
 
 
 a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
-openapi-processor without an explicit dependency on the processor. Requires Gradle 5.2 or better.
+openapi-processor without an explicit dependency on the processor.
+
+== compatibility
+
+[cols="3*",options="header"]
+|===
+| plugin version
+| minimum gradle version
+| description
+
+| 1.1.0
+| 5.5
+a| features identical to 1.0.0.
+
+(build changes only, but the integration test does not run anymore with gradle below 5.5)
+
+| 1.0.0
+| 5.2
+a|-
+|===
 
 
 == gradle dsl
