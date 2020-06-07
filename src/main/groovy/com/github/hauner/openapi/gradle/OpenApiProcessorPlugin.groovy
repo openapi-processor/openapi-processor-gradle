@@ -46,7 +46,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
         if (version < "5.2") {
             project.logger.error ("the current gradle version is ${version}")
-            project.logger.error ("com.github.hauner.openapi-processor requires gradle 5.2+")
+            project.logger.error ("openapi-processor-gradle requires gradle 5.2+")
             return false
         }
 
