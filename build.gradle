@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.github.hauner.openapi'
-version '1.0.0.DEPRECATED'
+version '1.0.0.M5.DEPRECATED'
 
 targetCompatibility = JavaVersion.VERSION_1_8
 
