@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.github.hauner.openapi'
-version '1.0.0.M5'
+version '1.0.0.DEPRECATED'
 
 targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -49,7 +49,7 @@ gradlePlugin {
         generatrPlugin {
             id = 'com.github.hauner.openapi-generatr'
             displayName = 'Gradle openapi-generatr plugin'
-            description = 'plugin to run openapi-generatr-x generators, e.g. openapi-generatr-spring (requires gradle 5.2+)'
+            description = 'Deprecated. Superseded by com.github.hauner.openapi-processor. (plugin to run openapi-generatr-x generators, e.g. openapi-generatr-spring (requires gradle 5.2+)).'
             implementationClass = 'com.github.hauner.openapi.gradle.OpenApiGeneratrPlugin'
         }
     }
