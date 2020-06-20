@@ -19,12 +19,12 @@ allprojects {
     repositories {
         mavenCentral()
         maven {
-            url  "https://dl.bintray.com/hauner/openapi-processor"
+            url  "https://dl.bintray.com/openapi-processor/primary"
         }
     }
 
     dependencies {
-        compileOnly 'com.github.hauner.openapi:openapi-processor-api:1.0.0'
+        compileOnly 'io.openapiprocessor:openapi-processor-api:1.1.0.M1'
         implementation "org.codehaus.groovy:groovy:2.5.12"
     }
 }
