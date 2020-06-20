@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'io.openapiprocessor'
-version '1.0.0.M7'
+version '1.1.0-SNAPSHOT'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -55,7 +55,7 @@ testInt {
 gradlePlugin {
     plugins {
         processorPlugin {
-            id = 'com.github.hauner.openapi-processor'
+            id = 'io.openapiprocessor.openapi-processor'
             displayName = 'Gradle openapi-processor plugin'
             description = 'plugin to run openapi-processor-*, e.g. openapi-processor-spring (requires gradle 5.5+)'
             implementationClass = 'com.github.hauner.openapi.gradle.OpenApiProcessorPlugin'
@@ -65,7 +65,7 @@ gradlePlugin {
 
 
 pluginBundle {
-    website = 'https://github.com/hauner/openapi-processor-gradle'
-    vcsUrl = 'https://github.com/hauner/openapi-processor-gradle'
-    tags = ['openapi']
+    website = 'https://github.com/openapi-processor/openapi-processor-gradle'
+    vcsUrl = 'https://github.com/openapi-processor/openapi-processor-gradle'
+    tags = ['openapi', 'openapi-processor']
 }
