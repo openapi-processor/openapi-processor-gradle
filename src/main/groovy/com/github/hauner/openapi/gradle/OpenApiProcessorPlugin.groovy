@@ -59,7 +59,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
     private addOpenApiGeneratrRepository (Project project) {
         project.repositories {
-            // mavenCentral()
+            mavenCentral()  // required?
             maven {
                 url "https://dl.bintray.com/openapi-processor/primary"
                 content {
