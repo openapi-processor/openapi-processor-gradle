@@ -29,8 +29,8 @@ class OpenApiProcessorExtensionSpec extends Specification {
     def objectFactory = Mock (ObjectFactory)
 
     void setup () {
-        objectFactory.property (String) >> new DefaultProperty<String>(String)
-        objectFactory.mapProperty (String, Processor) >> new DefaultMapProperty<String, Object>(String, Processor)
+        objectFactory.property (String) >> new DefaultProperty<String>(null, String)
+        objectFactory.mapProperty (String, Processor) >> new DefaultMapProperty<String, Object>(null, String, Processor)
     }
 
     void "initializes properties" () {

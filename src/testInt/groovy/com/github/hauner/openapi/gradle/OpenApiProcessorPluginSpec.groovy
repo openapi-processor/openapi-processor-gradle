@@ -93,11 +93,8 @@ openapiProcessor {
         result.output.contains("processor one did run !")
 
         where:
-        // minimum required version 5.2
+        // minimum required version 5.5 to run this test
         gradleVersion << [
-            '5.2', '5.2.1',
-            '5.3', '5.3.1',
-            '5.4', '5.4.1',
             '5.5', '5.5.1',
             '5.6', '5.6.1', '5.6.2', '5.6.3', '5.6.4',
             '6.0', '6.0.1',

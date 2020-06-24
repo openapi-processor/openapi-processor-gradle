@@ -44,9 +44,9 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
     private static boolean isSupportedGradleVersion (Project project) {
         String version = project.gradle.gradleVersion
 
-        if (version < "5.2") {
+        if (version < "5.5") {
             project.logger.error ("the current gradle version is ${version}")
-            project.logger.error ("openapi-processor-gradle requires gradle 5.2+")
+            project.logger.error ("openapi-processor-gradle requires gradle 5.5+")
             return false
         }
 
