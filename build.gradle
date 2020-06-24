@@ -18,8 +18,25 @@ allprojects {
 
     repositories {
         mavenCentral()
+
         maven {
-            url  "https://dl.bintray.com/openapi-processor/primary"
+            url "https://dl.bintray.com/openapi-processor/primary"
+            content {
+               includeGroup "io.openapiprocessor"
+            }
+            mavenContent {
+                releasesOnly()
+            }
+        }
+
+        maven {
+            url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+            content {
+               includeGroup "io.openapiprocessor"
+            }
+            mavenContent {
+                snapshotsOnly()
+            }
         }
     }
 
