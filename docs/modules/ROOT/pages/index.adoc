@@ -23,19 +23,20 @@ openapi-processor without an explicit dependency on the processor.
 
 == compatibility
 
-[cols="3*",options="header"]
+[cols="4*",options="header"]
 |===
 | plugin version
+| plugin id
 | minimum gradle version
 | description
 
 | 1.1.0
+| `io.openapiprocessor.openapi-processor`
 | 5.5
 a| features identical to 1.0.0.
 
-(build changes only, but the integration test does not run anymore with gradle below 5.5)
-
 | 1.0.0
+| `com.github.hauner.openapi-processor`
 | 5.2
 a|-
 |===
