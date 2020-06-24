@@ -59,7 +59,27 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
     private addOpenApiGeneratrRepository (Project project) {
         project.repositories {
-            mavenCentral()
+            // mavenCentral()
+            maven {
+                url "https://dl.bintray.com/openapi-processor/primary"
+                content {
+                   includeGroup "io.openapiprocessor"
+                }
+                mavenContent {
+                    releasesOnly()
+                }
+            }
+            maven {
+                url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+                content {
+                   includeGroup "io.openapiprocessor"
+                }
+                mavenContent {
+                    snapshotsOnly()
+                }
+            }
+
+            // obsolete
             maven {
                 url "https://dl.bintray.com/hauner/openapi-processor"
                 content {
