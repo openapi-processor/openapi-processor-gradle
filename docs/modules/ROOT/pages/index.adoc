@@ -30,14 +30,14 @@ openapi-processor without an explicit dependency on the processor.
 | minimum gradle version
 | description
 
-| 1.1.0
+| 1.0.0.M8
 | `io.openapiprocessor.openapi-processor`
-| 5.5
-a| features identical to 1.0.0.
+| 5.5 (June 2019)
+a| functionality identical to 1.0.0.M7
 
-| 1.0.0
+| 1.0.0.M7
 | `com.github.hauner.openapi-processor`
-| 5.2
+| 5.2 (February 2019)
 a|-
 |===
 
