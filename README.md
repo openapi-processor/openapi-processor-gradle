@@ -6,8 +6,7 @@
 
 # openapi-processor-gradle 
 
-a gradle plugin based on the [openapi-processor-api][oap-api] to handle any
-openapi-processor without an explicit dependency on the processor. Requires Gradle 5.2 or better.
+a gradle plugin based on the [openapi-processor-api][oap-api] to handle any openapi-processor without an explicit dependency on the processor. Requires Gradle 5.2 or better.
 
 # documentation
 
