@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'io.openapiprocessor'
-version '1.1.0-SNAPSHOT'
+version '1.0.0.M8'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -18,13 +18,30 @@ allprojects {
 
     repositories {
         mavenCentral()
+
         maven {
-            url  "https://dl.bintray.com/openapi-processor/primary"
+            url "https://dl.bintray.com/openapi-processor/primary"
+            content {
+               includeGroup "io.openapiprocessor"
+            }
+            mavenContent {
+                releasesOnly()
+            }
+        }
+
+        maven {
+            url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+            content {
+               includeGroup "io.openapiprocessor"
+            }
+            mavenContent {
+                snapshotsOnly()
+            }
         }
     }
 
     dependencies {
-        compileOnly 'io.openapiprocessor:openapi-processor-api:1.1.0.M1'
+        compileOnly 'io.openapiprocessor:openapi-processor-api:1.1.0-SNAPSHOT'
         implementation "org.codehaus.groovy:groovy:2.5.12"
     }
 }

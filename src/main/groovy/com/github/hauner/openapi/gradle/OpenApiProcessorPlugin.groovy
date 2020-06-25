@@ -60,6 +60,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
     private addOpenApiGeneratrRepository (Project project) {
         project.repositories {
             mavenCentral()  // required?
+
             maven {
                 url "https://dl.bintray.com/openapi-processor/primary"
                 content {
@@ -133,7 +134,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
                 def project = task.getProject ()
                 def handler = project.getDependencies ()
-                Dependency api = handler.create("com.github.hauner.openapi:openapi-processor-api:1.0.0")
+                Dependency api = handler.create("io.openapiprocessor:openapi-processor-api:1.1.0-SNAPSHOT")
 
                 if (!config.processorLib) {
                     task.logger.warn ("'openapiProcessor.${name}.processor' not set!")
@@ -158,7 +159,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 config.targetDir
             }
 
-            // copy common api path to generatr props if not set
+            // copy common api path to openapi-processor props if not set
             private copyApiPath (OpenApiProcessorTask task) {
                 if (!config.hasApiPath ()) {
                     if (!extension.apiPath.present) {
