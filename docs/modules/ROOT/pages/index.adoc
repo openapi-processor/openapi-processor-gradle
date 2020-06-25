@@ -3,10 +3,10 @@
 :page-layout: default
 :page-aliases: current@gradle:ROOT:index.adoc, latest@gradle:ROOT:index.adoc
 :badge-license: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
-:badge-ci: https://github.com/hauner/openapi-processor-gradle/workflows/ci/badge.svg
-:oapj-ci: https://github.com/hauner/openapi-processor-gradle/actions?query=workflow%3Aci
-:oapj-license: https://github.com/hauner/openapi-processor-gradle/blob/master/LICENSE
-:oap-api: https://github.com/hauner/openapi-processor-api
+:badge-ci: https://github.com/openapi-processor/openapi-processor-gradle/workflows/ci/badge.svg
+:oapj-ci: https://github.com/openapi-processor/openapi-processor-gradle/actions?query=workflow%3Aci
+:oapj-license: https://github.com/openapi-processor/openapi-processor-gradle/blob/master/LICENSE
+:oap-api: https://github.com/openapi-processor/openapi-processor-api
 
 //
 // content
@@ -18,8 +18,7 @@ link:{oapj-ci}[image:{badge-ci}[]]
 link:{oapj-license}[image:{badge-license}[]]
 
 
-a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
-openapi-processor without an explicit dependency on the processor.
+a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any openapi-processor without an explicit dependency on the processor.
 
 == compatibility
 
@@ -44,20 +43,16 @@ a|-
 
 == gradle dsl
 
-An xref:spring:ROOT:index.adoc[openapi-processor-spring] spring specific description is available in
-xref:spring:ROOT:gradle.adoc[Gradle Integration].
+An xref:spring:ROOT:index.adoc[openapi-processor-spring] spring specific description is available in xref:spring:ROOT:gradle.adoc[Gradle Integration].
 
-The plugin adds a new configuration block `openapiProcessor` to the gradle project. Each processor
-is configurable by a nested configuration block.
+The plugin adds a new configuration block `openapiProcessor` to the gradle project. Each processor is configurable by a nested configuration block.
 
 Apart from that there is only a single option that is recognized inside the configuration block:
 
 * `apiPath`, which defines the path to the openapi yaml file. This is usually the same for all
 processors and placing it directly into the `openapiProcessor` block sets it for all processors.
 
-To configure a processor, for example the xref:spring::index.doc[openapi-processor-spring], place a
-`spring` configuration into the `openapiProcessor` block. The name of the configuration gets
-used to create a gradle task `process<Name>` to run the corresponding processor.
+To configure a processor, for example the xref:spring::index.doc[openapi-processor-spring], place a `spring` configuration into the `openapiProcessor` block. The name of the configuration gets used to create a gradle task `process<Name>` to run the corresponding processor.
 
 [source,groovy]
 ----
@@ -73,8 +68,7 @@ openapiProcessor {
 }
 ----
 
-In case another processor (e.g. json) is required place its configuration into the `openapiProcessor`
-block in the same way:
+In case another processor (e.g. json) is required place its configuration into the `openapiProcessor` block in the same way:
 
 [source,groovy]
 ----
@@ -94,20 +88,16 @@ openapiProcessor {
 }
 ----
 
-The configuration of a single processor has a few pre-defined properties, and it can have any number
-of  additional parameters defined by the processor (all options will be passed in a map to the
-processor with the option name as the key).
+The configuration of a single processor has a few pre-defined properties, and it can have any number of  additional parameters defined by the processor (all options will be passed in a map to the processor with the option name as the key).
 
-* `processor` (mandatory): the `processor` dependency. Uses the same dependency notations allowed in
- the gradle `dependencies` block.
+* `processor` (mandatory): the `processor` dependency. Uses the same dependency notations allowed in the gradle `dependencies` block.
 +
-The processor library is configured here to avoid any side effect on the build dependencies of
-the project.
+The processor library is configured here to avoid any side effect on the build dependencies of the project.
 +
 Example using the preferred shortcut nation:
 
     spring {
-        processor 'com.github.hauner.openapi:openapi-processor-spring:<version>'
+        processor 'io.openapiprocessor:openapi-processor-spring:<version>'
     }
 +
 or like this to use an un-published processor:
@@ -117,21 +107,15 @@ or like this to use an un-published processor:
     }
 
 
-* `apiPath` (optional): the path to the open api yaml file. If set inside a processor configuration
-it overrides the parent `apiPath`.
+* `apiPath` (optional): the path to the open api yaml file. If set inside a processor configuration it overrides the parent `apiPath`.
 
-* `targetDir` (mandatory): the target folder for the processor. The processor will write its output
-to this directory.
+* `targetDir` (mandatory): the target folder for the processor. The processor will write its output to this directory.
 
 == gradle tasks
 
-The plugin creates a single gradle task for each processor configuration that will run the
-corresponding processor. The name gets derived from the name of the processor: `generate<Name>`.
+The plugin creates a single gradle task for each processor configuration that will run the corresponding processor. The name gets derived from the name of the processor: `generate<Name>`.
 
-
-The plugin does not add the `process<Name>` task to the build lifecycle. To automatically run it
-add a task dependency in the `build.gradle` file. For example to run openapi-processor-spring
-before compiling use:
+The plugin does not add the `process<Name>` task to the build lifecycle. To automatically run it, add a task dependency in the `build.gradle` file. For example to run openapi-processor-spring before compiling use:
 
     // generate api before compiling
     compileJava.dependsOn ('processSpring')
@@ -143,11 +127,9 @@ to run openapi-processor-json when processing the resources:
 
 == using the processor output
 
-In case the processor creates java sources it is necessary to compile them as part of the build
-process.
+In case the processor creates java sources it is necessary to compile them as part of the build process.
 
-For example to compile the java source files created by openapi-generatr-spring add the `targetDir`
-of the  processor to the java `sourceSets`:
+For example to compile the java source files created by openapi-processor-spring add the `targetDir`of the  processor to the java `sourceSets`:
 
 [source,groovy]
 ----
@@ -162,8 +144,7 @@ sourceSets {
 }
 ----
 
-To add the json file created by the openapi-processor-json to the final artifact jar as resource add
- the `targetDir` of the processor to the java `resources` source set:
+To add the json file created by the openapi-processor-json to the final artifact jar as resource add the `targetDir` of the processor to the java `resources` source set:
 
 
 [source,groovy]
@@ -181,8 +162,7 @@ sourceSets {
 
 == configuration example
 
-Here is a full example that configures xref:spring:ROOT:index.adoc[openapi-processor-spring] and
-xref:json:ROOT:index.adoc[openapi-processor-json]:
+Here is a full example that configures xref:spring:ROOT:index.adoc[openapi-processor-spring] and xref:json:ROOT:index.adoc[openapi-processor-json]:
 
 [source,groovy]
 ----
@@ -198,7 +178,7 @@ openapiProcessor {
     spring {
         // the openapi-processor-spring dependency (mandatory)
         //
-        processor 'com.github.hauner.openapi:openapi-processor-spring:1.0.0.Mx'
+        processor 'io.openapiprocessor:openapi-processor-spring:<version>'
 
         // setting api path inside a processor configuration overrides the one at the top.
         //
@@ -225,7 +205,7 @@ openapiProcessor {
     json {
         // the openapi-processor-json dependency (mandatory)
         //
-        processor 'com.github.hauner.openapi:openapi-processor-json:1.0.0.Mx'
+        processor 'io.openapiprocessor:openapi-processor-json:<version>'
 
         // the destination folder for the json file. (mandatory)
         targetDir "${buildDir}/json"
@@ -242,14 +222,14 @@ openapiProcessor {
     apiPath "${projectDir}/src/api/openapi.yaml"
 
     spring {
-        processor 'com.github.hauner.openapi:openapi-processor-spring:1.0.0.Mx'
+        processor 'io.openapiprocessor:openapi-processor-spring:<version>'
         targetDir "${projectDir}/build/openapi"
         mapping "${projectDir}/src/api/mapping.yaml"
         showWarnings true
     }
 
     json {
-        processor 'com.github.hauner.openapi:openapi-processor-json:1.0.0.Mx'
+        processor 'io.openapiprocessor:openapi-processor-json:<version>'
         targetDir "${buildDir}/json"
     }
 
@@ -258,5 +238,4 @@ openapiProcessor {
 
 == Samples
 
-See xref:spring-mvc-sample::index.adoc[spring mvc sample] or
-xref:spring-webflux-sample::index.adoc[spring webflux sample] for working spring boot samples.
+See xref:spring-mvc-sample::index.adoc[spring mvc sample] or xref:spring-webflux-sample::index.adoc[spring webflux sample] for working spring boot samples.
