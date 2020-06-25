@@ -6,10 +6,10 @@
 
 # openapi-processor-gradle 
 
-a gradle plugin based on the xref:api::index.adoc[openapi-processor-api] to handle any
+a gradle plugin based on the [openapi-processor-api][oap-api] to handle any
 openapi-processor without an explicit dependency on the processor. Requires Gradle 5.2 or better.
 
-# Documentation
+# documentation
 
 See [here][oap-docs].
 
@@ -22,6 +22,7 @@ The plugin at the [gradle plugin portal][oap-plugin].
 [badge-ci]: https://github.com/hauner/openapi-processor-gradle/workflows/ci/badge.svg
 [workflow-ci]: https://github.com/hauner/openapi-processor-gradle/actions?query=workflow%3Aci
 
+[oap-api]: https://github.com/openapi-processor/openapi-processor-api
 [oap-docs]: https://hauner.github.com/openapi-processor/gradle/current/index.html
-[oap-license]: https://github.com/hauner/openapi-processor-gradle/blob/master/LICENSE
+[oap-license]: https://github.com/openapi-processor/openapi-processor-gradle/blob/master/LICENSE
 [oap-plugin]: https://plugins.gradle.org/plugin/com.github.hauner.openapi-processor
