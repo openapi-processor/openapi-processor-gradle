@@ -1,4 +1,3 @@
-[![][badge-license]][oap-license]
 [![][badge-ci]][workflow-ci]
 
 ![openapi-processor-gradle logo](images/openapi-processor-gradle@1280x200.png)
