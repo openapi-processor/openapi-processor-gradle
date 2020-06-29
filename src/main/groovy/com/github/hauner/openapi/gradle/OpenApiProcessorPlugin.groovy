@@ -134,7 +134,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
                 def project = task.getProject ()
                 def handler = project.getDependencies ()
-                Dependency api = handler.create("io.openapiprocessor:openapi-processor-api:1.1.0-SNAPSHOT")
+                Dependency api = handler.create("io.openapiprocessor:openapi-processor-api:1.1.0")
 
                 if (!config.processorLib) {
                     task.logger.warn ("'openapiProcessor.${name}.processor' not set!")
