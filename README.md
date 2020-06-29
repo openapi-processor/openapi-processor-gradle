@@ -17,10 +17,10 @@ The plugin at the [gradle plugin portal][oap-plugin].
   
 
 [badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
-[badge-ci]: https://github.com/hauner/openapi-processor-gradle/workflows/ci/badge.svg
-[workflow-ci]: https://github.com/hauner/openapi-processor-gradle/actions?query=workflow%3Aci
+[badge-ci]: https://github.com/openapi-processor/openapi-processor-gradle/workflows/ci/badge.svg
+[workflow-ci]: https://github.com/openapi-processor/openapi-processor-gradle/actions?query=workflow%3Aci
 
 [oap-api]: https://github.com/openapi-processor/openapi-processor-api
-[oap-docs]: https://hauner.github.com/openapi-processor/gradle/current/index.html
+[oap-docs]: https://docs.openapiprocessor.io/gradle
 [oap-license]: https://github.com/openapi-processor/openapi-processor-gradle/blob/master/LICENSE
 [oap-plugin]: https://plugins.gradle.org/plugin/com.github.hauner.openapi-processor
