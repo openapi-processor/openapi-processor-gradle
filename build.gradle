@@ -66,6 +66,6 @@ gradlePlugin {
 
 pluginBundle {
     website = 'https://github.com/hauner/openapi-processor-gradle'
-    vcsUrl = 'https://github.com/hauner/openapi-processor-gradle'
+    vcsUrl = 'https://github.com/openapi-processor/openapi-processor-gradle'
     tags = ['openapi']
 }
