@@ -60,6 +60,27 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
     private addOpenApiGeneratrRepository (Project project) {
         project.repositories {
             mavenCentral()
+
+            maven {
+                url "https://dl.bintray.com/openapi-processor/primary"
+                content {
+                   includeGroup "io.openapiprocessor"
+                }
+                mavenContent {
+                    releasesOnly()
+                }
+            }
+
+            maven {
+                url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+                content {
+                   includeGroup "io.openapiprocessor"
+                }
+                mavenContent {
+                    snapshotsOnly()
+                }
+            }
+
             maven {
                 url "https://dl.bintray.com/hauner/openapi-processor"
                 content {
@@ -113,7 +134,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
                 def project = task.getProject ()
                 def handler = project.getDependencies ()
-                Dependency api = handler.create("com.github.hauner.openapi:openapi-processor-api:1.0.0")
+                Dependency api = handler.create("io.openapiprocessor:openapi-processor-api:1.1.0")
 
                 if (!config.processorLib) {
                     task.logger.warn ("'openapiProcessor.${name}.processor' not set!")

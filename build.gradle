@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.github.hauner.openapi'
-version '1.0.0.M7'
+version '1.0.0.M8'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -19,12 +19,12 @@ allprojects {
     repositories {
         mavenCentral()
         maven {
-            url  "https://dl.bintray.com/hauner/openapi-processor"
+            url  "https://dl.bintray.com/openapi-processor/primary"
         }
     }
 
     dependencies {
-        compileOnly 'com.github.hauner.openapi:openapi-processor-api:1.0.0'
+        compileOnly 'io.openapiprocessor:openapi-processor-api:1.1.0'
         implementation "org.codehaus.groovy:groovy:2.5.12"
     }
 }
