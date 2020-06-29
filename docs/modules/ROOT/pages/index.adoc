@@ -28,15 +28,20 @@ a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 | minimum gradle version
 | description
 
-| 1.0.0.M8
+| 1.0.0.M9 (not yet released)
 | `io.openapiprocessor.openapi-processor`
 | 5.5 (June 2019)
-a| functionality identical to 1.0.0.M7
+a| only supports processors with new `io.openapiprocessor` group id
+
+| 1.0.0.M8
+| `com.github.hauner.openapi-processor`
+| 5.2 (February 2019)
+a| supports processors with new `io.openapiprocessor` and old `com.github.hauner.openapi` group id
 
 | 1.0.0.M7
 | `com.github.hauner.openapi-processor`
 | 5.2 (February 2019)
-a|-
+a| only supports processors `com.github.hauner.openapi` group id
 |===
 
 
