@@ -23,7 +23,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.Dependency
 
 /**
- * OpenAPI Generatr Gradle plugin.
+ * openapi-processor-gradle plugin.
  *
  * @author Martin Hauner
  */
@@ -91,7 +91,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
     }
 
     /**
-     * Provides an Action that create a 'generate{GeneratrName}' task for each configured generatr.
+     * Provides an Action that create a 'process{ProcessorName}' task for each configured processor.
      */
     private Action<Project> createTasksBuilderAction (OpenApiProcessorExtension extension) {
         new Action<Project>() {
@@ -113,7 +113,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
     }
 
     /**
-     * Creates an Action that configures a 'generate{GeneratrName}' task from its configuration.
+     * Creates an Action that configures a 'process{ProcessorName}' task from its configuration.
      */
     private Action<OpenApiProcessorTask> createTaskBuilderAction(
         String name, Processor config, OpenApiProcessorExtension extension) {
