@@ -242,4 +242,4 @@ openapiProcessor {
 
 == Samples
 
-See xref:spring-mvc-sample::index.adoc[spring mvc sample] or xref:spring-webflux-sample::index.adoc[spring webflux sample] for working spring boot samples.
+See xref:samples::spring-mvc.adoc[spring mvc sample] or xref:samples::spring-webflux.adoc[spring webflux sample] for working spring boot samples.
