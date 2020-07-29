@@ -2,7 +2,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'com.gradle.plugin-publish' version '0.12.0'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
-    id "com.github.ben-manes.versions" version "0.28.0"
+    id "com.github.ben-manes.versions" version "0.29.0"
 }
 
 group 'io.openapiprocessor'
@@ -52,7 +52,7 @@ dependencies {
         exclude group: 'org.codehaus.groovy'
     }
 
-    testImplementation 'net.bytebuddy:byte-buddy:1.10.11'
+    testImplementation 'net.bytebuddy:byte-buddy:1.10.13'
 }
 
 
