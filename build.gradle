@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'io.openapiprocessor'
-version '1.0.0.M9'
+version '1.0.0.M10'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
