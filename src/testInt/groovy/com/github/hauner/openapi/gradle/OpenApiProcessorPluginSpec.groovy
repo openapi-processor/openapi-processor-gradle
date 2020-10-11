@@ -90,7 +90,7 @@ openapiProcessor {
         result.output.contains("processor one did run !")
 
         result.task(':processTwo').outcome == SUCCESS
-        result.output.contains("processor one did run !")
+        result.output.contains("processor two did run !")
 
         where:
         // 5.5 is the minimum required version to run this test
