@@ -1,6 +1,6 @@
 package com.github.hauner.openapi.processor.two
 
-import com.github.hauner.openapi.api.OpenApiProcessor
+import io.openapiprocessor.api.OpenApiProcessor
 
 class TwoProcessor implements OpenApiProcessor {
 

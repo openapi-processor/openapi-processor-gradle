@@ -16,7 +16,8 @@
 
 package com.github.hauner.openapi.gradle
 
-import com.github.hauner.openapi.api.OpenApiProcessor
+import com.github.hauner.openapi.api.OpenApiProcessor as ApiWithOldPackage
+import io.openapiprocessor.api.OpenApiProcessor as ApiWithNewPackage
 
 /**
  * Find the processors using the ServiceLoader.
@@ -25,11 +26,13 @@ import com.github.hauner.openapi.api.OpenApiProcessor
  */
 class ProcessorLoader {
 
-    static Iterable<OpenApiProcessor> load(ClassLoader classLoader) {
-        ServiceLoader<OpenApiProcessor> processors = ServiceLoader.load (OpenApiProcessor, classLoader)
-        if (processors.empty) {
-            return []
-        }
+    static Iterable<ApiWithOldPackage> load(ClassLoader classLoader) {
+        ServiceLoader<ApiWithOldPackage> withOldPackage = ServiceLoader.load (ApiWithOldPackage, classLoader)
+        ServiceLoader<ApiWithNewPackage> withNewPackage = ServiceLoader.load (ApiWithNewPackage, classLoader)
+
+        def processors = []
+        processors.addAll (withOldPackage)
+        processors.addAll (withNewPackage)
         processors
     }
 
