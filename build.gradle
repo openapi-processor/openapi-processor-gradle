@@ -74,6 +74,7 @@ testSets {
 }
 
 check.dependsOn testInt
+testInt.dependsOn ':processor-v1:build'
 testInt.dependsOn ':processor-one:build'
 testInt.dependsOn ':processor-two:build'
 

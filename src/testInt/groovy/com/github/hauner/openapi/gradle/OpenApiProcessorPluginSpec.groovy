@@ -56,6 +56,13 @@ plugins {
 openapiProcessor {
     apiPath "\${projectDir}/src/api/openapi.yaml"
 
+    v1 {
+        processor files("${projectDir}/processor-v1/build/libs/processor-v1.jar")
+
+        targetDir "\${buildDir}/v1"
+        v1 "value v1"
+    }
+    
     one {
         processor files("${projectDir}/processor-one/build/libs/processor-one.jar")
 
@@ -77,7 +84,7 @@ openapiProcessor {
         def result = GradleRunner.create()
             .withGradleVersion(gradleVersion)
             .withProjectDir(testProjectDir.root)
-            .withArguments('--stacktrace', 'processOne', 'processTwo')
+            .withArguments('--stacktrace', 'processV1', 'processOne', 'processTwo')
             .withPluginClasspath ([
                 new File("${projectDir}/build/classes/groovy/main/"),
                 new File("${projectDir}/build/classes/java/main/"),
@@ -87,6 +94,9 @@ openapiProcessor {
             .build()
 
         then:
+        result.task(':processV1').outcome == SUCCESS
+        result.output.contains("processor v1 did run !")
+
         result.task(':processOne').outcome == SUCCESS
         result.output.contains("processor one did run !")
 
