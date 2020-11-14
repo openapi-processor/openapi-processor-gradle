@@ -50,7 +50,7 @@ property: value
 
         buildFile << """\
 plugins {
-  id 'com.github.hauner.openapi-processor'
+  id 'io.openapiprocessor.openapi-processor'
 }
 
 openapiProcessor {
