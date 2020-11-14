@@ -67,7 +67,7 @@ sourceSets {
   }
 }
 
-compileGroovy.dependsOn "generateVersion"
+compileJava.dependsOn "generateVersion"
 
 testSets {
     testInt
