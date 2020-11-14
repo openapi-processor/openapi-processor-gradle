@@ -40,17 +40,27 @@ class OpenApiProcessorWorker implements Runnable {
     @Override
     void run () {
         try {
-            OpenApiProcessor processor = getProcessor ()
-            processor.run (processorProps)
+            def processor = getProcessor ()
+
+            if (processor instanceof io.openapiprocessor.api.v1.OpenApiProcessor) {
+                processor.run (processorProps)
+
+            } else if (processor instanceof io.openapiprocessor.api.OpenApiProcessor) {
+                processor.run (processorProps)
+
+            } else if (processor instanceof com.github.hauner.openapi.api.OpenApiProcessor) {
+                processor.run (processorProps)
+            }
         } catch (Exception e) {
             throw e
         }
     }
 
-    private OpenApiProcessor getProcessor () {
-        OpenApiProcessor processor = ProcessorLoader.load (this.class.classLoader).find {
-            it.getName () == processorName
-        } as OpenApiProcessor
+    private def getProcessor () {
+        def processor = ProcessorLoader.load (processorName, this.class.classLoader)
+        if (!processor) {
+            throw new MissingProcessorException(processorName)
+        }
         processor
     }
 
