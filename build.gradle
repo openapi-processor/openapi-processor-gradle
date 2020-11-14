@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.github.hauner.openapi'
-version '1.0.0.M8'
+version '1.0.0.M8.DEPRECATED'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -57,12 +57,11 @@ gradlePlugin {
         processorPlugin {
             id = 'com.github.hauner.openapi-processor'
             displayName = 'Gradle openapi-processor plugin'
-            description = 'plugin to run openapi-processor-*, e.g. openapi-processor-spring (requires gradle 5.2+)'
+            description = 'Deprecated. Superseded by io.openapiprocessor.openapi-processor. (plugin to run openapi-processor-*, e.g. openapi-processor-spring (requires gradle 5.2+)).'
             implementationClass = 'com.github.hauner.openapi.gradle.OpenApiProcessorPlugin'
         }
     }
 }
-
 
 pluginBundle {
     website = 'https://github.com/hauner/openapi-processor-gradle'
