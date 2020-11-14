@@ -23,4 +23,4 @@ The plugin at the [gradle plugin portal][oap-plugin].
 [oap-api]: https://github.com/openapi-processor/openapi-processor-api
 [oap-docs]: https://docs.openapiprocessor.io/gradle
 [oap-license]: https://github.com/openapi-processor/openapi-processor-gradle/blob/master/LICENSE
-[oap-plugin]: https://plugins.gradle.org/plugin/com.github.hauner.openapi-processor
+[oap-plugin]: https://plugins.gradle.org/plugin/io.openapiprocessor.openapi-processor
