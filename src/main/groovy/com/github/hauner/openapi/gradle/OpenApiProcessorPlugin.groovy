@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.gradle
 
+import io.openapiprocessor.gradle.Version
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -134,7 +135,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
                 def project = task.getProject ()
                 def handler = project.getDependencies ()
-                Dependency api = handler.create("io.openapiprocessor:openapi-processor-api:1.1.0")
+                Dependency api = handler.create("io.openapiprocessor:openapi-processor-api:${Version.api}")
 
                 if (!config.processorLib) {
                     task.logger.warn ("'openapiProcessor.${name}.processor' not set!")

@@ -80,6 +80,7 @@ openapiProcessor {
             .withArguments('--stacktrace', 'processOne', 'processTwo')
             .withPluginClasspath ([
                 new File("${projectDir}/build/classes/groovy/main/"),
+                new File("${projectDir}/build/classes/java/main/"),
                 new File("${projectDir}/build/resources/main/")
             ])
             .withDebug (true)

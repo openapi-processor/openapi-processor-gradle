@@ -8,6 +8,10 @@ plugins {
 group 'io.openapiprocessor'
 version '1.0.0.M10'
 
+ext {
+    api = '1.2.0'  // openapi-processor-api version
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -41,7 +45,7 @@ allprojects {
     }
 
     dependencies {
-        compileOnly 'io.openapiprocessor:openapi-processor-api:1.1.0'
+        compileOnly "io.openapiprocessor:openapi-processor-api:${project.api}"
         implementation "org.codehaus.groovy:groovy:2.5.12"
     }
 }
@@ -55,6 +59,15 @@ dependencies {
     testImplementation 'net.bytebuddy:byte-buddy:1.10.13'
 }
 
+sourceSets {
+  main {
+    java {
+        srcDirs "${buildDir}/version"
+    }
+  }
+}
+
+compileGroovy.dependsOn "generateVersion"
 
 testSets {
     testInt
@@ -86,3 +99,5 @@ pluginBundle {
     vcsUrl = 'https://github.com/openapi-processor/openapi-processor-gradle'
     tags = ['openapi', 'openapi-processor']
 }
+
+apply plugin: VersionPlugin
