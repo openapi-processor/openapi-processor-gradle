@@ -1,6 +1,6 @@
 :author: Martin Hauner
 :page-title: openapi-processor-gradle
-:page-aliases: current@gradle:ROOT:index.adoc, latest@gradle:ROOT:index.adoc
+//:page-aliases: current@gradle:ROOT:index.adoc, latest@gradle:ROOT:index.adoc
 :badge-license: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
 :badge-ci: https://github.com/openapi-processor/openapi-processor-gradle/workflows/ci/badge.svg
 :oapj-ci: https://github.com/openapi-processor/openapi-processor-gradle/actions?query=workflow%3Aci
