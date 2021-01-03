@@ -1,5 +1,5 @@
 name: gradle
 title: oap-gradle
-version: master
+version: 1.0.0.M9
 nav:
 - modules/ROOT/nav.adoc
