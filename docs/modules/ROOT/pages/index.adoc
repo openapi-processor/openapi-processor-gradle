@@ -1,6 +1,6 @@
 :author: Martin Hauner
 :page-title: openapi-processor-gradle
-:page-aliases: current@gradle:ROOT:index.adoc, latest@gradle:ROOT:index.adoc
+//:page-aliases: current@gradle:ROOT:index.adoc, latest@gradle:ROOT:index.adoc
 :badge-license: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
 :badge-ci: https://github.com/openapi-processor/openapi-processor-gradle/workflows/ci/badge.svg
 :oapj-ci: https://github.com/openapi-processor/openapi-processor-gradle/actions?query=workflow%3Aci
@@ -28,7 +28,7 @@ a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 | minimum gradle version
 | description
 
-| 2020.1 (not released yet)
+| 2021.1 (1.0.0.M10), (not yet released)
 | `io.openapiprocessor.openapi-processor`
 | 5.5 (June 2019)
 a| only supports processors with new `io.openapiprocessor` group id
@@ -114,7 +114,7 @@ Example using the preferred shortcut nation:
 or like this to use an un-published processor:
 
     spring {
-        processor files('... path to generatr jar')
+        processor files('... path to processor jar')
     }
 
 
@@ -124,7 +124,7 @@ or like this to use an un-published processor:
 
 == gradle tasks
 
-The plugin creates a single gradle task for each processor configuration that will run the corresponding processor. The name gets derived from the name of the processor: `generate<Name>`.
+The plugin creates a single gradle task for each processor configuration that will run the corresponding processor. The name gets derived from the name of the processor: `process<Name>`.
 
 The plugin does not add the `process<Name>` task to the build lifecycle. To automatically run it, add a task dependency in the `build.gradle` file. For example to run openapi-processor-spring before compiling use:
 
