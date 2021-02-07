@@ -60,8 +60,16 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
     private addOpenApiGeneratrRepository (Project project) {
         project.repositories {
-            mavenCentral()  // required?
+            mavenCentral()
 
+            maven {
+                url "https://oss.sonatype.org/content/repositories/snapshots"
+                mavenContent {
+                    snapshotsOnly()
+                }
+            }
+
+            // obsolete
             maven {
                 url "https://dl.bintray.com/openapi-processor/primary"
                 content {
@@ -71,6 +79,8 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                     releasesOnly()
                 }
             }
+
+            // obsolete
             maven {
                 url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
                 content {
