@@ -24,6 +24,17 @@ allprojects {
         mavenCentral()
 
         maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+            content {
+               includeGroup "io.openapiprocessor"
+            }
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+
+        // obsolete, releases are available from mavenCentral()
+        maven {
             url "https://dl.bintray.com/openapi-processor/primary"
             content {
                includeGroup "io.openapiprocessor"
@@ -33,6 +44,7 @@ allprojects {
             }
         }
 
+        // obsolete, snapshots are available from oss.sonatype.org
         maven {
             url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
             content {
