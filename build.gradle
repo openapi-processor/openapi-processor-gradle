@@ -6,10 +6,10 @@ plugins {
 }
 
 group 'io.openapiprocessor'
-version '2021.1' // aka 1.0.0.M10
+version '2021.1'
 
 ext {
-    api = '2020.3'  // openapi-processor-api version
+    api = '2021.1'
 }
 
 java {
