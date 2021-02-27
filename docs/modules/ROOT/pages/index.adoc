@@ -28,7 +28,7 @@ a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 | minimum gradle version
 | description
 
-| 2021.1 (1.0.0.M10), (not yet released)
+| 2021.1 (1.0.0.M10), (february 2021)
 | `io.openapiprocessor.openapi-processor`
 | 5.5 (June 2019)
 a| only supports processors with new `io.openapiprocessor` group id
