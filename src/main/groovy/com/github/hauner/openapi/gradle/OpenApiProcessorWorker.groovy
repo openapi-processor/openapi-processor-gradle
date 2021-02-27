@@ -16,8 +16,6 @@
 
 package com.github.hauner.openapi.gradle
 
-import com.github.hauner.openapi.api.OpenApiProcessor
-
 import javax.inject.Inject
 
 /**
