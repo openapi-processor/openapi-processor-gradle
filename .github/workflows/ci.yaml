@@ -1,11 +1,17 @@
-name: ci
+name: build
 
 on:
   push:
-    paths:
-      - 'src/**'
-      - 'build.gradle'
-      - '.github/**'
+    branches:
+      - '**'
+    paths-ignore:
+      - 'gradle.properties'
+      - 'LICENSE'
+      - 'README.md'
+      - 'docs/**'
+    tags-ignore:
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
   build:
