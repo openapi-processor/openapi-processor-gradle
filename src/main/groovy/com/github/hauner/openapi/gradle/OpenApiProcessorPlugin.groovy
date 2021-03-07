@@ -23,7 +23,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
             return
         }
 
-        addOpenApiGeneratrRepository (project)
+        addOpenApiProcessorRepository (project)
 
         def ext = createExtension (project)
         project.afterEvaluate (createTasksBuilderAction (ext))
@@ -45,7 +45,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         project.extensions.create ('openapiProcessor', OpenApiProcessorExtension, project)
     }
 
-    private addOpenApiGeneratrRepository (Project project) {
+    private addOpenApiProcessorRepository (Project project) {
         project.repositories {
             mavenCentral()
 
