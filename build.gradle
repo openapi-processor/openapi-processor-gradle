@@ -91,7 +91,7 @@ testInt.dependsOn ':processor-one:build'
 testInt.dependsOn ':processor-two:build'
 
 testInt {
-    minHeapSize = "512M"
+    maxHeapSize = "1024M"
     systemProperty "PROJECT_DIR", "$projectDir"
 }
 
