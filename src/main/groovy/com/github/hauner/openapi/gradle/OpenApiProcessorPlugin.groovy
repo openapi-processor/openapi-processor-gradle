@@ -145,15 +145,28 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
                 def project = task.getProject ()
                 def handler = project.getDependencies ()
-                Dependency api = handler.create("io.openapiprocessor:openapi-processor-api:${Version.api}")
+                List<Dependency> dependencies = []
 
-                if (!config.processorLib) {
+                if (config.dependencies.empty) {
                     task.logger.warn ("'openapiProcessor.${name}.processor' not set!")
                 }
 
-                Dependency dep = handler.create (config.processorLib)
+                dependencies.add (handler.create(
+                    "io.openapiprocessor:openapi-processor-api:${Version.api}"))
 
-                Configuration cfg = project.getConfigurations ().detachedConfiguration (api, dep)
+                config.dependencies.each {
+                    dependencies.add (handler.create (it))
+                }
+
+                Dependency[] deps = dependencies.toArray (new Dependency[0])
+
+                Configuration cfg = project.getConfigurations ()
+                    .detachedConfiguration (deps)
+                // needed ?
+                //  cfg.resolutionStrategy {
+                //      force ("io.openapiprocessor:openapi-processor-api:${Version.api}")
+                //      force (config.dependencies)
+                //  }
                 cfg.setVisible (false)
                 cfg.setTransitive (true)
                 cfg.setDescription ("the dependencies of the process${name.capitalize ()} task.")

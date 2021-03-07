@@ -28,7 +28,7 @@ class Processor {
     public static final String TARGET_DIR = 'targetDir'
 
     String name
-    def processorLib  // String | FileCollection...
+    def dependencies = [] // String | FileCollection...
 
     Map<String, Object> other = [:]
 
@@ -37,11 +37,11 @@ class Processor {
     }
 
     void processor (FileCollection fc) {
-        processorLib = fc
+        dependencies.add (fc)
     }
 
     void processor (String dep) {
-        processorLib = dep
+        dependencies.add (dep)
     }
 
     void targetDir (String targetDir) {
