@@ -116,7 +116,20 @@ or like this to use an un-published processor:
     spring {
         processor files('... path to processor jar')
     }
-
++
+[.badge .badge-since]+since 2021.2+
++
+It is possible to use multiple `processor` entries to update dependencies of the openapi-processor.
++
+For example, the java generating processors depend on `openapi-processor-core`. The `core` library provides most of the logic of a processor and it is usually enough to update the `core` library to get bugfixes or new features.
++
+[source,groovy]
+----
+spring {
+   processor 'io.openapiprocessor:openapi-processor-core:2021.3-SNAPSHOT'
+   processor 'io.openapiprocessor:openapi-processor-spring:2021.1'
+}
+----
 
 * `apiPath` (optional): the path to the open api yaml file. If set inside a processor configuration it overrides the parent `apiPath`.
 
