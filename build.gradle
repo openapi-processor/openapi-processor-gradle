@@ -114,4 +114,4 @@ pluginBundle {
     tags = ['openapi', 'openapi-processor']
 }
 
-apply plugin: VersionPlugin
+apply plugin: VersionPlugin 
