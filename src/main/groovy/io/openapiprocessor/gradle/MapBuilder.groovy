@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.gradle
+package io.openapiprocessor.gradle
 
 import groovy.util.logging.Slf4j
 

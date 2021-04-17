@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.gradle
+package io.openapiprocessor.gradle
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection

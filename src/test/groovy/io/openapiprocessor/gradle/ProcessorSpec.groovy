@@ -3,7 +3,7 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.gradle
+package io.openapiprocessor.gradle
 
 import spock.lang.Specification
 

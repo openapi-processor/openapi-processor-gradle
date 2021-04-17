@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.gradle
+package io.openapiprocessor.gradle
 
-import com.github.hauner.openapi.gradle.support.Sl4jMockRule
+import io.openapiprocessor.gradle.support.Sl4jMockRule
 import org.junit.Rule
 import org.slf4j.Logger
 import spock.lang.Specification
@@ -121,5 +121,5 @@ class MapBuilderSpec extends Specification {
         result.nested1.nested2.prop2 == "value2"
         result.nested1.nested2.nested3.prop3 == "value3"
     }
-    
+
 }

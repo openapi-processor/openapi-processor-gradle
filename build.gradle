@@ -102,7 +102,7 @@ gradlePlugin {
             id = 'io.openapiprocessor.openapi-processor'
             displayName = 'Gradle openapi-processor plugin'
             description = 'plugin to run openapi-processor-*, e.g. openapi-processor-spring (requires gradle 5.5+)'
-            implementationClass = 'com.github.hauner.openapi.gradle.OpenApiProcessorPlugin'
+            implementationClass = 'io.openapiprocessor.gradle.OpenApiProcessorPlugin'
         }
     }
 }

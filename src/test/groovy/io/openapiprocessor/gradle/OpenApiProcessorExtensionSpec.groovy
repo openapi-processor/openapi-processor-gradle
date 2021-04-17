@@ -3,7 +3,7 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.gradle
+package io.openapiprocessor.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.internal.provider.DefaultMapProperty

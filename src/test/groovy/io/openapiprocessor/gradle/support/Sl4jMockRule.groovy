@@ -1,4 +1,4 @@
-package com.github.hauner.openapi.gradle.support
+package io.openapiprocessor.gradle.support
 
 import org.junit.rules.ExternalResource
 import org.slf4j.Logger
