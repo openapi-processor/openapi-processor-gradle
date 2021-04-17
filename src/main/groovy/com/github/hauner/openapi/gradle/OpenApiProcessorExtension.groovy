@@ -16,6 +16,7 @@
 
 package com.github.hauner.openapi.gradle
 
+import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.MapProperty
@@ -82,6 +83,46 @@ class OpenApiProcessorExtension {
         processors = objectFactory.mapProperty (String, Processor)
     }
 
+    /**
+     * groovy/kotlin dsl. create a new processor configuration.
+     *
+     * <pre>
+     *  openapiProcessor {
+     *    process("newProcessor") { ... }
+     * }
+     * </pre>
+     *
+     * @param name unique name of the processor
+     * @param args {@link Processor} action
+     * @return the new processor
+     */
+    Processor process(String name, Action<Processor> action) {
+        def processor = new Processor (name)
+        action.execute (processor)
+        processors.put (name, processor)
+    }
+
+    /**
+     * groovy dsl only. create a new processor configuration.
+     *
+     * <pre>
+     *  openapiProcessor {
+     *    newProcessor { ... }
+     * }
+     * </pre>
+     *
+     * gradle will never call this from a kotlin build script unless explicitly calling it, i.e.
+     *
+     * <pre>
+     *  openapiProcessor {
+     *    methodMissing "newProcessor" { ... }
+     * }
+     * </pre>
+     *
+     * @param name unique name of the processor
+     * @param args arg array. arg[0] must be a {@link Processor} configuration block
+     * @return the new processor
+     */
     def methodMissing (String name, def args) {
         def arg = args[0]
 

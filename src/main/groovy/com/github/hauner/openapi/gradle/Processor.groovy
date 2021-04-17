@@ -63,6 +63,18 @@ class Processor {
         other.put (API_PATH, path)
     }
 
+    void prop (Map<String, Object> props) {
+        other.putAll (props)
+    }
+
+    void prop (String key, Object value) {
+        other.put (key, value)
+    }
+
+    void prop (GString key, Object value) {
+        other.put (key.toString (), value)
+    }
+
     def methodMissing (String name, def args) {
         if (args[0] instanceof Closure) {
             def builder = new MapBuilder()

@@ -42,7 +42,7 @@ class OpenApiProcessorExtensionSpec extends Specification {
         ex.apiPath.get () == "openapi.yaml"
     }
 
-    void "converts processor closure to map" () {
+    void "converts processor closure to map via methodMissing" () {
         project.configure (_, _) >> { args ->
             Closure c = args[1]
             c.delegate = args[0]
@@ -58,6 +58,25 @@ class OpenApiProcessorExtensionSpec extends Specification {
         ex.test2 {
             one "a2"
             two "b2"
+        }
+
+        then:
+        ex.processors.get ().test.other.one == "a"
+        ex.processors.get ().test.other.two == "b"
+        ex.processors.get ().test2.other.one == "a2"
+        ex.processors.get ().test2.other.two == "b2"
+    }
+
+    void "converts processor properties to map via process()/prop() methods" () {
+        when:
+        def ex = new OpenApiProcessorExtension (project, objectFactory)
+        ex.process ("test") {
+            it.prop ("one", "a")
+            it.prop ("two", "b")
+        }
+        ex.process ("test2") {
+            it.prop ("one", "a2")
+            it.prop ("two", "b2")
         }
 
         then:
