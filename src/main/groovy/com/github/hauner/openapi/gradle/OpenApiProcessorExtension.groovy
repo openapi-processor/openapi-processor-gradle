@@ -167,9 +167,9 @@ class OpenApiProcessorExtension {
      * @param processor configuration closure
      * @return the created wrapper closure
      */
-    private static Closure wrapWithProjectDelegate (Closure processr) {
+    private static Closure wrapWithProjectDelegate (Closure processor) {
         return {
-            processr.run ()
+            processor.run ()
         }
     }
 
