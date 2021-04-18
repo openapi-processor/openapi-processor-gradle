@@ -89,6 +89,10 @@ class OpenApiProcessorExtension {
         processors.put (name, processor)
     }
 
+    Processor process(GString name, Action<Processor> action) {
+        process (name.toString (), action)
+    }
+
     /**
      * groovy dsl only. create a new processor configuration.
      *

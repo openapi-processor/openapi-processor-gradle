@@ -5,7 +5,6 @@
 
 package io.openapiprocessor.gradle
 
-import io.openapiprocessor.gradle.Version
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,6 +15,7 @@ import org.gradle.api.artifacts.Dependency
  * openapi-processor-gradle plugin.
  */
 class OpenApiProcessorPlugin implements Plugin<Project> {
+    private static final String EXTENSION_NAME = 'openapiProcessor'
 
     @Override
     void apply (Project project) {
@@ -26,7 +26,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         addOpenApiProcessorRepository (project)
 
         def ext = createExtension (project)
-        project.afterEvaluate (createTasksBuilderAction (ext))
+        project.afterEvaluate (createTasksBuilderAction ())
     }
 
     private static boolean isSupportedGradleVersion (Project project) {
@@ -42,7 +42,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
     }
 
     private static OpenApiProcessorExtension createExtension (Project project) {
-        project.extensions.create ('openapiProcessor', OpenApiProcessorExtension, project)
+        project.extensions.create (EXTENSION_NAME, OpenApiProcessorExtension, project)
     }
 
     private addOpenApiProcessorRepository (Project project) {
@@ -91,19 +91,14 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
     /**
      * Provides an Action that create a 'process{ProcessorName}' task for each configured processor.
      */
-    private Action<Project> createTasksBuilderAction (OpenApiProcessorExtension extension) {
-        new Action<Project>() {
-
+    private Action<Project> createTasksBuilderAction () {
+        return new Action<Project>() {
             @Override
             void execute (Project project) {
-                registerTasks (project)
-            }
-
-            private void registerTasks (Project project) {
+                OpenApiProcessorExtension extension = project.extensions.findByName (EXTENSION_NAME)
                 extension.processors.get ().each { entry ->
                     def name = "process${entry.key.capitalize ()}"
-                    def action = createTaskBuilderAction (entry.key, entry.value, extension)
-
+                    def action = createTaskBuilderAction (entry.key, entry.value)
                     project.tasks.register (name, OpenApiProcessorTask, action)
                 }
             }
@@ -113,15 +108,12 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
     /**
      * Creates an Action that configures a 'process{ProcessorName}' task from its configuration.
      */
-    private Action<OpenApiProcessorTask> createTaskBuilderAction(
-        String name, Processor config, OpenApiProcessorExtension extension) {
-
+    private Action<OpenApiProcessorTask> createTaskBuilderAction(String name, Processor processor) {
         new Action<OpenApiProcessorTask>()  {
-
             @Override
             void execute (OpenApiProcessorTask task) {
                 task.setProcessorName (name)
-                task.setProcessorProps (config.other)
+                task.setProcessorProps (processor.other)
 
                 task.setGroup ('openapi processor')
                 task.setDescription ("process openapi with openapi-processor-$name")
@@ -134,14 +126,14 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 def handler = project.getDependencies ()
                 List<Dependency> dependencies = []
 
-                if (config.dependencies.empty) {
-                    task.logger.warn ("'openapiProcessor.${name}.processor' not set!")
+                if (processor.dependencies.empty) {
+                    task.logger.warn ("'$EXTENSION_NAME.$name.processor' not set!")
                 }
 
                 dependencies.add (handler.create(
                     "io.openapiprocessor:openapi-processor-api:${Version.api}"))
 
-                config.dependencies.each {
+                processor.dependencies.each {
                     dependencies.add (handler.create (it))
                 }
 
@@ -149,11 +141,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
                 Configuration cfg = project.getConfigurations ()
                     .detachedConfiguration (deps)
-                // needed ?
-                //  cfg.resolutionStrategy {
-                //      force ("io.openapiprocessor:openapi-processor-api:${Version.api}")
-                //      force (config.dependencies)
-                //  }
+
                 cfg.setVisible (false)
                 cfg.setTransitive (true)
                 cfg.setDescription ("the dependencies of the process${name.capitalize ()} task.")
@@ -161,27 +149,28 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
             }
 
             private String getInputDirectory () {
-                String path = config.apiPath
+                String path = processor.apiPath
                 def file = new File (path)
                 file.parent
             }
 
             private String getOutputDirectory () {
-                config.targetDir
+                processor.targetDir
             }
 
             // copy common api path to openapi-processor props if not set
             private copyApiPath (OpenApiProcessorTask task) {
-                if (!config.hasApiPath ()) {
-                    if (!extension.apiPath.present) {
-                        task.logger.warn ("'openapiProcessor.apiPath' or 'openapiProcessor.${name}.apiPath' not set!")
-                        return
-                    }
+                if(processor.hasApiPath ())
+                    return
 
-                    config.apiPath = extension.apiPath.get ()
+                def extension = task.project.extensions.findByName (EXTENSION_NAME)
+                if (!extension.apiPath.present) {
+                    task.logger.warn ("'$EXTENSION_NAME.apiPath' or '$EXTENSION_NAME.$name.apiPath' not set!")
+                    return
                 }
-            }
 
+                processor.apiPath = extension.apiPath.get ()
+            }
         }
     }
 
