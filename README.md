@@ -17,8 +17,8 @@ The plugin at the [gradle plugin portal][oap-plugin].
   
 
 [badge-license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
-[badge-ci]: https://github.com/openapi-processor/openapi-processor-gradle/workflows/ci/badge.svg
-[workflow-ci]: https://github.com/openapi-processor/openapi-processor-gradle/actions?query=workflow%3Aci
+[badge-ci]: https://github.com/openapi-processor/openapi-processor-gradle/workflows/build/badge.svg
+[workflow-ci]: https://github.com/openapi-processor/openapi-processor-gradle/actions?query=workflow%3Abuild
 
 [oap-api]: https://github.com/openapi-processor/openapi-processor-api
 [oap-docs]: https://docs.openapiprocessor.io/gradle
