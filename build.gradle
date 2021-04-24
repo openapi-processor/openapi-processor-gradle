@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'io.openapiprocessor'
-version '2021.2'
+version '2021.3'
 
 ext {
     api = '2021.1'
