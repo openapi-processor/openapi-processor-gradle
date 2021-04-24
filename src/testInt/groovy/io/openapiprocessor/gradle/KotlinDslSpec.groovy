@@ -72,7 +72,6 @@ openapiProcessor {
         result.output.contains("processor v1 did run !")
 
         where:
-        // 5.5 is the minimum required version to run this test
         gradleVersion << [
 //            // does not work with gradle before 6.5
 //            '5.5', '5.5.1',
