@@ -1,8 +1,8 @@
 plugins {
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.12.0'
-    id 'org.unbroken-dome.test-sets' version '3.0.1'
-    id "com.github.ben-manes.versions" version "0.36.0"
+    id 'com.gradle.plugin-publish' version '0.15.0'
+    id 'org.unbroken-dome.test-sets' version '4.0.0'
+    id "com.github.ben-manes.versions" version "0.39.0"
 }
 
 group 'io.openapiprocessor'
@@ -32,28 +32,6 @@ allprojects {
                 snapshotsOnly()
             }
         }
-
-        // obsolete, releases are available from mavenCentral()
-        maven {
-            url "https://dl.bintray.com/openapi-processor/primary"
-            content {
-               includeGroup "io.openapiprocessor"
-            }
-            mavenContent {
-                releasesOnly()
-            }
-        }
-
-        // obsolete, snapshots are available from oss.sonatype.org
-        maven {
-            url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
-            content {
-               includeGroup "io.openapiprocessor"
-            }
-            mavenContent {
-                snapshotsOnly()
-            }
-        }
     }
 
     dependencies {
@@ -68,7 +46,7 @@ dependencies {
         exclude group: 'org.codehaus.groovy'
     }
 
-    testImplementation 'net.bytebuddy:byte-buddy:1.10.18'
+    testImplementation 'net.bytebuddy:byte-buddy:1.11.8'
 }
 
 sourceSets {
