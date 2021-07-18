@@ -269,7 +269,7 @@ tasks.processResources {
 ----
 ====
 
-=== `dependOn` a processing task
+== `dependOn` a processing task
 
 If a task needs to run before a processing task, e.g. `processSpring`, it is necessary to create the dependency inside an `afterEvaluate` block.
 
