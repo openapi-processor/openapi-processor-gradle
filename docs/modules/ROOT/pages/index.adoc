@@ -269,6 +269,27 @@ tasks.processResources {
 ----
 ====
 
+=== `dependOn` a processing task
+
+If a task needs to run before a processing task, e.g. `processSpring`, it is necessary to create the dependency inside an `afterEvaluate` block.
+
+The gradle plugin creates the processing tasks inside an `afterEvaluate` block and therefore they are not visible outside `afterEvaluate`.
+
+Here is a simple example:
+
+[source,groovy]
+----
+// groovy
+tasks.register('prepareProcessing') {
+    doLast {
+        println 'preparing processing...'
+    }
+}
+
+afterEvaluate {
+    tasks.processSpring.dependsOn('foo')
+}
+----
 
 == using the processor output
 
