@@ -16,15 +16,10 @@
 
 package io.openapiprocessor.gradle
 
-import io.openapiprocessor.gradle.support.Sl4jMockRule
-import org.junit.Rule
 import org.slf4j.Logger
 import spock.lang.Specification
 
 class MapBuilderSpec extends Specification {
-
-    def log = Mock Logger
-    @Rule Sl4jMockRule rule = new Sl4jMockRule(MapBuilder, log)
 
     void "does set simple property value via method" () {
         def builder = new MapBuilder()
@@ -55,8 +50,10 @@ class MapBuilderSpec extends Specification {
     }
 
     void "warns when property is set multiple times" () {
+        def log = Mock Logger
         log.isWarnEnabled () >> true
-        def builder = new MapBuilder()
+
+        def builder = new MapBuilder(log: log)
 
         when:
         builder.with {

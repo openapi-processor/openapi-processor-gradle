@@ -16,7 +16,8 @@
 
 package io.openapiprocessor.gradle
 
-import groovy.util.logging.Slf4j
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * convert any (nested) dsl structure (ie. closures) to a (nested) map structure.
@@ -37,8 +38,9 @@ import groovy.util.logging.Slf4j
  *
  * @author Martin Hauner
  */
-@Slf4j
 class MapBuilder {
+    Logger log = LoggerFactory.getLogger (MapBuilder)
+
     private Map<String, ?> props = [:]
 
     /**
