@@ -5,8 +5,6 @@
 
 package com.github.hauner.openapi.gradle
 
-import org.gradle.api.file.FileCollection
-
 /**
  * backward compatibility, replaced by {@link io.openapiprocessor.gradle.Processor}
  */
