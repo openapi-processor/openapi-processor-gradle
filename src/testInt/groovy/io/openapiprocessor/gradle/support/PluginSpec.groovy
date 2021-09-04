@@ -7,14 +7,13 @@ package io.openapiprocessor.gradle.support
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+import spock.lang.TempDir
 
 abstract class PluginSpec extends Specification {
 
-    @Rule
-    TemporaryFolder testProjectDir
+    @TempDir
+    File testProjectDir
 
     private File buildFile
     private File openapiFile
@@ -22,12 +21,12 @@ abstract class PluginSpec extends Specification {
 
     void setup() {
         projectDir = System.properties ['PROJECT_DIR']
-        testProjectDir.newFolder ('src', 'api')
+        new File(testProjectDir, "src/api").mkdirs ()
 
-        buildFile = testProjectDir.newFile (getBuildFileName ())
+        buildFile = new File(testProjectDir, getBuildFileName ())
         buildFile << getBuildFile(projectDir)
 
-        openapiFile = testProjectDir.newFile ('src/api/openapi.yaml')
+        openapiFile = new File (testProjectDir, 'src/api/openapi.yaml')
         openapiFile << getOpenApiFile()
     }
 
@@ -45,7 +44,7 @@ abstract class PluginSpec extends Specification {
     BuildResult build(String gradleVersion) {
         return GradleRunner.create()
             .withGradleVersion(gradleVersion)
-            .withProjectDir(testProjectDir.root)
+            .withProjectDir(testProjectDir)
             .withArguments(getGradleArguments ())
             .withPluginClasspath ([
                 new File("${projectDir}/build/classes/groovy/main/"),
