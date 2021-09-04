@@ -71,30 +71,6 @@ class OpenApiProcessorPluginSpec extends PluginSpec {
         gradleVersion << Gradle.VERSIONS_7.reverse ()
     }
 
-    @Unroll
-    void "process task runs processor from gradle 6 (#gradleVersion)" () {
-        when:
-        def result = build(gradleVersion)
-
-        then:
-        assertResult (result)
-
-        where:
-        gradleVersion << Gradle.VERSIONS_6.reverse ()
-    }
-
-    @Unroll
-    void "process task runs processor from gradle 5 (#gradleVersion)" () {
-        when:
-        def result = build(gradleVersion)
-
-        then:
-        assertResult (result)
-
-        where:
-        gradleVersion << Gradle.VERSIONS_5.reverse ()
-    }
-
     private void assertResult(BuildResult result) {
         assert result.task(':processV1').outcome == SUCCESS
         assert result.output.contains("processor v1 did run !")
