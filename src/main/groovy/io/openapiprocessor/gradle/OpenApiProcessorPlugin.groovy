@@ -55,36 +55,6 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                     snapshotsOnly()
                 }
             }
-
-            // obsolete
-            maven {
-                url "https://dl.bintray.com/openapi-processor/primary"
-                content {
-                   includeGroup "io.openapiprocessor"
-                }
-                mavenContent {
-                    releasesOnly()
-                }
-            }
-
-            // obsolete
-            maven {
-                url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
-                content {
-                   includeGroup "io.openapiprocessor"
-                }
-                mavenContent {
-                    snapshotsOnly()
-                }
-            }
-
-            // obsolete
-            maven {
-                url "https://dl.bintray.com/hauner/openapi-processor"
-                content {
-                   includeGroupByRegex "com\\.github\\.hauner\\.openapi.*"
-                }
-            }
         }
     }
 
