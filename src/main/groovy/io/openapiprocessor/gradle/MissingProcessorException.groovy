@@ -16,7 +16,7 @@
 
 package io.openapiprocessor.gradle
 
-class MissingProcessorException extends Exception {
+class MissingProcessorException extends RuntimeException {
 
     MissingProcessorException(String processorName) {
         super("can't find processor: ${processorName}!")
