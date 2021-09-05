@@ -28,7 +28,7 @@ class VersionPlugin implements Plugin<Project> {
 
             @Override
             void execute (Project prj) {
-                prj.tasks.register ('generateVersion', VersionTask , new Action<VersionTask>() {
+                prj.tasks.register ('generateVersion', VersionTask, new Action<VersionTask>() {
 
                     @Override
                     void execute (VersionTask task) {
