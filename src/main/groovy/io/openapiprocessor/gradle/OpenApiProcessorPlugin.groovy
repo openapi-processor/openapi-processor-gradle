@@ -65,7 +65,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         return new Action<Project>() {
             @Override
             void execute (Project project) {
-                OpenApiProcessorExtension extension = project.extensions.findByName (EXTENSION_NAME)
+                def extension = project.extensions.findByName (EXTENSION_NAME) as OpenApiProcessorExtension
                 extension.processors.get ().each { entry ->
                     def name = "process${entry.key.capitalize ()}"
                     def action = createTaskBuilderAction (entry.key, entry.value)
@@ -82,17 +82,18 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         new Action<OpenApiProcessorTask>()  {
             @Override
             void execute (OpenApiProcessorTask task) {
-                task.setProcessorName (name)
-                task.setProcessorProps (processor.other)
+                def project = task.getProject ()
+
+                task.processorName.set (name)
+                task.processorProps.set (processor.other)
 
                 task.setGroup ('openapi processor')
                 task.setDescription ("process openapi with openapi-processor-$name")
 
                 copyApiPath (task)
-                task.setApiDir (getInputDirectory ())
-                task.setTargetDir (getOutputDirectory ())
+                task.apiDir.set (inputDirectory)
+                task.targetDir.set (outputDirectory)
 
-                def project = task.getProject ()
                 def handler = project.getDependencies ()
                 List<Dependency> dependencies = []
 
@@ -115,7 +116,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 cfg.setVisible (false)
                 cfg.setTransitive (true)
                 cfg.setDescription ("the dependencies of the process${name.capitalize ()} task.")
-                task.dependencies = cfg
+                task.dependencies.from (cfg)
             }
 
             private String getInputDirectory () {
