@@ -46,7 +46,7 @@ dependencies {
     testImplementation ('org.spockframework:spock-core:2.0-groovy-3.0') {
         exclude group: 'org.codehaus.groovy'
     }
-    testImplementation 'net.bytebuddy:byte-buddy:1.11.13'
+    testImplementation 'net.bytebuddy:byte-buddy:1.11.15'
 }
 
 tasks.withType(Test) {
