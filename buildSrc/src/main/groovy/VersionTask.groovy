@@ -36,7 +36,7 @@ class VersionTask extends DefaultTask {
      */
     @TaskAction
     void generateVersion () {
-        def path = Path.of (targetDir, "version", "io", "openapiprocessor", "gradle")
+        def path = Path.of (targetDir, "io", "openapiprocessor", "gradle")
         Files.createDirectories(path)
 
         def target = path.resolve ("Version.java")
