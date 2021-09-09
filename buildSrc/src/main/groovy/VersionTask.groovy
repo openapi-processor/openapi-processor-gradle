@@ -1,4 +1,5 @@
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
@@ -13,9 +14,13 @@ import java.time.Instant
 class VersionTask extends DefaultTask {
 
     /**
+     * the "build.gradle" file with the current versions.
+     */
+    @InputFile
+    File buildFile
+
+    /**
      * Target directory for the generated version class.
-     *
-     * Used by gradle for the up-to-date check.
      */
     @OutputDirectory
     String targetDir
