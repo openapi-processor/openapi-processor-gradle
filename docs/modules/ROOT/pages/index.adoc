@@ -20,6 +20,18 @@ link:{oapj-license}[image:{badge-license}[]]
 a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any openapi-processor without an explicit dependency on the processor.
 
 
+[cols="2*",options="header"]
+|===
+| plugin version
+| required gradle version
+
+| 2022.1
+| 7.0+
+
+| 2021.3
+| 5.5+ with groovy dsl, 6.5 with kotlin dsl
+|===
+
 
 == gradle dsl
 
@@ -531,6 +543,11 @@ See xref:samples::spring-mvc.adoc[spring mvc sample] or xref:samples::spring-web
 | plugin id
 | minimum gradle version
 | description
+
+| 2022.1, (January 2022)
+| `io.openapiprocessor.openapi-processor`
+a| 7.0 (April 2021) groovy & kotlin dsl
+a| only supports processors with `io.openapiprocessor` group id
 
 | 2021.3, (April 2021)
 | `io.openapiprocessor.openapi-processor`
