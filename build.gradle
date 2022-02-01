@@ -1,8 +1,8 @@
 plugins {
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.15.0'
+    id 'com.gradle.plugin-publish' version '0.20.0'
     id 'org.unbroken-dome.test-sets' version '4.0.0'
-    id "com.github.ben-manes.versions" version "0.39.0"
+    id "com.github.ben-manes.versions" version "0.41.0"
 }
 
 apply plugin: VersionPlugin
@@ -38,7 +38,7 @@ allprojects {
 
     dependencies {
         compileOnly "io.openapiprocessor:openapi-processor-api:${project.api}"
-        implementation 'org.codehaus.groovy:groovy:3.0.8'
+        implementation 'org.codehaus.groovy:groovy:3.0.9'
     }
 }
 
@@ -46,7 +46,7 @@ dependencies {
     testImplementation ('org.spockframework:spock-core:2.0-groovy-3.0') {
         exclude group: 'org.codehaus.groovy'
     }
-    testImplementation 'net.bytebuddy:byte-buddy:1.11.15'
+    testImplementation 'net.bytebuddy:byte-buddy:1.12.7'
 }
 
 tasks.withType(Test) {
