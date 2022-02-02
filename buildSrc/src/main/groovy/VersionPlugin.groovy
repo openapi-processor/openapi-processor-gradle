@@ -17,30 +17,33 @@ import org.gradle.api.Project
  *
  * The io/openapiprocessor/gradle/Version.java file is generated to:
  *
- * $(project.buildDir}/main/java
+ * $(project.buildDir}/version
  *
  * Add it as a source directory to include it in compilation.
  */
 class VersionPlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        project.afterEvaluate (new Action<Project> () {
+        def task = project.tasks.register ('generateVersion', VersionTask, new Action<VersionTask>() {
 
             @Override
-            void execute (Project prj) {
-                prj.tasks.register ('generateVersion', VersionTask , new Action<VersionTask>() {
-
-                    @Override
-                    void execute (VersionTask task) {
-                        task.targetDir = prj.buildDir
-                        task.version = prj.version
-                        task.api = prj.ext.api
-                    }
-
-                })
+            void execute (VersionTask task) {
+                task.buildFile = project.buildFile
+                task.targetDir = "${project.buildDir}/version"
+                task.version = project.version
+                task.api = project.ext.api
             }
 
         })
+
+        // adding the task as srcDir automatically executes the task before compiling.
+        project.sourceSets {
+          main {
+            java {
+                srcDirs task
+            }
+          }
+        }
     }
 
 }

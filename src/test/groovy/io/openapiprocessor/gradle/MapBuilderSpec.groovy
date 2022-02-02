@@ -1,30 +1,14 @@
 /*
- * Copyright 2019 the original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2019 https://github.com/openapi-processor/openapi-processor-gradle
+ * PDX-License-Identifier: Apache-2.0
  */
 
 package io.openapiprocessor.gradle
 
-import io.openapiprocessor.gradle.support.Sl4jMockRule
-import org.junit.Rule
 import org.slf4j.Logger
 import spock.lang.Specification
 
 class MapBuilderSpec extends Specification {
-
-    def log = Mock Logger
-    @Rule Sl4jMockRule rule = new Sl4jMockRule(MapBuilder, log)
 
     void "does set simple property value via method" () {
         def builder = new MapBuilder()
@@ -55,8 +39,10 @@ class MapBuilderSpec extends Specification {
     }
 
     void "warns when property is set multiple times" () {
+        def log = Mock Logger
         log.isWarnEnabled () >> true
-        def builder = new MapBuilder()
+
+        def builder = new MapBuilder(log: log)
 
         when:
         builder.with {

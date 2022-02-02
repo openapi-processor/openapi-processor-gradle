@@ -32,9 +32,9 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
     private static boolean isSupportedGradleVersion (Project project) {
         String version = project.gradle.gradleVersion
 
-        if (version < "5.5") {
+        if (version < "7.0") {
             project.logger.error ("the current gradle version is ${version}")
-            project.logger.error ("openapi-processor-gradle requires gradle 5.5+")
+            project.logger.error ("openapi-processor-gradle requires gradle 7.0+")
             return false
         }
 
@@ -55,36 +55,6 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                     snapshotsOnly()
                 }
             }
-
-            // obsolete
-            maven {
-                url "https://dl.bintray.com/openapi-processor/primary"
-                content {
-                   includeGroup "io.openapiprocessor"
-                }
-                mavenContent {
-                    releasesOnly()
-                }
-            }
-
-            // obsolete
-            maven {
-                url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
-                content {
-                   includeGroup "io.openapiprocessor"
-                }
-                mavenContent {
-                    snapshotsOnly()
-                }
-            }
-
-            // obsolete
-            maven {
-                url "https://dl.bintray.com/hauner/openapi-processor"
-                content {
-                   includeGroupByRegex "com\\.github\\.hauner\\.openapi.*"
-                }
-            }
         }
     }
 
@@ -95,7 +65,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         return new Action<Project>() {
             @Override
             void execute (Project project) {
-                OpenApiProcessorExtension extension = project.extensions.findByName (EXTENSION_NAME)
+                def extension = project.extensions.findByName (EXTENSION_NAME) as OpenApiProcessorExtension
                 extension.processors.get ().each { entry ->
                     def name = "process${entry.key.capitalize ()}"
                     def action = createTaskBuilderAction (entry.key, entry.value)
@@ -112,17 +82,18 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         new Action<OpenApiProcessorTask>()  {
             @Override
             void execute (OpenApiProcessorTask task) {
-                task.setProcessorName (name)
-                task.setProcessorProps (processor.other)
+                def project = task.getProject ()
+
+                task.processorName.set (name)
+                task.processorProps.set (processor.other)
 
                 task.setGroup ('openapi processor')
                 task.setDescription ("process openapi with openapi-processor-$name")
 
                 copyApiPath (task)
-                task.setApiDir (getInputDirectory ())
-                task.setTargetDir (getOutputDirectory ())
+                task.apiDir.set (inputDirectory)
+                task.targetDir.set (outputDirectory)
 
-                def project = task.getProject ()
                 def handler = project.getDependencies ()
                 List<Dependency> dependencies = []
 
@@ -145,7 +116,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 cfg.setVisible (false)
                 cfg.setTransitive (true)
                 cfg.setDescription ("the dependencies of the process${name.capitalize ()} task.")
-                task.dependencies = cfg
+                task.dependencies.from (cfg)
             }
 
             private String getInputDirectory () {

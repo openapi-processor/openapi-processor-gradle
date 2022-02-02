@@ -20,6 +20,20 @@ link:{oapj-license}[image:{badge-license}[]]
 a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any openapi-processor without an explicit dependency on the processor.
 
 
+[cols="2*",options="header"]
+|===
+| plugin version
+| required gradle version
+
+| 2022.1
+| 7.0+
+
+| 2021.3
+| 5.5+ with groovy dsl, 6.5 with kotlin dsl
+|===
+
+NOTE: unfortunately it is necessary to configure a few xref:oap::jdk.adoc[additional jvm parameter] to run the processor with JDK 16+
+
 
 == gradle dsl
 
@@ -522,46 +536,3 @@ openapiProcessor {
 == samples
 
 See xref:samples::spring-mvc.adoc[spring mvc sample] or xref:samples::spring-webflux.adoc[spring webflux sample] for working spring boot samples using the groovy dsl.
-
-== compatibility
-
-[cols="4*",options="header"]
-|===
-| plugin version
-| plugin id
-| minimum gradle version
-| description
-
-| 2021.3, (April 2021)
-| `io.openapiprocessor.openapi-processor`
-a| 5.5 (June 2019) groovy dsl +
-6.5 (June 2020) kotlin dsl
-a| only supports processors with new `io.openapiprocessor` group id
-
-| 2021.2, (March 2021)
-| `io.openapiprocessor.openapi-processor`
-| 5.5 (June 2019)
-a| only supports processors with new `io.openapiprocessor` group id
-
-| 2021.1 (1.0.0.M10), (February 2021)
-| `io.openapiprocessor.openapi-processor`
-| 5.5 (June 2019)
-a| same as above
-
-4+| &darr; old (deprecated)
-
-| 1.0.0.M9
-| same as above
-| same as above
-a| only supports processors with new `io.openapiprocessor` group id
-
-| 1.0.0.M8
-| `com.github.hauner.openapi-processor`
-| 5.2 (February 2019)
-a| supports processors with new `io.openapiprocessor` and old `com.github.hauner.openapi` group id
-
-| 1.0.0.M7
-| `com.github.hauner.openapi-processor`
-| 5.2 (February 2019)
-a| only supports processors `com.github.hauner.openapi` group id
-|===

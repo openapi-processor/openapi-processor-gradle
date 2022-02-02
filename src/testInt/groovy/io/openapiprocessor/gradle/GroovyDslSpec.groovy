@@ -1,3 +1,8 @@
+/*
+ * Copyright 2021 https://github.com/openapi-processor/openapi-processor-gradle
+ * PDX-License-Identifier: Apache-2.0
+ */
+
 package io.openapiprocessor.gradle
 
 import io.openapiprocessor.gradle.support.Gradle
@@ -50,32 +55,6 @@ class GroovyDslSpec extends PluginSpec {
 
         where:
         gradleVersion << Gradle.VERSIONS_7.reverse ()
-    }
-
-    @Unroll
-    void "test groovy (method) dsl with with gradle 6 (#gradleVersion)" () {
-        when:
-        def result = build (gradleVersion)
-
-        then:
-        result.task (':processV1').outcome == SUCCESS
-        result.output.contains ("processor v1 did run !")
-
-        where:
-        gradleVersion << Gradle.VERSIONS_6.reverse ()
-    }
-
-    @Unroll
-    void "test groovy (method) dsl with with gradle 5 (#gradleVersion)" () {
-        when:
-        def result = build(gradleVersion)
-
-        then:
-        result.task(':processV1').outcome == SUCCESS
-        result.output.contains("processor v1 did run !")
-
-        where:
-        gradleVersion << Gradle.VERSIONS_5.reverse ()
     }
 
 }
