@@ -32,6 +32,8 @@ a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 | 5.5+ with groovy dsl, 6.5 with kotlin dsl
 |===
 
+NOTE: unfortunately it is necessary to configure a few xref:oap::jdk.adoc[additional jvm parameter] to run the processor with JDK 16+
+
 
 == gradle dsl
 
