@@ -30,21 +30,21 @@ class OpenApiProcessorPluginSpec extends PluginSpec {
             apiPath "\${projectDir}/src/api/openapi.yaml"
         
             v1 {
-                processor files("${projectDir}/processor-v1/build/libs/processor-v1.jar")
+                processor project.files("${projectDir}/processor-v1/build/libs/processor-v1.jar")
         
                 targetDir "\${buildDir}/v1"
                 v1 "value v1"
             }
             
             one {
-                processor files("${projectDir}/processor-one/build/libs/processor-one.jar")
+                processor project.files("${projectDir}/processor-one/build/libs/processor-one.jar")
         
                 targetDir "\${buildDir}/one"
                 other1 "value one"
             }
         
             two {
-                processor files("${projectDir}/processor-two/build/libs/processor-two.jar")
+                processor project.files("${projectDir}/processor-two/build/libs/processor-two.jar")
         
                 targetDir "\${buildDir}/two"
                 other2 "value two"

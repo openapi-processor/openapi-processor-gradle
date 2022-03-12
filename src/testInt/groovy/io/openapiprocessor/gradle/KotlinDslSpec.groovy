@@ -29,7 +29,7 @@ class KotlinDslSpec extends PluginSpec {
             apiPath("\$projectDir/src/api/openapi.yaml")
         
             process("v1") {
-                processor(files("$projectDir/processor-v1/build/libs/processor-v1.jar"))
+                processor(project.files("$projectDir/processor-v1/build/libs/processor-v1.jar"))
                 targetDir("\$buildDir/v1")
         
                 prop("v1", "value v1")

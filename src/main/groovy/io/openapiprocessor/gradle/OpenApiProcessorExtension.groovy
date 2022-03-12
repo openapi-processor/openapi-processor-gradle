@@ -120,50 +120,14 @@ class OpenApiProcessorExtension {
 
         // should be a nested processor configuration
         if (arg instanceof Closure) {
-
             // apply it to a new Processor () entry
             def processor = new Processor (name)
-            arg.delegate = processor
-            arg.resolveStrategy = Closure.DELEGATE_FIRST
-
-            project.configure (project, wrapWithProjectDelegate (arg))
+            project.configure (processor, arg)
             processors.put (name, processor)
             return processor
         }
 
         throw new MissingMethodException(name, OpenApiProcessorExtension, args)
-    }
-
-    /**
-     * wraps the given closure with a closure that delegates to the project.
-     *
-     * this makes it possible to use any of the different dependency formats as value to the
-     * 'processor' property in a processor configuration block, e.g.
-     * <pre>
-     *     ...
-     *     spring {
-     *         processor files ("../some/lib.jar")
-     *         ....
-     *     }
-     *     ...
-     * </pre>
-     * or
-     * <pre>
-     *     ...
-     *     spring {
-     *         processor "group:artifact:version"
-     *         ....
-     *     }
-     *     ...
-     * </pre>
-     *
-     * @param processor configuration closure
-     * @return the created wrapper closure
-     */
-    private static Closure wrapWithProjectDelegate (Closure processor) {
-        return {
-            processor.run ()
-        }
     }
 
     void apiPath (String apiPath) {

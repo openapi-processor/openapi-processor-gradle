@@ -87,6 +87,15 @@ class Processor {
     }
 
     def methodMissing (String name, def args) {
+        /*
+        this way we could use processor (file ("...")) instead of processor (project.file ("..."))
+
+        def ignore =  ['files']
+        if (ignore.contains (name)) {
+            throw new MissingMethodException(name, Processor, args)
+        }
+         */
+
         if (args[0] instanceof Closure) {
             def builder = new MapBuilder()
             builder.with (args[0] as Closure)
