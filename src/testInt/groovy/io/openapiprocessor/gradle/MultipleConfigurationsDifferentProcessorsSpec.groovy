@@ -12,7 +12,7 @@ import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class OpenApiProcessorPluginSpec extends PluginSpec {
+class MultipleConfigurationsDifferentProcessorsSpec extends PluginSpec {
 
     @Override
     String getBuildFileName () {
