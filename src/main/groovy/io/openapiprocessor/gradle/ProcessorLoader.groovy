@@ -39,7 +39,7 @@ class ProcessorLoader {
             return processor
         }
 
-        false
+        null
     }
 
     private static findProcessor(String processorName, Class clazz, ClassLoader classLoader) {
