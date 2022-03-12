@@ -124,6 +124,7 @@ class OpenApiProcessorExtension {
             // apply it to a new Processor () entry
             def processor = new Processor (name)
             arg.delegate = processor
+            arg.resolveStrategy = Closure.DELEGATE_FIRST
 
             project.configure (project, wrapWithProjectDelegate (arg))
             processors.put (name, processor)
