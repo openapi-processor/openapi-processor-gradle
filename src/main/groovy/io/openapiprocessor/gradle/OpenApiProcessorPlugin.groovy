@@ -84,11 +84,11 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
             void execute (OpenApiProcessorTask task) {
                 def project = task.getProject ()
 
-                task.processorName.set (name)
+                task.processorName.set (processor.name)
                 task.processorProps.set (processor.other)
 
                 task.setGroup ('openapi processor')
-                task.setDescription ("process openapi with openapi-processor-$name")
+                task.setDescription ("process openapi with openapi-processor-${processor.name}")
 
                 copyApiPath (task)
                 task.apiDir.set (inputDirectory)

@@ -16,13 +16,23 @@ class Processor {
     public static final String TARGET_DIR = 'targetDir'
 
     String name
+    String config
     def dependencies = [] // String | FileCollection...
 
     Map<String, Object> other = [:]
 
-    Processor (String name) {
-        this.name = name
+    Processor (String configName) {
+        this.config = configName
+        this.name = configName
     }
+
+//    void processorName (String processorName) {
+//        this.name = processorName
+//    }
+//
+//    void processorName (GString processorName) {
+//        this.name = processorName.toString ()
+//    }
 
     void processor (FileCollection fc) {
         dependencies.add (fc)
