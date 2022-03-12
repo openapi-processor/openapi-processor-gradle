@@ -114,7 +114,7 @@ openapiProcessor {
 ----
 Kotlin::
 +
-[source,groovy]
+[source,kotlin]
 ----
 // build.gradle.kts
 
