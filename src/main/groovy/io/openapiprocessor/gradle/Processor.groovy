@@ -26,13 +26,13 @@ class Processor {
         this.name = configName
     }
 
-//    void processorName (String processorName) {
-//        this.name = processorName
-//    }
-//
-//    void processorName (GString processorName) {
-//        this.name = processorName.toString ()
-//    }
+    void processorName (String processorName) {
+        this.name = processorName
+    }
+
+    void processorName (GString processorName) {
+        this.name = processorName.toString ()
+    }
 
     void processor (FileCollection fc) {
         dependencies.add (fc)
