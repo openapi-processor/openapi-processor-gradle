@@ -375,6 +375,76 @@ sourceSets {
 ----
 ====
 
+== processing multiple openapi files
+
+[.badge .badge-since]+since 2022.1+
+
+NOTE: this is experimental
+
+By default, the name of a `processor` configuration block is used to select the processor library. Each processor library has a name and the plugin tries to load the processor library with that name.
+
+This way it is not possible to process multiple distinct openapi descriptions with the same processor.
+
+To achieve this it is possible to use user selected names for the `processor` blocks and explicitly configure the processor name using `processorName()`:
+
+[tabs]
+====
+Groovy::
++
+[source,groovy]
+----
+// build.gradle
+
+openapiProcessor {
+    apiOne { // <1>
+      processorName "spring" // <2>
+
+      apiPath "${projectDir}/src/api-one/openapi.yaml"
+        ... options of openapi-processor-spring
+    }
+
+    apiTwo { // <1>
+      processorName "spring" // <2>
+
+      apiPath "${projectDir}/src/api-two/openapi.yaml"
+        ... options of openapi-processor-spring
+    }
+}
+----
+Kotlin::
++
+[source,kotlin]
+----
+// build.gradle.kts
+
+openapiProcessor {
+    process("apiOne") { // <1>
+      processorName("spring") // <2>
+
+      apiPath("${projectDir}/src/api-one/openapi.yaml")
+        ... options of openapi-processor-spring
+    }
+
+    process("apiTwo") { // <1>
+      processorName("spring") // <2>
+
+      apiPath("${projectDir}/src/api-two/openapi.yaml")
+        ... options of openapi-processor-json
+    }
+}
+----
+====
+
+<1> user selected name for the configuration. It is used to create the task name (in this case `processApiOne` & `processApiTwo`).
+
+<2> explicit name of the processor to use.
+
+
+
+The plugin configures the parent directory of the openapi file (i.e. `apiPath`) and the `targetDir` for the up-to-date check of each `processXX` gradle task. If the inputs and outputs are unchanged gradle will not re-run the task.
+
+To keep this working and to avoid unnecessary re-runs of the processor tasks it is recommended to use distinct folders for each api file.
+
 == configuration example
 
 Here is a full example that configures xref:spring:ROOT:index.adoc[openapi-processor-spring] and xref:json:ROOT:index.adoc[openapi-processor-json]:
