@@ -87,6 +87,7 @@ class OpenApiProcessorExtension {
         def processor = new Processor (name)
         action.execute (processor)
         processors.put (name, processor)
+        processor
     }
 
     Processor process(GString name, Action<Processor> action) {
