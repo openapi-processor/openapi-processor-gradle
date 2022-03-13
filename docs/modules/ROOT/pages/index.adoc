@@ -379,8 +379,6 @@ sourceSets {
 
 [.badge .badge-since]+since 2022.1+
 
-NOTE: this is experimental
-
 By default, the name of a `processor` configuration block is used to select the processor library. Each processor library has a name and the plugin tries to load the processor library with that name.
 
 This way it is not possible to process multiple distinct openapi descriptions with the same processor.
