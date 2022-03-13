@@ -46,7 +46,7 @@ Apart from that there is only a single option that is recognized inside the conf
 * `apiPath`, which defines the path to the openapi yaml file. This is usually the same for all
 processors and placing it directly into the `openapiProcessor` block sets it for all processors.
 
-To configure a processor, for example xref:spring:ROOT:index.doc[openapi-processor-spring], place a `spring` configuration into the `openapiProcessor` block. The name of the configuration gets used to create a gradle task `process<Name>` to run the corresponding processor.
+To configure a processor, for example xref:spring:ROOT:index.adoc[openapi-processor-spring], place a `spring` configuration into the `openapiProcessor` block. The name of the configuration gets used to create a gradle task `process<Name>` to run the corresponding processor.
 
 [tabs]
 ====
