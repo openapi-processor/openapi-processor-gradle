@@ -10,7 +10,7 @@
 //
 // content
 //
-image:openapi-processor-gradle$$@$$1280x200.png[openapi-processor-gradle]
+image:openapi-processor-gradle-at-1280x200.png[openapi-processor-gradle]
 
 // badges
 link:{oapj-ci}[image:{badge-ci}[]]
