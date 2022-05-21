@@ -45,14 +45,17 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         project.extensions.create (EXTENSION_NAME, OpenApiProcessorExtension, project)
     }
 
-    private addOpenApiProcessorRepository (Project project) {
-        project.repositories {
-            mavenCentral()
+    private void addOpenApiProcessorRepository (Project project) {
+        def snapshots = project.findProperty ("openapi-processor-gradle.snapshots")
+        if (!snapshots) {
+            return
+        }
 
+        project.repositories {
             maven {
                 url "https://oss.sonatype.org/content/repositories/snapshots"
                 mavenContent {
-                    snapshotsOnly()
+                    snapshotsOnly ()
                 }
             }
         }
