@@ -15,7 +15,8 @@ import org.gradle.api.artifacts.Dependency
  * openapi-processor-gradle plugin.
  */
 class OpenApiProcessorPlugin implements Plugin<Project> {
-    private static final String EXTENSION_NAME = 'openapiProcessor'
+    private static final String EXTENSION_NAME = 'openapiprocessor'
+    private static final String EXTENSION_NAME_OLD = 'openapiProcessor'
 
     @Override
     void apply (Project project) {
@@ -25,7 +26,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
         addOpenApiProcessorRepository (project)
 
-        def ext = createExtension (project)
+        createExtension (project)
         project.afterEvaluate (createTasksBuilderAction ())
     }
 
@@ -39,10 +40,6 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         }
 
         return true
-    }
-
-    private static OpenApiProcessorExtension createExtension (Project project) {
-        project.extensions.create (EXTENSION_NAME, OpenApiProcessorExtension, project)
     }
 
     private void addOpenApiProcessorRepository (Project project) {
@@ -68,7 +65,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         return new Action<Project>() {
             @Override
             void execute (Project project) {
-                def extension = project.extensions.findByName (EXTENSION_NAME) as OpenApiProcessorExtension
+                def (extName, extension) = findExtension (project)
                 extension.processors.get ().each { entry ->
                     def name = "process${entry.key.capitalize ()}"
                     def action = createTaskBuilderAction (entry.key, entry.value)
@@ -101,7 +98,8 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 List<Dependency> dependencies = []
 
                 if (processor.dependencies.empty) {
-                    task.logger.warn ("'$EXTENSION_NAME.$name.processor' not set!")
+                    task.logger.warn ("'${EXTENSION_NAME}.${name}.processor' not set!")
+                    task.logger.warn ("or '${EXTENSION_NAME_OLD}.${name}.processor' not set!")
                 }
 
                 dependencies.add (handler.create(
@@ -137,9 +135,9 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 if(processor.hasApiPath ())
                     return
 
-                def extension = task.project.extensions.findByName (EXTENSION_NAME)
+                def (extName, extension) = findExtension (task.project)
                 if (!extension.apiPath.present) {
-                    task.logger.warn ("'$EXTENSION_NAME.apiPath' or '$EXTENSION_NAME.$name.apiPath' not set!")
+                    task.logger.warn ("'${extName}.apiPath' or '${extName}.${name}.apiPath' not set!")
                     return
                 }
 
@@ -148,4 +146,19 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         }
     }
 
+    private static void createExtension (Project project) {
+        project.extensions.create (EXTENSION_NAME, OpenApiProcessorExtension, project)
+        project.extensions.create (EXTENSION_NAME_OLD, OpenApiProcessorExtension, project)
+    }
+
+    private def findExtension (Project project) {
+        def ext2 = project.extensions.findByName (EXTENSION_NAME) as OpenApiProcessorExtension
+        def ext = project.extensions.findByName (EXTENSION_NAME_OLD) as OpenApiProcessorExtension
+
+        if (!ext2.processors.keySet ().get ().isEmpty ()) {
+            return [EXTENSION_NAME, ext2]
+        } else {
+            return [EXTENSION_NAME_OLD, ext]
+        }
+    }
 }
