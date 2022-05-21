@@ -24,5 +24,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11.0.2
-    - name: build
-      run: ./gradlew build
+    - name: build & publish (sonatype)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SIGN_KEY: ${{ secrets.SIGN_KEY }}
+        SIGN_PWD: ${{ secrets.SIGN_PWD }}
+        PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
+        PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
+      run: ./gradlew build publishToSonatype
