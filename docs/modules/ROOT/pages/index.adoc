@@ -25,7 +25,7 @@ a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 | plugin version
 | required gradle version
 
-| 2022.1
+| 2022.1 or newer
 | 7.0+
 
 | 2021.3
@@ -39,14 +39,14 @@ NOTE: unfortunately it is necessary to configure a few xref:oap::jdk.adoc[additi
 
 An xref:spring:ROOT:index.adoc[openapi-processor-spring] spring specific description is available in xref:spring:ROOT:gradle.adoc[Gradle Integration].
 
-The plugin adds a new configuration block `openapiProcessor` to the gradle project. Each processor is configurable by a nested configuration block.
+The plugin adds a new configuration block `openapiProcessor` (or `openapiprocessor`) to the gradle project. Each processor is configurable by a nested configuration block.
 
 Apart from that there is only a single option that is recognized inside the configuration block:
 
 * `apiPath`, which defines the path to the openapi yaml file. This is usually the same for all
 processors and placing it directly into the `openapiProcessor` block sets it for all processors.
 
-To configure a processor, for example xref:spring:ROOT:index.adoc[openapi-processor-spring], place a `spring` configuration into the `openapiProcessor` block. The name of the configuration gets used to create a gradle task `process<Name>` to run the corresponding processor.
+To configure a processor, for example xref:spring:ROOT:index.adoc[openapi-processor-spring], place a `spring` configuration into the `openapiProcessor` block. The name of the configuration is used to create a gradle task `process<Name>` to run the corresponding processor.
 
 [tabs]
 ====
@@ -135,7 +135,7 @@ openapiProcessor {
 ----
 ====
 
-The configuration of a single processor has a few pre-defined properties, and it can have any number of  additional parameters defined by the processor (all options will be passed in a map to the processor with the option name as the key).
+The configuration of a single processor has a few pre-defined properties, and it can have any number of additional parameters defined by the processor (all options will be passed in a map to the processor with the option name as the key).
 
 * `processor` (mandatory): the `processor` dependency. Uses the same dependency notations allowed in the gradle `dependencies` block.
 +
@@ -189,7 +189,7 @@ process("spring") {
 +
 It is possible to use multiple `processor` entries to control the dependencies of an openapi-processor.
 +
-For example, the java generating processors depend on `openapi-processor-core`. The `core` library provides most of the logic of a processor and it is usually enough to update the `core` library to get bugfixes or new features.
+For example, the java generating processors depend on `openapi-processor-core`. The `core` library provides most of the logic of a processor, and it is usually enough to update the `core` library to get bugfixes or new features. To find 'SNAPSHOT' versions the plugin automatically adds the snapshot repository to the `repositories`. ([.badge .badge-since]+since 2022.2+, In case you don't want this it is possible to disable adding the snapshot repository by adding `openapi-processor-gradle.snapshots = false` to `gradle.properties`).
 +
 [tabs]
 ====
