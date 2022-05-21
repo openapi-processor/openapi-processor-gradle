@@ -1,22 +1,21 @@
 plugins {
+    id 'signing'
+    id 'maven-publish'
     id 'java-gradle-plugin'
     id 'com.gradle.plugin-publish' version '0.20.0'
     id 'org.unbroken-dome.test-sets' version '4.0.0'
-    id "com.github.ben-manes.versions" version "0.41.0"
+    id "com.github.ben-manes.versions" version "0.42.0"
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
 
 apply plugin: VersionPlugin
+apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
 
-group 'io.openapiprocessor'
-version '2022.1'
+group projectGroupId
+version projectVersion
 
 ext {
     api = '2021.1'
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 allprojects {
@@ -42,31 +41,72 @@ allprojects {
     }
 }
 
-dependencies {
-    testImplementation ('org.spockframework:spock-core:2.0-groovy-3.0') {
-        exclude group: 'org.codehaus.groovy'
+java {
+    withJavadocJar()
+    withSourcesJar()
+
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
-    testImplementation 'net.bytebuddy:byte-buddy:1.12.7'
 }
 
-tasks.withType(Test) {
-    useJUnitPlatform()
+compileJava {
+    options.release = 8
 }
 
-testSets {
-    testInt
-}
+testing {
+    suites {
+        test {
+            useJUnitJupiter('5.8.2')
+        }
 
-check.dependsOn testInt
-testInt.dependsOn ':processor-v1:build'
-testInt.dependsOn ':processor-one:build'
-testInt.dependsOn ':processor-two:build'
+        testInt(JvmTestSuite) {
+            useJUnitJupiter('5.8.2')
+            testType = TestSuiteType.INTEGRATION_TEST
+
+            dependencies {
+                implementation project
+            }
+
+            sources {
+                java {
+                    srcDirs = ['src/testInt/groovy']
+                }
+            }
+
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                    }
+                }
+            }
+        }
+    }
+}
 
 testInt {
     maxHeapSize = "1024M"
     systemProperty "PROJECT_DIR", "$projectDir"
 }
 
+tasks.named('check') {
+    dependsOn(testing.suites.testInt)
+}
+
+testInt.dependsOn ':processor-v1:build'
+testInt.dependsOn ':processor-one:build'
+testInt.dependsOn ':processor-two:build'
+
+dependencies {
+    testImplementation platform ("org.spockframework:spock-bom:2.0-groovy-3.0")
+    testImplementation 'org.spockframework:spock-core'
+    testImplementation gradleTestKit()
+
+    testIntImplementation platform ("org.spockframework:spock-bom:2.0-groovy-3.0")
+    testIntImplementation 'org.spockframework:spock-core'
+    testIntImplementation gradleTestKit()
+}
 
 gradlePlugin {
     plugins {
@@ -79,10 +119,8 @@ gradlePlugin {
     }
 }
 
-
 pluginBundle {
     website = 'https://github.com/openapi-processor/openapi-processor-gradle'
     vcsUrl = 'https://github.com/openapi-processor/openapi-processor-gradle'
     tags = ['openapi', 'openapi-processor']
 }
-

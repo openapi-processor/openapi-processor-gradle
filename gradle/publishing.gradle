@@ -1,0 +1,100 @@
+// does not work on oss.sonatype.org
+//tasks.withType(GenerateModuleMetadata) {
+//    enabled = false
+//}
+
+configure(project.rootProject) {
+    ext {
+        publishUser = getBuildProperty ('PUBLISH_USER')
+        publishKey =  getBuildProperty ('PUBLISH_KEY')
+
+        signKey = getBuildSignKey ('SIGN_KEY')
+        signPwd = getBuildProperty ('SIGN_PWD')
+
+        isReleaseVersion = !version.endsWith("SNAPSHOT")
+    }
+}
+
+publishing {
+    publications {
+        GradlePlugin (MavenPublication) {
+            groupId project.group
+            artifactId project.name
+            version project.version
+
+            from components.java
+
+            pom {
+                name = project.projectTitle
+                description = project.projectDesc
+                url = project.projectUrl
+
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = "repo"
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'hauner'
+                        name  = 'Martin Hauner'
+                    }
+                }
+
+                scm {
+                   url = "https://github.com/${project.projectGithubRepo}".toString ()
+                }
+            }
+
+        }
+    }
+
+    repositories {
+        maven {
+            def releaseRepository = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            def snapshotRepository = uri("https://oss.sonatype.org/content/repositories/snapshots")
+            url = project.isReleaseVersion ? releaseRepository : snapshotRepository
+
+            credentials {
+                username = publishUser
+                password = publishKey
+            }
+        }
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype() {
+            username = publishUser
+            password = publishKey
+        }
+    }
+}
+
+//tasks.withType(Sign) {
+//    onlyIf { project.isReleaseVersion }
+//}
+
+signing {
+    useInMemoryPgpKeys(signKey, signPwd)
+
+    signing {
+        sign publishing.publications.GradlePlugin
+    }
+}
+
+
+// helper
+
+String getBuildProperty(String property) {
+    project.findProperty (property) ?: System.getenv (property) ?: 'n/a'
+}
+
+String getBuildSignKey(String property) {
+    project.findProperty (property) ?:
+        System.getenv (property) ? System.getenv (property).replace("\\n", "\n"): 'n/a'
+}
