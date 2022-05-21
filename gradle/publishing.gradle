@@ -1,7 +1,3 @@
-// does not work on oss.sonatype.org
-//tasks.withType(GenerateModuleMetadata) {
-//    enabled = false
-//}
 
 configure(project.rootProject) {
     ext {
@@ -16,47 +12,14 @@ configure(project.rootProject) {
 }
 
 
-/*
-    publishing {
-        publications {
-            afterEvaluate {
-                named<MavenPublication>("pluginMaven") {
-                    pom {
-                        name.set(readableName)
-                        description.set(project.description)
-                        inceptionYear.set("2020")
-                        url.set(repoUrl)
-                        developers {
-                            developer {
-                                name.set("Marc Philipp")
-                                id.set("marcphilipp")
-                            }
-                            developer {
-                                name.set("Marcin Zajączkowski")
-                                id.set("szpak")
-                            }
-                        }
-                        licenses {
-                            license {
-                                name.set("Apache License, Version 2.0")
-                                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-*/
-
 afterEvaluate {
 
     publishing {
         publications {
             pluginMaven (MavenPublication) {
-                //            groupId project.group
-                //            artifactId project.name
-                //            version project.version
+                //  groupId project.group
+                //  artifactId project.name
+                //  version project.version
 
                 pom {
                     name = project.projectTitle
@@ -107,49 +70,6 @@ afterEvaluate {
         }
     }
 }
-
-//    publications {
-//        pluginMaven (MavenPublication) {
-//            artifact sourcesJar
-//        }
-//    }
-//
-//    publications {
-//        GradlePlugin (MavenPublication) {
-//            groupId project.group
-//            artifactId project.name
-//            version project.version
-//
-//            from components.java
-//
-//            pom {
-//                name = project.projectTitle
-//                description = project.projectDesc
-//                url = project.projectUrl
-//
-//                licenses {
-//                    license {
-//                        name = 'The Apache Software License, Version 2.0'
-//                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
-//                        distribution = "repo"
-//                    }
-//                }
-//
-//                developers {
-//                    developer {
-//                        id = 'hauner'
-//                        name  = 'Martin Hauner'
-//                    }
-//                }
-//
-//                scm {
-//                   url = "https://github.com/${project.projectGithubRepo}".toString ()
-//                }
-//            }
-//
-//        }
-//    }
-//}
 
 nexusPublishing {
     repositories {
