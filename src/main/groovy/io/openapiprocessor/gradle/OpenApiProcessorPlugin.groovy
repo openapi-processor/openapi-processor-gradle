@@ -44,7 +44,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
     private void addOpenApiProcessorRepository (Project project) {
         def snapshots = project.findProperty ("openapi-processor-gradle.snapshots")
-        if (!snapshots) {
+        if (snapshots != null && snapshots == false) {
             return
         }
 
