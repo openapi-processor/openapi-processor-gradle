@@ -443,6 +443,35 @@ The plugin configures the parent directory of the openapi file (i.e. `apiPath`) 
 
 To keep this working and to avoid unnecessary re-runs of the processor tasks it is recommended to use distinct folders for each api file.
 
+== using plugin snapshots
+
+Sometimes it is useful to try a special plugin version instead of the published plugin from the plugin portal. For example to try a snapshot or test version of the plugin.
+
+This is possible by configuring the repositories checked for plugins using a `pluginManagement` block in `settings.gradle` (this must be at the top of the file). The example below adds the snapshot repository of the gradle plugin.
+
+[source,groovy]
+----
+// build.gradle
+
+plugins {
+    id 'io.openapiprocessor.openapi-processor" version "2022.2-SNAPSHOT'
+}
+
+
+// settings.gradle
+
+pluginManagement {
+    repositories {
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
+        }
+        gradlePluginPortal()
+    }
+}
+
+// ...
+----
+
 == configuration example
 
 Here is a full example that configures xref:spring:ROOT:index.adoc[openapi-processor-spring] and xref:json:ROOT:index.adoc[openapi-processor-json]:
