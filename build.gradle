@@ -8,11 +8,11 @@ plugins {
     id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
 
-apply plugin: VersionPlugin
-apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
-
 group projectGroupId
 version projectVersion
+
+apply plugin: VersionPlugin
+apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
 
 ext {
     api = '2021.1'
