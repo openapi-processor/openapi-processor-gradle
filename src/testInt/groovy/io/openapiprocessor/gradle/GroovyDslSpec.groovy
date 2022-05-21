@@ -25,6 +25,10 @@ class GroovyDslSpec extends PluginSpec {
             id("io.openapiprocessor.openapi-processor")
         }
         
+        repositories {
+            mavenCentral()
+        }
+        
         openapiProcessor {
             apiPath("\$projectDir/src/api/openapi.yaml")
         

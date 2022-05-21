@@ -26,6 +26,10 @@ class MultipleConfigurationsSameProcessorSpec extends PluginSpec {
           id 'io.openapiprocessor.openapi-processor'
         }
         
+        repositories {
+            mavenCentral()
+        }
+        
         openapiProcessor {
             firstApi {
                 processorName "one"
