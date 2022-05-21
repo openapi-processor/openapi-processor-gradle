@@ -24,17 +24,20 @@ import org.gradle.api.Project
 class VersionPlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        def task = project.tasks.register ('generateVersion', VersionTask, new Action<VersionTask>() {
+        def task = project.tasks.register (
+            'generateVersion',
+            VersionTask,
+            new Action<VersionTask> () {
 
-            @Override
-            void execute (VersionTask task) {
-                task.buildFile = project.buildFile
-                task.targetDir = "${project.buildDir}/version"
-                task.version = project.version
-                task.api = project.ext.api
-            }
+                @Override
+                void execute (VersionTask task) {
+                    task.buildFile = project.buildFile
+                    task.targetDir = "${project.buildDir}/version"
+                    task.version = project.version
+                    task.api = project.ext.api
+                }
 
-        })
+            })
 
         // adding the task as srcDir automatically executes the task before compiling.
         project.sourceSets {
