@@ -15,7 +15,99 @@ configure(project.rootProject) {
     }
 }
 
-publishing {
+
+/*
+    publishing {
+        publications {
+            afterEvaluate {
+                named<MavenPublication>("pluginMaven") {
+                    pom {
+                        name.set(readableName)
+                        description.set(project.description)
+                        inceptionYear.set("2020")
+                        url.set(repoUrl)
+                        developers {
+                            developer {
+                                name.set("Marc Philipp")
+                                id.set("marcphilipp")
+                            }
+                            developer {
+                                name.set("Marcin Zajączkowski")
+                                id.set("szpak")
+                            }
+                        }
+                        licenses {
+                            license {
+                                name.set("Apache License, Version 2.0")
+                                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+*/
+
+afterEvaluate {
+
+    publishing {
+        publications {
+            pluginMaven (MavenPublication) {
+                //            groupId project.group
+                //            artifactId project.name
+                //            version project.version
+
+                pom {
+                    name = project.projectTitle
+                    description = project.projectDesc
+                    url = project.projectUrl
+
+                    developers {
+                        developer {
+                            id = 'hauner'
+                            name  = 'Martin Hauner'
+                        }
+                    }
+
+                    scm {
+                       url = "https://github.com/${project.projectGithubRepo}".toString ()
+                    }
+
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution = "repo"
+                        }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                def releaseRepository = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                def snapshotRepository = uri("https://oss.sonatype.org/content/repositories/snapshots")
+                url = project.isReleaseVersion ? releaseRepository : snapshotRepository
+
+                credentials {
+                    username = publishUser
+                    password = publishKey
+                }
+            }
+        }
+    }
+
+    signing {
+        useInMemoryPgpKeys(signKey, signPwd)
+
+        signing {
+            sign publishing.publications.pluginMaven
+        }
+    }
+}
+
 //    publications {
 //        pluginMaven (MavenPublication) {
 //            artifact sourcesJar
@@ -57,20 +149,7 @@ publishing {
 //
 //        }
 //    }
-
-    repositories {
-        maven {
-            def releaseRepository = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-            def snapshotRepository = uri("https://oss.sonatype.org/content/repositories/snapshots")
-            url = project.isReleaseVersion ? releaseRepository : snapshotRepository
-
-            credentials {
-                username = publishUser
-                password = publishKey
-            }
-        }
-    }
-}
+//}
 
 nexusPublishing {
     repositories {
@@ -81,19 +160,6 @@ nexusPublishing {
     }
 }
 
-//tasks.withType(Sign) {
-//    onlyIf { project.isReleaseVersion }
-//}
-
-signing {
-    useInMemoryPgpKeys(signKey, signPwd)
-
-    signing {
-        sign publishing.publications.pluginMaven
-    }
-}
-
-
 // helper
 
 String getBuildProperty(String property) {
@@ -101,6 +167,6 @@ String getBuildProperty(String property) {
 }
 
 String getBuildSignKey(String property) {
-    project.findProperty (property) ?:
-        System.getenv (property) ? System.getenv (property).replace("\\n", "\n"): 'n/a'
+    project.findProperty (property) ?: System.getenv (property) ?
+        System.getenv (property).replace("\\n", "\n"): 'n/a'
 }
