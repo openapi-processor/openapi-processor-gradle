@@ -39,7 +39,7 @@ NOTE: unfortunately it is necessary to configure a few xref:oap::jdk.adoc[additi
 
 An xref:spring:ROOT:index.adoc[openapi-processor-spring] spring specific description is available in xref:spring:ROOT:gradle.adoc[Gradle Integration].
 
-The plugin adds a new configuration block `openapiProcessor` (or `openapiprocessor`) to the gradle project. Each processor is configurable by a nested configuration block.
+The plugin adds a new configuration block `openapiProcessor` to the gradle project. Each processor is configurable by a nested configuration block.
 
 Apart from that there is only a single option that is recognized inside the configuration block:
 
