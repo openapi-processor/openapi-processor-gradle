@@ -49,7 +49,7 @@ class GroovyDslSpec extends PluginSpec {
     }
 
     @Unroll
-    void "test groovy (method) dsl with with gradle 7 (#gradleVersion)" () {
+    void "test groovy (method) dsl with with gradle 7+ (#gradleVersion)" () {
         when:
         def result = build(gradleVersion)
 
@@ -58,7 +58,7 @@ class GroovyDslSpec extends PluginSpec {
         result.output.contains("processor v1 did run !")
 
         where:
-        gradleVersion << Gradle.VERSIONS_7.reverse ()
+        gradleVersion << Gradle.VERSIONS.reverse ()
     }
 
 }

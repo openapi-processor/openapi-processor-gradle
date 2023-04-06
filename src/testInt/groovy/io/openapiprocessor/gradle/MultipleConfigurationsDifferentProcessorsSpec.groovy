@@ -72,7 +72,7 @@ class MultipleConfigurationsDifferentProcessorsSpec extends PluginSpec {
         assertResult (result)
 
         where:
-        gradleVersion << Gradle.VERSIONS_7.reverse ()
+        gradleVersion << Gradle.VERSIONS.reverse ()
     }
 
     private void assertResult(BuildResult result) {
