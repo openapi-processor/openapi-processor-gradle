@@ -65,9 +65,9 @@ afterEvaluate {
     signing {
         useInMemoryPgpKeys(signKey, signPwd)
 
-        signing {
-            sign publishing.publications.pluginMaven
-        }
+//        signing {
+//            sign publishing.publications.pluginMaven
+//        }
     }
 }
 
