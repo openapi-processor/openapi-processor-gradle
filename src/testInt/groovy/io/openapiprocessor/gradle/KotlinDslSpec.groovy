@@ -49,7 +49,7 @@ class KotlinDslSpec extends PluginSpec {
     }
 
     @Unroll
-    void "test kotlin dsl with with gradle 7+ -> #gradleVersion" () {
+    void "test kotlin dsl with with gradle #gradleVersion" () {
         when:
         def result = build(gradleVersion)
 

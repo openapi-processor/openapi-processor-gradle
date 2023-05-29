@@ -49,7 +49,7 @@ class GroovyDslSpec extends PluginSpec {
     }
 
     @Unroll
-    void "test groovy (method) dsl with with gradle 7+ (#gradleVersion)" () {
+    void "test groovy (method) dsl with with gradle #gradleVersion" () {
         when:
         def result = build(gradleVersion)
 
