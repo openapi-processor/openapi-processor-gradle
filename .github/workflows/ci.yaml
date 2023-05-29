@@ -34,6 +34,6 @@ jobs:
         SIGN_PWD: ${{ secrets.SIGN_PWD }}
         PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
-      run: ./gradlew build publishToSonatype -d -s
+      run: ./gradlew build publishToSonatype -s
 
-# -i
+# -i -d
