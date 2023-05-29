@@ -21,14 +21,28 @@ abstract public class OpenApiProcessorWorker implements WorkAction<OpenApiProces
         Object processor = getProcessor (getProcessorName ());
         Map<String, ?> properties = getProcessorProperties ();
 
-        if (processor instanceof io.openapiprocessor.api.v1.OpenApiProcessor) {
-            run ((io.openapiprocessor.api.v1.OpenApiProcessor) processor, properties);
+        try {
+            if (processor instanceof io.openapiprocessor.api.v1.OpenApiProcessor) {
+                run ((io.openapiprocessor.api.v1.OpenApiProcessor) processor, properties);
 
-        } else if (processor instanceof io.openapiprocessor.api.OpenApiProcessor) {
-            run ((io.openapiprocessor.api.OpenApiProcessor) processor, properties);
+            } else if (processor instanceof io.openapiprocessor.api.OpenApiProcessor) {
+                run ((io.openapiprocessor.api.OpenApiProcessor) processor, properties);
 
-        } else if (processor instanceof com.github.hauner.openapi.api.OpenApiProcessor) {
-            run((com.github.hauner.openapi.api.OpenApiProcessor) processor, properties);
+            } else if (processor instanceof com.github.hauner.openapi.api.OpenApiProcessor) {
+                run ((com.github.hauner.openapi.api.OpenApiProcessor) processor, properties);
+            }
+        } catch (Throwable t) {
+            waitForLogging ();
+            throw t;
+        }
+    }
+
+    private static void waitForLogging () {
+        // without waiting gradle does not reliably log a processor error/exception.
+        try {
+            Thread.sleep (1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException (e);
         }
     }
 
