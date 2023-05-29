@@ -79,7 +79,7 @@ testing {
 }
 
 testInt {
-    maxHeapSize = "1024M"
+    maxHeapSize = "2048M"
     systemProperty "PROJECT_DIR", "$projectDir"
 }
 
@@ -92,11 +92,11 @@ testInt.dependsOn ':processor-one:build'
 testInt.dependsOn ':processor-two:build'
 
 dependencies {
-    testImplementation platform ("org.spockframework:spock-bom:2.0-groovy-3.0")
+    testImplementation platform ("org.spockframework:spock-bom:2.3-groovy-3.0")
     testImplementation 'org.spockframework:spock-core'
     testImplementation gradleTestKit()
 
-    testIntImplementation platform ("org.spockframework:spock-bom:2.0-groovy-3.0")
+    testIntImplementation platform ("org.spockframework:spock-bom:2.3-groovy-3.0")
     testIntImplementation 'org.spockframework:spock-core'
     testIntImplementation gradleTestKit()
 }
