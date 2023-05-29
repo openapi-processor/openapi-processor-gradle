@@ -66,7 +66,19 @@ class MultipleConfigurationsSameProcessorSpec extends PluginSpec {
         assertResult (result)
 
         where:
-        gradleVersion << Gradle.VERSIONS.reverse ()
+        gradleVersion << Gradle.VERSIONS_7.reverse ()
+    }
+
+    @Unroll
+    void "process task runs processor from gradle 8 (#gradleVersion)" () {
+        when:
+        def result = build(gradleVersion)
+
+        then:
+        assertResult (result)
+
+        where:
+        gradleVersion << Gradle.VERSIONS_8.reverse ()
     }
 
     private void assertResult(BuildResult result) {

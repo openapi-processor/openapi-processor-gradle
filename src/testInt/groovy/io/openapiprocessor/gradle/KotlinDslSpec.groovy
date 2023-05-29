@@ -49,7 +49,7 @@ class KotlinDslSpec extends PluginSpec {
     }
 
     @Unroll
-    void "test kotlin dsl with with gradle #gradleVersion" () {
+    void "test kotlin dsl with with gradle 7 (#gradleVersion)" () {
         when:
         def result = build(gradleVersion)
 
@@ -58,7 +58,19 @@ class KotlinDslSpec extends PluginSpec {
         result.output.contains("processor v1 did run !")
 
         where:
-        gradleVersion << Gradle.VERSIONS.reverse ()
+        gradleVersion << Gradle.VERSIONS_7.reverse ()
     }
 
+    @Unroll
+    void "test kotlin dsl with with gradle 8 (#gradleVersion)" () {
+        when:
+        def result = build(gradleVersion)
+
+        then:
+        result.task(':processV1').outcome == SUCCESS
+        result.output.contains("processor v1 did run !")
+
+        where:
+        gradleVersion << Gradle.VERSIONS_8.reverse ()
+    }
 }
