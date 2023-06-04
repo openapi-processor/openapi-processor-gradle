@@ -5,6 +5,9 @@
 
 package io.openapiprocessor.gradle
 
+
+import io.openapiprocessor.gradle.version.GitHubVersionCheck
+import io.openapiprocessor.gradle.version.GitHubVersionProvider
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -20,6 +23,8 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
     @Override
     void apply (Project project) {
+        checkLatestRelease ()
+
         if (!isSupportedGradleVersion (project)) {
             return
         }
@@ -144,6 +149,10 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 processor.apiPath = extension.apiPath.get ()
             }
         }
+    }
+
+    private static void checkLatestRelease () {
+        new GitHubVersionCheck(new GitHubVersionProvider(), Version.version).check()
     }
 
     private static void createExtension (Project project) {
