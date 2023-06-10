@@ -21,7 +21,8 @@ class Gradle {
 
     static List<String> VERSIONS_8 = [
         '8.0', '8.0.1', '8.0.2',
-        '8.1', '8.1.1'
+        '8.1', '8.1.1',
+        '8.2-rc-2'
     ]
 
     static List<String> VERSIONS_7 = [
