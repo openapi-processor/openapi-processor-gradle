@@ -39,6 +39,7 @@ class GroovyDslSpec extends PluginSpec {
                 prop("v1", "value v1")
             }
             
+            checkUpdates(false)
         }
         """.stripIndent ()
     }

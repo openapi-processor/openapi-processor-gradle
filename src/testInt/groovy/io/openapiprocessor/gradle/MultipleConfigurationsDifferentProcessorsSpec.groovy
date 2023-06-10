@@ -54,6 +54,7 @@ class MultipleConfigurationsDifferentProcessorsSpec extends PluginSpec {
                 other2 "value two"
             }
             
+            checkUpdates(false)
         }
         """.stripIndent ()
     }

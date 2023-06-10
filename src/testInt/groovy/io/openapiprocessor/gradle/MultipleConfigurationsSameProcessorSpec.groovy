@@ -48,6 +48,8 @@ class MultipleConfigurationsSameProcessorSpec extends PluginSpec {
                 targetDir "\${buildDir}/second"
                 other2 "value second"
             }
+            
+            checkUpdates(false)
         }
         """.stripIndent ()
     }

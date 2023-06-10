@@ -39,6 +39,7 @@ class KotlinDslSpec extends PluginSpec {
                 prop("v1", "value v1")
             }
             
+            checkUpdates(false)
         }
         """.stripIndent ()
     }
