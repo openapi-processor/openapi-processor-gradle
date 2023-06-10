@@ -5,7 +5,11 @@
 
 package io.openapiprocessor.gradle;
 
+import io.openapiprocessor.api.v2.OpenApiProcessorVersion;
+import io.openapiprocessor.api.v2.Version;
+import org.gradle.api.logging.Logger;
 import org.gradle.workers.WorkAction;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -15,6 +19,7 @@ import java.util.Map;
  */
 @SuppressWarnings ("deprecation")
 abstract public class OpenApiProcessorWorker implements WorkAction<OpenApiProcessorWorkParameters> {
+    private final Logger log = (Logger) LoggerFactory.getLogger(OpenApiProcessorWorker.class);
 
     @Override
     public void execute () {
@@ -22,18 +27,45 @@ abstract public class OpenApiProcessorWorker implements WorkAction<OpenApiProces
         Map<String, ?> properties = getProcessorProperties ();
 
         try {
-            if (processor instanceof io.openapiprocessor.api.v1.OpenApiProcessor) {
-                run ((io.openapiprocessor.api.v1.OpenApiProcessor) processor, properties);
+            check (processor);
+            run (processor, properties);
 
-            } else if (processor instanceof io.openapiprocessor.api.OpenApiProcessor) {
-                run ((io.openapiprocessor.api.OpenApiProcessor) processor, properties);
-
-            } else if (processor instanceof com.github.hauner.openapi.api.OpenApiProcessor) {
-                run ((com.github.hauner.openapi.api.OpenApiProcessor) processor, properties);
-            }
         } catch (Throwable t) {
             waitForLogging ();
             throw t;
+        }
+    }
+
+    private void check (Object processor) {
+        try {
+            if (processor instanceof OpenApiProcessorVersion) {
+                OpenApiProcessorVersion processorVersion = (OpenApiProcessorVersion) processor;
+
+                if (processorVersion.hasNewerVersion ()) {
+                    String currentVersion = processorVersion.getVersion ();
+                    Version latestVersion = processorVersion.getLatestVersion ();
+
+                    log.quiet("{} version {} is available! I'm version {}.",
+                        getProcessorName (), latestVersion.getName (), currentVersion);
+                }
+            }
+        } catch (Throwable ignore) {
+            // ignore, do not complain
+        }
+    }
+
+    private void run (Object processor, Map<String, ?> properties) {
+        if (processor instanceof io.openapiprocessor.api.v2.OpenApiProcessor) {
+            run ((io.openapiprocessor.api.v2.OpenApiProcessor) processor, properties);
+
+        } else if (processor instanceof io.openapiprocessor.api.v1.OpenApiProcessor) {
+            run ((io.openapiprocessor.api.v1.OpenApiProcessor) processor, properties);
+
+        } else if (processor instanceof io.openapiprocessor.api.OpenApiProcessor) {
+            run ((io.openapiprocessor.api.OpenApiProcessor) processor, properties);
+
+        } else if (processor instanceof com.github.hauner.openapi.api.OpenApiProcessor) {
+            run ((com.github.hauner.openapi.api.OpenApiProcessor) processor, properties);
         }
     }
 

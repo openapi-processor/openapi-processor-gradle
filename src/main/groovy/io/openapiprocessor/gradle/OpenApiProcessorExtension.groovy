@@ -44,6 +44,11 @@ class OpenApiProcessorExtension {
     Property<String> api
 
     /**
+     * check automatically for updates. Default is true.
+     */
+    Property<Boolean> checkUpdates
+
+    /**
      * properties of the nested processor configurations by processor name, e.g.
      * <pre>
      *  openapiProcessor {
@@ -67,7 +72,10 @@ class OpenApiProcessorExtension {
     OpenApiProcessorExtension (Project project, ObjectFactory objectFactory) {
         this.project = project
         api = objectFactory.property(String)
+        checkUpdates = objectFactory.property(Boolean)
         processors = objectFactory.mapProperty (String, Processor)
+
+        checkUpdates.set(true)
     }
 
     /**
@@ -150,4 +158,11 @@ class OpenApiProcessorExtension {
         api
     }
 
+    void checkUpdates(Boolean check) {
+        checkUpdates.set(check)
+    }
+
+    Property<Boolean> getCheckUpdates() {
+        return checkUpdates
+    }
 }

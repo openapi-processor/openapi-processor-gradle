@@ -19,6 +19,7 @@ class OpenApiProcessorExtensionSpec extends Specification {
 
     void setup () {
         objectFactory.property (String) >> new DefaultProperty<String>(null, String)
+        objectFactory.property (Boolean) >> new DefaultProperty<Boolean>(null, Boolean)
         objectFactory.mapProperty (String, Processor) >> new DefaultMapProperty<String, Object>(null, String, Processor)
     }
 

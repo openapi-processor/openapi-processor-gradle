@@ -23,8 +23,6 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
     @Override
     void apply (Project project) {
-        checkLatestRelease ()
-
         if (!isSupportedGradleVersion (project)) {
             return
         }
@@ -32,6 +30,8 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         addOpenApiProcessorRepository (project)
 
         createExtension (project)
+
+        project.afterEvaluate (createCheckUpdatesAction ())
         project.afterEvaluate (createTasksBuilderAction ())
     }
 
@@ -59,6 +59,22 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 mavenContent {
                     snapshotsOnly ()
                 }
+            }
+        }
+    }
+
+    /**
+     * Provides an Action that checks for plugin updates.
+     */
+    private Action<Project> createCheckUpdatesAction () {
+        return new Action<Project>() {
+            @Override
+            void execute (Project project) {
+                def (extName, extension) = findExtension (project)
+                if (!extension && !extension.checkUpdates.get())
+                    return
+
+                checkLatestRelease ()
             }
         }
     }
