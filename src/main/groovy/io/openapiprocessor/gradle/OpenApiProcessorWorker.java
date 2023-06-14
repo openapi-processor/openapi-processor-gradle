@@ -78,6 +78,10 @@ abstract public class OpenApiProcessorWorker implements WorkAction<OpenApiProces
         }
     }
 
+    private void run (io.openapiprocessor.api.v2.OpenApiProcessor processor, Map<String, ?> properties) {
+        processor.run (properties);
+    }
+
     private void run (io.openapiprocessor.api.v1.OpenApiProcessor processor, Map<String, ?> properties) {
         processor.run (properties);
     }
