@@ -28,6 +28,8 @@ class GitHubVersionCheck {
                 log.quiet("openapi-processor-gradle version ${version.name} is available! I'm version ${currentVersion}.")
                 return true
             }
+            return false
+
         } catch (GitHubVersionException ignore) {
             // just ignore, do not complain
             return false
