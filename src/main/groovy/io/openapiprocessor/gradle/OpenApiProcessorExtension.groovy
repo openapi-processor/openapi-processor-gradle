@@ -32,6 +32,8 @@ import org.gradle.api.provider.Property
  *       .. other
  *     }
  *     ...
+ *
+ *     checkUpdates "never"|"daily"|"always"
  * }
  * </pre>
  */
@@ -44,9 +46,9 @@ class OpenApiProcessorExtension {
     Property<String> api
 
     /**
-     * check automatically for updates. Default is true.
+     * check automatically for updates. Can be "never"|"daily"|"always". Default is "never".
      */
-    Property<Boolean> checkUpdates
+    Property<String> checkUpdates
 
     /**
      * properties of the nested processor configurations by processor name, e.g.
@@ -72,10 +74,10 @@ class OpenApiProcessorExtension {
     OpenApiProcessorExtension (Project project, ObjectFactory objectFactory) {
         this.project = project
         api = objectFactory.property(String)
-        checkUpdates = objectFactory.property(Boolean)
+        checkUpdates = objectFactory.property(String)
         processors = objectFactory.mapProperty (String, Processor)
 
-        checkUpdates.set(true)
+        checkUpdates.set("never")
     }
 
     /**
@@ -158,11 +160,11 @@ class OpenApiProcessorExtension {
         api
     }
 
-    void checkUpdates(Boolean check) {
+    void checkUpdates(String check) {
         checkUpdates.set(check)
     }
 
-    Property<Boolean> getCheckUpdates() {
+    Property<String> getCheckUpdates() {
         return checkUpdates
     }
 }
