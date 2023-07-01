@@ -15,7 +15,7 @@ class VersionCheckSpec extends Specification {
     @TempDir
     Path testPath
 
-    "should not check if interval is 'never'"() {
+    void "should not check if interval is 'never'"() {
         def version = new VersionCheck(testPath.toString(), "never")
 
         when:
@@ -25,7 +25,7 @@ class VersionCheckSpec extends Specification {
         !canCheck
     }
 
-    "should check if interval is 'always'"() {
+    void "should check if interval is 'always'"() {
         def version = new VersionCheck(testPath.toString(), "never")
 
         when:
@@ -35,7 +35,7 @@ class VersionCheckSpec extends Specification {
         canCheck
     }
 
-    "should check if interval is 'daily'"() {
+    void "should check if interval is 'daily'"() {
         def version = new VersionCheck(testPath.toString(), "never")
 
         when:
