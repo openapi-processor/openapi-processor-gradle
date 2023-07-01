@@ -41,10 +41,16 @@ An xref:spring:ROOT:index.adoc[openapi-processor-spring] spring specific descrip
 
 The plugin adds a new configuration block `openapiProcessor` to the gradle project. Each processor is configurable by a nested configuration block.
 
-Apart from that there is only a single option that is recognized inside the configuration block:
+Apart from that there are only two options that are recognized inside the configuration block:
 
 * `apiPath`, which defines the path to the openapi yaml file. This is usually the same for all
 processors and placing it directly into the `openapiProcessor` block sets it for all processors.
+
+* `checkUpdates`, which allows to enable a version check for the gradle plugin itself and any processor that supports a version check. It can have one of 3 values:
++
+* `never`, this is the default and disables all update checks.
+* `daily`, this will check once a day if there is a newer version available. The plugin remembers the last check by writing a timestamp to `build/openapiprocessor/<processor>.yaml`. Without that file the check will run, e.g. after a clean checkout or after running the `clean` task.
+* `always`, this will check on any run of gradle or a processor task if a newer version is available.
 
 To configure a processor, for example xref:spring:ROOT:index.adoc[openapi-processor-spring], place a `spring` configuration into the `openapiProcessor` block. The name of the configuration is used to create a gradle task `process<Name>` to run the corresponding processor.
 
@@ -184,8 +190,7 @@ process("spring") {
 }
 ----
 ====
-+
-[.badge .badge-since]+since 2021.2+
+
 +
 It is possible to use multiple `processor` entries to control the dependencies of an openapi-processor.
 +
@@ -377,7 +382,7 @@ sourceSets {
 
 == processing multiple openapi files
 
-[.badge .badge-since]+since 2022.1+
+//[.badge .badge-since]+since 2022.1+
 
 By default, the name of a `processor` configuration block is used to select the processor library. Each processor library has a name and the plugin tries to load the processor library with that name.
 
