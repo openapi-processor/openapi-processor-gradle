@@ -30,6 +30,7 @@ class OpenApiProcessorExtensionSpec extends Specification {
         then:
         ex.apiPath.value ("openapi.yaml")
         ex.apiPath.get () == "openapi.yaml"
+        ex.checkUpdates.get() == "never"
     }
 
     void "converts processor closure to map via methodMissing" () {

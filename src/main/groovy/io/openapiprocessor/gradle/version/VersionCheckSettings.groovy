@@ -7,6 +7,7 @@ package io.openapiprocessor.gradle.version
 
 import org.yaml.snakeyaml.Yaml
 
+import java.nio.file.Files
 import java.time.Instant
 
 class VersionCheckSettings {
@@ -49,6 +50,7 @@ class VersionCheckSettings {
 
     void write() {
         def file = new File(settingsName)
+        Files.createDirectories(file.parentFile.toPath())
         yaml.dump(settings, new FileWriter(file))
     }
 }

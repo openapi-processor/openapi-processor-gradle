@@ -5,21 +5,21 @@
 
 package io.openapiprocessor.gradle
 
-
 import io.openapiprocessor.gradle.version.GitHubVersionCheck
 import io.openapiprocessor.gradle.version.GitHubVersionProvider
+import io.openapiprocessor.gradle.version.VersionCheck
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.Dependency
 
+import static io.openapiprocessor.gradle.OpenApiProcessorExtensionUtils.*
+
 /**
  * openapi-processor-gradle plugin.
  */
 class OpenApiProcessorPlugin implements Plugin<Project> {
-    private static final String EXTENSION_NAME_ALTERNATIVE = 'openapi'
-    private static final String EXTENSION_NAME_DEFAULT = 'openapiProcessor'
 
     @Override
     void apply (Project project) {
@@ -71,7 +71,10 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
             @Override
             void execute (Project project) {
                 def (extName, extension) = findExtension (project)
-                if (!extension && !extension.checkUpdates.get())
+                def interval = extension.checkUpdates.get()
+
+                def version = new VersionCheck(project.rootDir.absolutePath, interval)
+                if (!version.canCheck("gradle"))
                     return
 
                 checkLatestRelease ()
@@ -167,23 +170,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         }
     }
 
-    private static void checkLatestRelease () {
+    private void checkLatestRelease () {
         new GitHubVersionCheck(new GitHubVersionProvider(), Version.version).check()
-    }
-
-    private static void createExtension (Project project) {
-        project.extensions.create (EXTENSION_NAME_DEFAULT, OpenApiProcessorExtension, project)
-        project.extensions.create (EXTENSION_NAME_ALTERNATIVE, OpenApiProcessorExtension, project)
-    }
-
-    private def findExtension (Project project) {
-        def ext2 = project.extensions.findByName (EXTENSION_NAME_ALTERNATIVE) as OpenApiProcessorExtension
-        def ext = project.extensions.findByName (EXTENSION_NAME_DEFAULT) as OpenApiProcessorExtension
-
-        if (!ext2.processors.keySet ().get ().isEmpty ()) {
-            return [EXTENSION_NAME_ALTERNATIVE, ext2]
-        } else {
-            return [EXTENSION_NAME_DEFAULT, ext]
-        }
     }
 }

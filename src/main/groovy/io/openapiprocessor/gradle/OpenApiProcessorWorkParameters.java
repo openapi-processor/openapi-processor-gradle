@@ -15,4 +15,7 @@ interface OpenApiProcessorWorkParameters extends WorkParameters {
 
     MapProperty<String, Object> getProcessorProps ();
 
+    Property<String> getRootDir ();
+
+    Property<String> getCheckUpdates ();
 }

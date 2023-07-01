@@ -7,6 +7,7 @@ package io.openapiprocessor.gradle;
 
 import io.openapiprocessor.api.v2.OpenApiProcessorVersion;
 import io.openapiprocessor.api.v2.Version;
+import io.openapiprocessor.gradle.version.VersionCheck;
 import org.gradle.api.logging.Logger;
 import org.gradle.workers.WorkAction;
 import org.slf4j.LoggerFactory;
@@ -38,17 +39,11 @@ abstract public class OpenApiProcessorWorker implements WorkAction<OpenApiProces
 
     private void check (Object processor) {
         try {
-            if (processor instanceof OpenApiProcessorVersion) {
-                OpenApiProcessorVersion processorVersion = (OpenApiProcessorVersion) processor;
+            if (!shouldCheck(processor))
+                return;
 
-                if (processorVersion.hasNewerVersion ()) {
-                    String currentVersion = processorVersion.getVersion ();
-                    Version latestVersion = processorVersion.getLatestVersion ();
+            runCheck(processor);
 
-                    log.quiet("{} version {} is available! I'm version {}.",
-                        getProcessorName (), latestVersion.getName (), currentVersion);
-                }
-            }
         } catch (Throwable ignore) {
             // ignore, do not complain
         }
@@ -75,6 +70,33 @@ abstract public class OpenApiProcessorWorker implements WorkAction<OpenApiProces
             Thread.sleep (1000);
         } catch (InterruptedException e) {
             throw new RuntimeException (e);
+        }
+    }
+
+    private boolean shouldCheck (Object processor) {
+        if(! (processor instanceof io.openapiprocessor.api.v2.OpenApiProcessor)) {
+            return false;
+        }
+
+        var theProcessor = (io.openapiprocessor.api.v2.OpenApiProcessor)processor;
+
+        VersionCheck version = new VersionCheck(getRootDir(), getCheckUpdates());
+        return version.canCheck(theProcessor.getName());
+    }
+
+    private void runCheck (Object processor) {
+        if (! (processor instanceof OpenApiProcessorVersion)) {
+            return;
+        }
+
+        var processorVersion = (OpenApiProcessorVersion) processor;
+
+        if (processorVersion.hasNewerVersion ()) {
+            String currentVersion = processorVersion.getVersion ();
+            Version latestVersion = processorVersion.getLatestVersion ();
+
+            log.quiet("{} version {} is available! I'm version {}.",
+                getProcessorName (), latestVersion.getName (), currentVersion);
         }
     }
 
@@ -108,5 +130,13 @@ abstract public class OpenApiProcessorWorker implements WorkAction<OpenApiProces
 
     private Map<String, ?> getProcessorProperties() {
         return getParameters ().getProcessorProps ().get ();
+    }
+
+    private String getRootDir() {
+        return getParameters ().getRootDir ().get ();
+    }
+
+    private String getCheckUpdates() {
+        return getParameters ().getCheckUpdates ().get ();
     }
 }

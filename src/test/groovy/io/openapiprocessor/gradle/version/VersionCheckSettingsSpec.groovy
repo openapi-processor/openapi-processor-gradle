@@ -18,7 +18,7 @@ class VersionCheckSettingsSpec extends Specification {
     Path testPath
 
     void "get last check without existing file is null"() {
-        def file = testPath.resolve("openapiprocessor.yaml")
+        def file = testPath.resolve(".openapiprocessor.yaml")
         def settings = new VersionCheckSettings(file.toString())
 
         when:
