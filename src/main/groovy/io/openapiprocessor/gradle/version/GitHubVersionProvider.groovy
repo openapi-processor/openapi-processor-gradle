@@ -31,6 +31,7 @@ class GitHubVersionProvider {
                     text: json.body
             )
         } catch (Throwable t) {
+            System.out.println(t)
             throw new GitHubVersionException(versionUri, t)
         }
     }
