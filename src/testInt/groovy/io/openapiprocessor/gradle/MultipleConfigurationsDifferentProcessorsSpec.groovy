@@ -53,8 +53,6 @@ class MultipleConfigurationsDifferentProcessorsSpec extends PluginSpec {
                 targetDir "\${buildDir}/two"
                 other2 "value two"
             }
-            
-            checkUpdates(false)
         }
         """.stripIndent ()
     }
