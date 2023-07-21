@@ -12,7 +12,7 @@ apply plugin: VersionPlugin
 apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
 
 ext {
-    api = '2023.1-SNAPSHOT'
+    api = '2023.1'
 }
 
 allprojects {
