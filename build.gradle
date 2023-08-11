@@ -92,7 +92,7 @@ testInt.dependsOn ':processor-one:build'
 testInt.dependsOn ':processor-two:build'
 
 dependencies {
-    implementation 'org.yaml:snakeyaml:2.0'
+    implementation 'org.yaml:snakeyaml:2.1'
 
     testImplementation platform ("org.spockframework:spock-bom:2.3-groovy-3.0")
     testImplementation 'org.spockframework:spock-core'
