@@ -34,7 +34,7 @@ allprojects {
 
     dependencies {
         compileOnly "io.openapiprocessor:openapi-processor-api:${project.api}"
-        implementation 'org.codehaus.groovy:groovy:3.0.18'
+        implementation localGroovy()
     }
 }
 
@@ -50,11 +50,11 @@ java {
 testing {
     suites {
         test {
-            useJUnitJupiter('5.9.2')
+            useJUnitJupiter('5.10.0')
         }
 
         testInt(JvmTestSuite) {
-            useJUnitJupiter('5.9.2')
+            useJUnitJupiter('5.10.0')
             testType = TestSuiteType.INTEGRATION_TEST
 
             dependencies {
@@ -92,22 +92,25 @@ testInt.dependsOn ':processor-one:build'
 testInt.dependsOn ':processor-two:build'
 
 dependencies {
-    implementation 'org.yaml:snakeyaml:2.0'
+    implementation localGroovy()
+    implementation 'org.yaml:snakeyaml:2.1'
 
-    testImplementation platform ("org.spockframework:spock-bom:2.3-groovy-3.0")
+    testImplementation(localGroovy())
+    testImplementation platform ("org.spockframework:spock-bom:2.4-M1-groovy-3.0")
     testImplementation 'org.spockframework:spock-core'
     testImplementation 'net.bytebuddy:byte-buddy:1.14.5'
     testImplementation gradleTestKit()
 
-    testIntImplementation platform ("org.spockframework:spock-bom:2.3-groovy-3.0")
+    testIntImplementation(localGroovy())
+    testIntImplementation platform ("org.spockframework:spock-bom:2.4-M1-groovy-3.0")
     testIntImplementation 'org.spockframework:spock-core'
     testIntImplementation 'net.bytebuddy:byte-buddy:1.14.5'
     testIntImplementation gradleTestKit()
 }
 
 gradlePlugin {
-    website = 'https://github.com/openapi-processor/openapi-processor-gradle'
-    vcsUrl = 'https://github.com/openapi-processor/openapi-processor-gradle'
+    website = "https://github.com/openapi-processor/openapi-processor-gradle"
+    vcsUrl = "https://github.com/openapi-processor/openapi-processor-gradle"
 
     plugins {
         processorPlugin {
