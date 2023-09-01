@@ -93,7 +93,7 @@ testInt.dependsOn ':processor-two:build'
 
 dependencies {
     implementation localGroovy()
-    implementation 'org.yaml:snakeyaml:2.1'
+    implementation 'org.yaml:snakeyaml:2.2'
 
     testImplementation(localGroovy())
     testImplementation platform ("org.spockframework:spock-bom:2.4-M1-groovy-3.0")
