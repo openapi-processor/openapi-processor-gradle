@@ -96,13 +96,13 @@ dependencies {
     implementation 'org.yaml:snakeyaml:2.1'
 
     testImplementation(localGroovy())
-    testImplementation platform ("org.spockframework:spock-bom:2.4-M1-groovy-3.0")
+    testImplementation platform ("org.spockframework:spock-bom:2.4-groovy-4.0-SNAPSHOT")
     testImplementation 'org.spockframework:spock-core'
     testImplementation 'net.bytebuddy:byte-buddy:1.14.8'
     testImplementation gradleTestKit()
 
     testIntImplementation(localGroovy())
-    testIntImplementation platform ("org.spockframework:spock-bom:2.4-M1-groovy-3.0")
+    testIntImplementation platform ("org.spockframework:spock-bom:2.4-groovy-4.0-SNAPSHOT")
     testIntImplementation 'org.spockframework:spock-core'
     testIntImplementation 'net.bytebuddy:byte-buddy:1.14.8'
     testIntImplementation gradleTestKit()
