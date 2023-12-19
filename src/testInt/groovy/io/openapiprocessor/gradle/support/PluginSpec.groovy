@@ -16,6 +16,7 @@ abstract class PluginSpec extends Specification {
     File testProjectDir
 
     private File buildFile
+    private File propsFile
     private File openapiFile
     private String projectDir
 
@@ -55,4 +56,10 @@ abstract class PluginSpec extends Specification {
             .build()
     }
 
+    BuildResult build(String gradleVersion, String properties) {
+        propsFile = new File(testProjectDir, "gradle.properties")
+        propsFile << properties
+
+        return build(gradleVersion)
+    }
 }
