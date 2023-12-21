@@ -37,12 +37,6 @@ class OpenApiProcessorExtensionSpec extends Specification {
     }
 
     void "converts processor closure to map via methodMissing" () {
-        project.configure (_, _) >> { args ->
-            Closure c = args[1]
-            c.delegate = args[0]
-            c.run ()
-        }
-
         when:
         def ex = new OpenApiProcessorExtension (project, objectFactory)
         ex.test {
@@ -59,6 +53,32 @@ class OpenApiProcessorExtensionSpec extends Specification {
         ex.processors.get ().test.other.two == "b"
         ex.processors.get ().test2.other.one == "a2"
         ex.processors.get ().test2.other.two == "b2"
+    }
+
+    void "creates processor from string" () {
+        when:
+        def ex = new OpenApiProcessorExtension (project, objectFactory)
+        ex.test {
+            processor("a processor")
+        }
+
+        then:
+        ex.processors.get ().test.dependencies.first() == "a processor"
+    }
+
+    void "creates processor from file" () {
+        project.file("processor") >> { args ->
+            return new File("xxx")
+        }
+
+        when:
+        def ex = new OpenApiProcessorExtension (project, objectFactory)
+        ex.test {
+            processor(file("processor"))
+        }
+
+        then:
+        ex.processors.get ().test.dependencies.first().name == "xxx"
     }
 
     void "converts processor properties to map via process()/prop() methods" () {

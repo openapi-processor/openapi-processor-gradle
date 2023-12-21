@@ -132,7 +132,16 @@ class OpenApiProcessorExtension {
         if (arg instanceof Closure) {
             // apply it to a new Processor () entry
             def processor = new Processor (name)
-            project.configure (processor, arg)
+
+            processor.metaClass.file = { Object path ->
+                return project.file(path)
+            }
+
+//            processor.metaClass.files = { Object... paths ->
+//                return project.files(paths)
+//            }
+
+            processor.with(arg)
             processors.put (name, processor)
             return processor
         }
