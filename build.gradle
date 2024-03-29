@@ -98,13 +98,13 @@ dependencies {
     testImplementation(localGroovy())
     testImplementation platform ("org.spockframework:spock-bom:2.4-M1-groovy-3.0")
     testImplementation 'org.spockframework:spock-core'
-    testImplementation 'net.bytebuddy:byte-buddy:1.14.12'
+    testImplementation 'net.bytebuddy:byte-buddy:1.14.13'
     testImplementation gradleTestKit()
 
     testIntImplementation(localGroovy())
     testIntImplementation platform ("org.spockframework:spock-bom:2.4-M1-groovy-3.0")
     testIntImplementation 'org.spockframework:spock-core'
-    testIntImplementation 'net.bytebuddy:byte-buddy:1.14.12'
+    testIntImplementation 'net.bytebuddy:byte-buddy:1.14.13'
     testIntImplementation gradleTestKit()
 }
 
