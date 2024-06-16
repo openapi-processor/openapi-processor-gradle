@@ -4,8 +4,8 @@ configure(project.rootProject) {
         publishUser = getBuildProperty ('PUBLISH_USER')
         publishKey =  getBuildProperty ('PUBLISH_KEY')
 
-        signKey = getBuildSignKey ('SIGN_KEY')
-        signPwd = getBuildProperty ('SIGN_PWD')
+//        signKey = getBuildSignKey ('SIGN_KEY')
+//        signPwd = getBuildProperty ('SIGN_PWD')
 
         isReleaseVersion = !version.endsWith("SNAPSHOT")
     }
@@ -62,7 +62,14 @@ afterEvaluate {
         }
     }
 
+    // signing requires the sign key and pwd as environment variables:
+    //
+    // ORG_GRADLE_PROJECT_signKey=...
+    // ORG_GRADLE_PROJECT_signPwd=...
+
     signing {
+        def signKey = findProperty("signKey") as String
+        def signPwd = findProperty("signPwd") as String
         useInMemoryPgpKeys(signKey, signPwd)
 
 //        signing {
