@@ -6,6 +6,8 @@ configure(project.rootProject) {
 
 //        signKey = getBuildSignKey ('SIGN_KEY')
 //        signPwd = getBuildProperty ('SIGN_PWD')
+        signKey = findProperty("signKey") as String
+        signPwd = findProperty("signPwd") as String
 
         isReleaseVersion = !version.endsWith("SNAPSHOT")
     }
@@ -68,8 +70,6 @@ afterEvaluate {
     // ORG_GRADLE_PROJECT_signPwd=...
 
     signing {
-        def signKey = findProperty("signKey") as String
-        def signPwd = findProperty("signPwd") as String
         useInMemoryPgpKeys(signKey, signPwd)
 
 //        signing {
