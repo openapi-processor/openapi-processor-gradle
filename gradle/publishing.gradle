@@ -1,3 +1,4 @@
+// obsolete
 
 configure(project.rootProject) {
     ext {

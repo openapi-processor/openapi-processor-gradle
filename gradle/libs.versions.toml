@@ -1,0 +1,26 @@
+[versions]
+project = "2023.3-SNAPSHOT"
+
+api = "2023.1"
+snakeyaml = "2.2"
+spock = "2.4-M4-groovy-3.0"
+bytebuddy = "1.15.0"
+
+# plugins
+versions = "0.51.0"
+publish = "1.2.1"
+nexus = "2.0.0"
+
+[libraries]
+openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
+snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
+spock-platform = { module = "org.spockframework:spock-bom", version.ref = "spock" }
+spock-core = { module = "org.spockframework:spock-core" }
+bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }
+
+#[bundles]
+
+[plugins]
+publish = { id = "com.gradle.plugin-publish", version.ref = "publish" }
+nexus = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
