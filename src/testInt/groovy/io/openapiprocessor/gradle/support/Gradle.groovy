@@ -16,7 +16,9 @@ class Gradle {
         '8.5',
         '8.6',
         '8.7',
-        '8.8'
+        '8.8',
+        '8.9',
+        '8.10'
     ]
 
     static List<String> VERSIONS_7 = [
