@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.gradle
 
+import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
 class ProcessorSpec extends Specification {
@@ -86,4 +87,39 @@ class ProcessorSpec extends Specification {
         processor.other.test.three.five == 'd'
     }
 
+    void "accept targetDir when given as Directory" () {
+        def project = ProjectBuilder.builder().build()
+        project.pluginManager.apply(OpenApiProcessorPlugin)
+
+        when:
+        project.openapiProcessor {
+            process("any") {
+                targetDir(project.layout.projectDirectory.dir("src/api/openapi.yaml"))
+            }
+        }
+
+        then:
+        def ext = project.extensions.findByType(OpenApiProcessorExtension)
+        def processor = ext.getProcessors().getting("any").get()
+
+        processor.targetDir == project.layout.projectDirectory.dir("src/api/openapi.yaml").toString()
+    }
+
+    void "accept mapping property when given as RegularFile" () {
+        def project = ProjectBuilder.builder().build()
+        project.pluginManager.apply(OpenApiProcessorPlugin)
+
+        when:
+        project.openapiProcessor {
+            process("any") {
+                prop("mapping", project.layout.projectDirectory.file("src/api/mapping.yaml"))
+            }
+        }
+
+        then:
+        def ext = project.extensions.findByType(OpenApiProcessorExtension)
+        def processor = ext.getProcessors().getting("any").get()
+
+        processor.other.mapping == project.layout.projectDirectory.file("src/api/mapping.yaml").toString()
+    }
 }

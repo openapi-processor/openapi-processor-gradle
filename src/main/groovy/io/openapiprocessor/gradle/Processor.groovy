@@ -5,8 +5,9 @@
 
 package io.openapiprocessor.gradle
 
-
+import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.RegularFile
 
 /**
  * represents an openapi-processor configured in {@link OpenApiProcessorExtension}
@@ -54,6 +55,10 @@ class Processor {
         other.put (TARGET_DIR, targetDir.toString ())
     }
 
+    void targetDir(Directory targetDir) {
+        other.put (TARGET_DIR, targetDir.toString())
+    }
+
     String getTargetDir () {
         other.get (TARGET_DIR)
     }
@@ -83,11 +88,19 @@ class Processor {
     }
 
     void prop (String key, Object value) {
-        other.put (key, value)
+        if (value instanceof RegularFile) {
+            other.put(key, value.toString())
+        } else {
+            other.put (key, value)
+        }
     }
 
     void prop (GString key, Object value) {
-        other.put (key.toString (), value)
+        if (value instanceof RegularFile) {
+            other.put(key.toString(), value.toString())
+        } else {
+            other.put (key.toString(), value)
+        }
     }
 
     def methodMissing (String name, def args) {

@@ -7,6 +7,7 @@ package io.openapiprocessor.gradle
 
 import org.gradle.api.Action
 import org.gradle.api.Project
+import org.gradle.api.file.RegularFile
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
@@ -149,12 +150,20 @@ class OpenApiProcessorExtension {
         throw new MissingMethodException(name, OpenApiProcessorExtension, args)
     }
 
+    void apiPath(RegularFile apiPath) {
+        api.set(apiPath.toString())
+    }
+
     void apiPath (String apiPath) {
         api.set (apiPath)
     }
 
     void apiPath (GString apiPath) {
         api.set (apiPath)
+    }
+
+    void setApiPath (RegularFile apiPath) {
+        api.set (apiPath.toString())
     }
 
     void setApiPath (String apiPath) {

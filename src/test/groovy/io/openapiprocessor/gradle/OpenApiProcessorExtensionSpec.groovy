@@ -9,6 +9,7 @@ import org.gradle.api.Project
 import org.gradle.api.internal.provider.DefaultMapProperty
 import org.gradle.api.internal.provider.DefaultProperty
 import org.gradle.api.model.ObjectFactory
+import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
 
@@ -109,5 +110,20 @@ class OpenApiProcessorExtensionSpec extends Specification {
 
         then:
         ex.apiPath.get () == 'projectDir/src/api/openapi.yaml'
+    }
+
+    void "accept apiPath when given as RegularFile" () {
+        def project = ProjectBuilder.builder().build()
+        project.pluginManager.apply(OpenApiProcessorPlugin)
+
+        when:
+        project.openapiProcessor {
+            apiPath(project.layout.projectDirectory.file("src/api/openapi.yaml"))
+        }
+
+        then:
+        def ext = project.extensions.findByType(OpenApiProcessorExtension)
+
+        ext.api.get().takeRight("src/api/openapi.yaml".length()) == "src/api/openapi.yaml"
     }
 }
