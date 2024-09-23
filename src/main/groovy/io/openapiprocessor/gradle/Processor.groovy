@@ -8,6 +8,7 @@ package io.openapiprocessor.gradle
 import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
+import org.gradle.api.provider.Provider
 
 /**
  * represents an openapi-processor configured in {@link OpenApiProcessorExtension}
@@ -47,6 +48,10 @@ class Processor {
         dependencies.add (dep)
     }
 
+    String getTargetDir () {
+        other.get (TARGET_DIR)
+    }
+
     void targetDir (String targetDir) {
         other.put (TARGET_DIR, targetDir)
     }
@@ -59,8 +64,31 @@ class Processor {
         other.put (TARGET_DIR, targetDir.toString())
     }
 
-    String getTargetDir () {
-        other.get (TARGET_DIR)
+    void targetDir(Provider<Directory> targetDir) {
+        other.put (TARGET_DIR, targetDir.get().toString())
+    }
+
+    void setTargetDir (String targetDir) {
+        other.put (TARGET_DIR, targetDir)
+    }
+
+    void setTargetDir (GString targetDir) {
+        other.put (TARGET_DIR, targetDir.toString ())
+    }
+
+    void setTargetDir(Directory targetDir) {
+        other.put (TARGET_DIR, targetDir.toString())
+    }
+
+    /**
+     * allow to assign targetDir like
+     *
+     * {@code targetDir = layout.buildDirectory.dir("openapi")}
+     *
+     * @param targetDir targetDir provider
+     */
+    void setTargetDir(Provider<Directory> targetDir) {
+        other.put (TARGET_DIR, targetDir.get().toString())
     }
 
     void apiPath (String apiPath) {
@@ -81,6 +109,10 @@ class Processor {
 
     void setApiPath (String path) {
         other.put (API_PATH, path)
+    }
+
+    void setApiPath (RegularFile apiPath) {
+        other.put (API_PATH, apiPath.toString())
     }
 
     void prop (Map<String, Object> props) {

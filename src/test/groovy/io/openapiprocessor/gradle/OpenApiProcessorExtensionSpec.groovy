@@ -126,4 +126,22 @@ class OpenApiProcessorExtensionSpec extends Specification {
 
         ext.api.get().takeRight("src/api/openapi.yaml".length()) == "src/api/openapi.yaml"
     }
+
+    void "accept apiPath assignment with RegularFile" () {
+        def project = ProjectBuilder.builder().build()
+        project.pluginManager.apply(OpenApiProcessorPlugin)
+
+        when:
+        project.openapiProcessor {
+            process("any") {
+                apiPath = project.layout.projectDirectory.file("src/api/openapi.yaml")
+            }
+        }
+
+        then:
+        def ext = project.extensions.findByType(OpenApiProcessorExtension)
+        def processor = ext.getProcessors().getting("any").get()
+
+        processor.apiPath == project.layout.projectDirectory.file("src/api/openapi.yaml").toString()
+    }
 }

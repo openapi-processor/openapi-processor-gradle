@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.gradle
 
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
@@ -94,7 +95,7 @@ class ProcessorSpec extends Specification {
         when:
         project.openapiProcessor {
             process("any") {
-                targetDir(project.layout.projectDirectory.dir("src/api/openapi.yaml"))
+                targetDir(project.layout.buildDirectory.dir("openapi").get())
             }
         }
 
@@ -102,7 +103,43 @@ class ProcessorSpec extends Specification {
         def ext = project.extensions.findByType(OpenApiProcessorExtension)
         def processor = ext.getProcessors().getting("any").get()
 
-        processor.targetDir == project.layout.projectDirectory.dir("src/api/openapi.yaml").toString()
+        processor.targetDir == project.layout.buildDirectory.dir("openapi").get().toString()
+    }
+
+    void "accept targetDir when given as Provider<Directory>" () {
+        def project = ProjectBuilder.builder().build()
+        project.pluginManager.apply(OpenApiProcessorPlugin)
+
+        when:
+        project.openapiProcessor {
+            process("any") {
+                targetDir(project.layout.buildDirectory.dir("openapi"))
+            }
+        }
+
+        then:
+        def ext = project.extensions.findByType(OpenApiProcessorExtension)
+        def processor = ext.getProcessors().getting("any").get()
+
+        processor.targetDir == project.layout.buildDirectory.dir("openapi").get().toString()
+    }
+
+    void "accept targetDir assignment with Provider<Directory>" () {
+        def project = ProjectBuilder.builder().build()
+        project.pluginManager.apply(OpenApiProcessorPlugin)
+
+        when:
+        project.openapiProcessor {
+            process("any") {
+                targetDir = project.layout.buildDirectory.dir("openapi")
+            }
+        }
+
+        then:
+        def ext = project.extensions.findByType(OpenApiProcessorExtension)
+        def processor = ext.getProcessors().getting("any").get()
+
+        processor.targetDir == project.layout.buildDirectory.dir("openapi").get().toString()
     }
 
     void "accept mapping property when given as RegularFile" () {
