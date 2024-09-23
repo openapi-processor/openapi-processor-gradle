@@ -128,8 +128,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                     task.logger.warn ("or '${EXTENSION_NAME_ALTERNATIVE}.${name}.processor' not set!")
                 }
 
-                dependencies.add (handler.create(
-                    "io.openapiprocessor:openapi-processor-api:${Version.api}"))
+                dependencies.add (handler.create("io.openapiprocessor:openapi-processor-api:${Version.api}"))
 
                 processor.dependencies.each {
                     dependencies.add (handler.create (it))
