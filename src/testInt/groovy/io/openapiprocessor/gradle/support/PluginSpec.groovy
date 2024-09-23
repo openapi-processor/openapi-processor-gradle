@@ -52,7 +52,7 @@ abstract class PluginSpec extends Specification {
                 new File("${projectDir}/build/classes/java/main/"),
                 new File("${projectDir}/build/resources/main/")
             ])
-            .withDebug (true)
+//            .withDebug (true)
             .build()
     }
 
