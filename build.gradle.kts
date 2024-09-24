@@ -8,8 +8,8 @@ plugins {
     alias(libs.plugins.versions)
 }
 
-group = getGradleProperty("projectGroupId")
-version = getGradleProperty("projectVersion")
+group = projectGroupId()
+version = projectVersion()
 extra["api"] = libs.versions.api.get()
 
 allprojects {

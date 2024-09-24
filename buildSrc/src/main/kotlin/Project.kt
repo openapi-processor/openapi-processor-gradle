@@ -21,8 +21,12 @@ fun Project.getBuildProperty(property: String): String {
     }
 }
 
-fun Project.getGradleProperty(property: String): Provider<String> {
-    return providers.gradleProperty(property)
+fun Project.projectGroupId(): String {
+    return getGradleProperty("projectGroupId").get()
+}
+
+fun Project.projectVersion(): String {
+    return getGradleProperty("projectVersion").get()
 }
 
 fun Project.getPublishUser(): String {
@@ -31,4 +35,8 @@ fun Project.getPublishUser(): String {
 
 fun Project.getPublishKey(): String {
     return getBuildProperty("PUBLISH_KEY")
+}
+
+fun Project.getGradleProperty(property: String): Provider<String> {
+    return providers.gradleProperty(property)
 }
