@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `kotlin-dsl`
     id("signing")
@@ -90,6 +92,13 @@ tasks.named<Test>("testInt") {
 
 tasks.named("check") {
     dependsOn(testing.suites.named("testInt"))
+}
+
+// for migration to kotlin
+tasks.withType<GroovyCompile> {
+    val kotlin = tasks.named("compileKotlin", KotlinCompile::class)
+    dependsOn(kotlin)
+    classpath += files(kotlin.get().destinationDirectory)
 }
 
 dependencies {
