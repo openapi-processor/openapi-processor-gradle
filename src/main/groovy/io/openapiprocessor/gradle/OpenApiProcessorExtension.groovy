@@ -7,8 +7,6 @@ package io.openapiprocessor.gradle
 
 import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.file.RegularFile
-import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 
@@ -38,12 +36,13 @@ import org.gradle.api.provider.Property
  * }
  * </pre>
  */
-class OpenApiProcessorExtension {
+abstract class OpenApiProcessorExtension extends OpenApiProcessorExtensionBase {
 
     /**
      * the path to the openapi yaml file. Used for all processors if not set in a nested processor
      * configuration.
      */
+    @Deprecated
     Property<String> api
 
     /**
@@ -74,7 +73,7 @@ class OpenApiProcessorExtension {
 
     OpenApiProcessorExtension (Project project) {
         this.project = project
-        apiPath = project.objects.fileProperty()
+        api = project.objects.property(String)
         checkUpdates = project.objects.property(String)
         processors = project.objects.mapProperty (String, Processor)
 
@@ -150,32 +149,18 @@ class OpenApiProcessorExtension {
         throw new MissingMethodException(name, OpenApiProcessorExtension, args)
     }
 
-    void apiPath(RegularFile apiPath) {
-        api.set(apiPath.toString())
+    /**
+     * set apiPath.
+     */
+    void apiPath(String apiPath) {
+        this.apiPath.fileValue(new File(apiPath))
     }
 
-    void apiPath (String apiPath) {
-        api.set (apiPath)
-    }
-
-    void apiPath (GString apiPath) {
-        api.set (apiPath)
-    }
-
-    void setApiPath (RegularFile apiPath) {
-        api.set (apiPath.toString())
-    }
-
-    void setApiPath (String apiPath) {
-        api.set (apiPath)
-    }
-
-    void setApiPath (GString apiPath) {
-        api.set (apiPath)
-    }
-
-    Property<String> getApiPath () {
-        api
+    /**
+     * set apiPath.
+     */
+    void apiPath(GString apiPath) {
+        this.apiPath.fileValue(new File(apiPath))
     }
 
     void checkUpdates(String check) {
