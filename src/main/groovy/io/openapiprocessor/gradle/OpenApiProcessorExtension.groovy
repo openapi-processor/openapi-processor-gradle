@@ -72,11 +72,11 @@ class OpenApiProcessorExtension {
 
     private Project project
 
-    OpenApiProcessorExtension (Project project, ObjectFactory objectFactory) {
+    OpenApiProcessorExtension (Project project) {
         this.project = project
-        api = objectFactory.property(String)
-        checkUpdates = objectFactory.property(String)
-        processors = objectFactory.mapProperty (String, Processor)
+        apiPath = project.objects.fileProperty()
+        checkUpdates = project.objects.property(String)
+        processors = project.objects.mapProperty (String, Processor)
 
         checkUpdates.set("never")
     }
