@@ -12,10 +12,20 @@ class OpenApiProcessorExtensionUtils {
     static final String EXTENSION_NAME_ALTERNATIVE = 'openapi'
 
     static void createExtension (Project project) {
-        project.extensions.create (EXTENSION_NAME_DEFAULT, OpenApiProcessorExtension, project)
-        project.extensions.create (EXTENSION_NAME_ALTERNATIVE, OpenApiProcessorExtension, project)
+        def extension = project.extensions.create (
+                EXTENSION_NAME_DEFAULT,
+                OpenApiProcessorExtension,
+                project)
+
+        // make same extension object available under alternative name
+        project.extensions.add(EXTENSION_NAME_ALTERNATIVE, extension)
     }
 
+    static OpenApiProcessorExtension getExtension(Project project) {
+        return project.extensions.findByName (EXTENSION_NAME_DEFAULT) as OpenApiProcessorExtension
+    }
+
+    @Deprecated
     static def findExtension (Project project) {
         def ext2 = project.extensions.findByName (EXTENSION_NAME_ALTERNATIVE) as OpenApiProcessorExtension
         def ext = project.extensions.findByName (EXTENSION_NAME_DEFAULT) as OpenApiProcessorExtension
@@ -27,6 +37,7 @@ class OpenApiProcessorExtensionUtils {
         }
     }
 
+    @Deprecated
     static OpenApiProcessorExtension findCurrentExtension(Project project) {
         def ext2 = project.extensions.findByName (EXTENSION_NAME_ALTERNATIVE) as OpenApiProcessorExtension
         def ext = project.extensions.findByName (EXTENSION_NAME_DEFAULT) as OpenApiProcessorExtension
