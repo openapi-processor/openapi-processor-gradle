@@ -39,13 +39,6 @@ import org.gradle.api.provider.Property
 abstract class OpenApiProcessorExtension extends OpenApiProcessorExtensionBase {
 
     /**
-     * the path to the openapi yaml file. Used for all processors if not set in a nested processor
-     * configuration.
-     */
-    @Deprecated
-    Property<String> api
-
-    /**
      * check automatically for updates. Can be "never"|"daily"|"always". Default is "never".
      */
     Property<String> checkUpdates
@@ -73,7 +66,6 @@ abstract class OpenApiProcessorExtension extends OpenApiProcessorExtensionBase {
 
     OpenApiProcessorExtension (Project project) {
         this.project = project
-        api = project.objects.property(String)
         checkUpdates = project.objects.property(String)
         processors = project.objects.mapProperty (String, Processor)
 
