@@ -27,6 +27,12 @@ allprojects {
                 snapshotsOnly()
             }
         }
+
+        java {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(11))
+            }
+        }
     }
 
     dependencies {
@@ -38,10 +44,6 @@ allprojects {
 java {
     withJavadocJar()
     withSourcesJar()
-
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
 }
 
 @Suppress("UnstableApiUsage")
