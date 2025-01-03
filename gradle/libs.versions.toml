@@ -1,7 +1,7 @@
 [versions]
 project = "2023.3-SNAPSHOT"
 
-api = "2023.1"
+api = "2024.2"
 snakeyaml = "2.3"
 spock = "2.4-M4-groovy-3.0"
 bytebuddy = "1.15.11"
