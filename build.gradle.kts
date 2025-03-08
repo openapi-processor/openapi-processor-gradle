@@ -80,9 +80,9 @@ testing {
     }
 }
 
-tasks.updateDaemonJvm {
-    jvmVersion = JavaVersion.VERSION_17
-}
+//tasks.updateDaemonJvm {
+//    jvmVersion = JavaVersion.VERSION_17
+//}
 
 tasks.named<Test>("testInt") {
     shouldRunAfter(tasks.named("test"))
