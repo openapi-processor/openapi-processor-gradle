@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.publish)
     alias(libs.plugins.nexus)
     alias(libs.plugins.versions)
+    alias(libs.plugins.kotlin)
 }
 
 group = projectGroupId()
@@ -104,6 +105,8 @@ tasks.withType<GroovyCompile> {
 dependencies {
     implementation(localGroovy())
     implementation(libs.snakeyaml)
+    implementation(platform(libs.kotlin.bom))
+    implementation(libs.kotlin.stdlib)
 }
 
 gradlePlugin {
