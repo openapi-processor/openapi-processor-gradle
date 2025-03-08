@@ -19,7 +19,7 @@ import org.gradle.workers.WorkerExecutor;
 
 import javax.inject.Inject;
 
-import static io.openapiprocessor.gradle.OpenApiProcessorExtensionUtils.findCurrentExtension;
+import static io.openapiprocessor.gradle.OpenApiProcessorExtensionUtils.getExtension;
 
 /**
  * processor task. Uses a worker executor to run the processor with an isolated "openapiProcessor"
@@ -84,7 +84,7 @@ abstract public class OpenApiProcessorTask extends DefaultTask {
                 workerSpec.getClasspath ().from (getDependencies ());
             });
 
-        var extension = findCurrentExtension(getProject());
+        var extension = getExtension(getProject());
 
         workQueue.submit(OpenApiProcessorWorker.class, parameters -> {
             parameters.getProcessorName ().set (getProcessorName ());
