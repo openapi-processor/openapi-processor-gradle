@@ -637,4 +637,4 @@ openapiProcessor {
 
 == samples
 
-See xref:samples::index.adoc[samples] for a couple of working samples.
+See xref:samples::spring-mvc.adoc[spring mvc sample] or xref:samples::spring-webflux.adoc[spring webflux sample] for working spring boot samples using the groovy dsl.
