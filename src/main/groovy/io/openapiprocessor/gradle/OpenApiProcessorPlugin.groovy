@@ -72,7 +72,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         return new Action<Project>() {
             @Override
             void execute (Project project) {
-                def (extName, extension) = findExtension (project)
+                def extension = getExtension (project)
                 def interval = extension.checkUpdates.get()
 
                 def version = new VersionCheck(project.rootDir.absolutePath, interval)
@@ -91,7 +91,7 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
         return new Action<Project>() {
             @Override
             void execute (Project project) {
-                def (extName, extension) = findExtension (project)
+                def extension = getExtension (project)
                 extension.processors.get ().each { entry ->
                     def name = "process${entry.key.capitalize ()}"
                     def action = createTaskBuilderAction (entry.key, entry.value)
@@ -125,7 +125,6 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
 
                 if (processor.dependencies.empty) {
                     task.logger.warn ("'${EXTENSION_NAME_DEFAULT}.${name}.processor' not set!")
-                    task.logger.warn ("or '${EXTENSION_NAME_ALTERNATIVE}.${name}.processor' not set!")
                 }
 
                 dependencies.add (handler.create("io.openapiprocessor:openapi-processor-api:${Version.api}"))
@@ -160,13 +159,13 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 if(processor.hasApiPath ())
                     return
 
-                def (extName, extension) = findExtension (task.project)
-                if (!extension.apiPath.present) {
-                    task.logger.warn ("'${extName}.apiPath' or '${extName}.${name}.apiPath' not set!")
+                def extension = getExtension (task.project)
+                if (!extension.api.present) {
+                    task.logger.warn ("'${extName}.apiPath'!")
                     return
                 }
 
-                processor.apiPath = extension.apiPath.get ()
+                processor.apiPath = extension.api.get ()
             }
         }
     }
