@@ -5,9 +5,10 @@
 
 package io.openapiprocessor.gradle
 
-
 import org.gradle.api.Action
 import org.gradle.api.Project
+import org.gradle.api.file.RegularFile
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 
@@ -40,6 +41,12 @@ import org.gradle.api.provider.Property
 abstract class OpenApiProcessorExtension extends OpenApiProcessorExtensionBase {
 
     /**
+     * the path to the openapi yaml file. Used for all processors if not set in a nested processor
+     * configuration.
+     */
+    RegularFileProperty api
+
+    /**
      * check automatically for updates. Can be "never"|"daily"|"always". Default is "never".
      */
     Property<String> checkUpdates
@@ -66,11 +73,13 @@ abstract class OpenApiProcessorExtension extends OpenApiProcessorExtensionBase {
     private Project project
 
     OpenApiProcessorExtension (Project project) {
-        this.project = project
-        checkUpdates = project.objects.property(String)
-        processors = project.objects.mapProperty (String, Processor)
+        api = project.objects.fileProperty()
 
+        checkUpdates = project.objects.property(String)
         checkUpdates.set("never")
+
+        processors = project.objects.mapProperty (String, Processor)
+        this.project = project
     }
 
     /**
@@ -146,14 +155,22 @@ abstract class OpenApiProcessorExtension extends OpenApiProcessorExtensionBase {
      * set apiPath.
      */
     void apiPath(String apiPath) {
-        this.apiPath.fileValue(new File(apiPath))
+        this.api.fileValue(new File(apiPath))
     }
 
     /**
      * set apiPath.
      */
     void apiPath(GString apiPath) {
-        this.apiPath.fileValue(new File(apiPath))
+        this.api.fileValue(new File(apiPath))
+    }
+
+    void setApiPath(File apiPath) {
+        api.set(apiPath)
+    }
+
+    void setApiPath(RegularFile apiPath) {
+        api.set(apiPath)
     }
 
     void checkUpdates(String check) {

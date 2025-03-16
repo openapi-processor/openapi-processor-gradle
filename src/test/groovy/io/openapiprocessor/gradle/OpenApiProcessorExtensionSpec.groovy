@@ -24,7 +24,7 @@ class OpenApiProcessorExtensionSpec extends Specification {
         ex.apiPath("openapi.yaml")
 
         expect:
-        ex.apiPath.get().asFile == project.file("openapi.yaml")
+        ex.api.get().asFile == project.file("openapi.yaml")
         ex.checkUpdates.get() == "never"
     }
 
@@ -93,7 +93,7 @@ class OpenApiProcessorExtensionSpec extends Specification {
         }
 
         then:
-        ex.apiPath.get().asFile == project.file('projectDir/src/api/openapi.yaml')
+        ex.api.get().asFile == project.file('projectDir/src/api/openapi.yaml')
     }
 
     void "assign apiPath from GString" () {
@@ -105,7 +105,7 @@ class OpenApiProcessorExtensionSpec extends Specification {
         }
 
         then:
-        ex.apiPath.get().asFile == project.file('projectDir/src/api/openapi.yaml')
+        ex.api.get().asFile == project.file('projectDir/src/api/openapi.yaml')
     }
 
     void "assign apiPath from RegularFile" () {
@@ -115,6 +115,6 @@ class OpenApiProcessorExtensionSpec extends Specification {
         }
 
         then:
-        ex.apiPath.get().asFile == project.file("src/api/openapi.yaml")
+        ex.api.get().asFile == project.file("src/api/openapi.yaml")
     }
 }
