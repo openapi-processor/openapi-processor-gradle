@@ -10,7 +10,6 @@ bytebuddy = "1.17.2"
 versions = "0.51.0"
 publish = "1.3.1"
 nexus = "2.0.0"
-kotlin = "2.0.20"
 
 [libraries]
 openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
@@ -18,13 +17,8 @@ snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
 spock-platform = { module = "org.spockframework:spock-bom", version.ref = "spock" }
 spock-core = { module = "org.spockframework:spock-core" }
 bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }
-kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-
-#[bundles]
 
 [plugins]
 publish = { id = "com.gradle.plugin-publish", version.ref = "publish" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

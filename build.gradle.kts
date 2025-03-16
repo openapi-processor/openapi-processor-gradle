@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `kotlin-dsl`
     id("signing")
@@ -8,7 +6,6 @@ plugins {
     alias(libs.plugins.publish)
     alias(libs.plugins.nexus)
     alias(libs.plugins.versions)
-    alias(libs.plugins.kotlin)
 }
 
 group = projectGroupId()
@@ -99,18 +96,9 @@ tasks.named("check") {
     dependsOn(testing.suites.named("testInt"))
 }
 
-// for migration to kotlin
-tasks.withType<GroovyCompile> {
-    val kotlin = tasks.named("compileKotlin", KotlinCompile::class)
-    dependsOn(kotlin)
-    classpath += files(kotlin.get().destinationDirectory)
-}
-
 dependencies {
     implementation(localGroovy())
     implementation(libs.snakeyaml)
-    implementation(platform(libs.kotlin.bom))
-    implementation(libs.kotlin.stdlib)
 }
 
 gradlePlugin {
