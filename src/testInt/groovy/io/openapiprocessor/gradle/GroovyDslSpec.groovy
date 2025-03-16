@@ -34,7 +34,7 @@ class GroovyDslSpec extends PluginSpec {
         
             process("v1") {
                 processor(project.files("$projectDir/processor-v1/build/libs/processor-v1.jar"))
-                targetDir("\$buildDir/v1")
+                targetDir(layout.buildDirectory.dir("v1"))
         
                 prop("v1", "value v1")
             }
