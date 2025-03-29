@@ -4,7 +4,7 @@ project = "2023.3-SNAPSHOT"
 api = "2024.2"
 snakeyaml = "2.4"
 spock = "2.4-M4-groovy-3.0"
-bytebuddy = "1.17.2"
+bytebuddy = "1.17.4"
 
 # plugins
 versions = "0.51.0"
