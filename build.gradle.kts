@@ -54,8 +54,6 @@ testing {
         }
 
         val testInt by registering(JvmTestSuite::class) {
-            testType = TestSuiteType.INTEGRATION_TEST
-
             sources {
                 java {
                     setSrcDirs(listOf("src/testInt/groovy"))
