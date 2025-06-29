@@ -4,4 +4,6 @@ include 'processor-one'
 include 'processor-two'
 include 'processor-v1'
 
+enableFeaturePreview "STABLE_CONFIGURATION_CACHE"
+
 //includeBuild '../openapi-processor-api'
