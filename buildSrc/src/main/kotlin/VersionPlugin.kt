@@ -1,7 +1,7 @@
-import gradle.kotlin.dsl.accessors._9c04ceaef20eeb51aed3ad37a03c872b.ext
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.internal.extensions.core.extra
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 
@@ -30,7 +30,7 @@ class VersionPlugin: Plugin<Project> {
             buildFile = project.buildFile
             targetDir = project.layout.buildDirectory.dir("version")
             pluginVersion = project.version.toString()
-            apiVersion = project.ext.get("api").toString()
+            apiVersion = project.extra["api"].toString()
         }
 
         val ssc = project.extensions.getByType<SourceSetContainer>()
