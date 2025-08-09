@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.publish)
     alias(libs.plugins.nexus)
     alias(libs.plugins.versions)
+    id("groovy")
 }
 
 group = projectGroupId()
@@ -75,9 +76,15 @@ testing {
     }
 }
 
-//tasks.updateDaemonJvm {
-//    jvmVersion = JavaVersion.VERSION_17
-//}
+// compile groovy before kotlin
+tasks.compileGroovy {
+    classpath = sourceSets.main.get().compileClasspath
+}
+
+tasks.compileKotlin {
+    libraries.from(sourceSets.main.get().groovy.classesDirectory)
+}
+//
 
 tasks.named<Test>("testInt") {
     shouldRunAfter(tasks.named("test"))
