@@ -27,17 +27,17 @@ allprojects {
                 snapshotsOnly()
             }
         }
-
-        java {
-            toolchain {
-                languageVersion.set(JavaLanguageVersion.of(11))
-            }
-        }
     }
 
     dependencies {
         compileOnly(rootProject.libs.openapi.processor.api)
         implementation(localGroovy())
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
