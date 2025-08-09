@@ -3,7 +3,10 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package io.openapiprocessor.gradle;
+package io.openapiprocessor.gradle.version
 
-abstract class OpenApiProcessorExtensionBase {
+import java.time.Instant
+
+interface Time {
+    fun now(): Instant
 }

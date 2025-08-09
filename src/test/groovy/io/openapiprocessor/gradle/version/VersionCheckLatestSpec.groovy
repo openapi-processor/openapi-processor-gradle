@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.gradle.version
 
-import io.openapiprocessor.gradle.Time
+
 import spock.lang.Specification
 import spock.lang.TempDir
 
@@ -21,7 +21,7 @@ class VersionCheckLatestSpec extends Specification {
     void "should check if there was no latest check"() {
         def file = testPath.resolve(".openapiprocessor.yaml")
         def settings = new VersionCheckSettings(file.toString())
-        def latest = new VersionCheckLatest(settings, 1)
+        def latest = new VersionCheckLatest(settings, 1, new VersionCheckLatest.DefaultTime())
 
         when:
         def check = latest.shouldCheck("gradle")
