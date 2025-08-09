@@ -6,12 +6,13 @@
 package io.openapiprocessor.gradle.version
 
 import spock.lang.Specification
+import java.time.Instant
 
 class GitHubVersionCheckSpec extends Specification {
 
     void "finds newer version" () {
         def provider = Stub GitHubVersionProvider
-        provider.version >> new GitHubVersion(name: "2023.2")
+        provider.getVersion() >> new GitHubVersion("2023.2", Instant.now(), "newer")
 
         when:
         def check = new GitHubVersionCheck(provider, "2023.1")
@@ -23,7 +24,10 @@ class GitHubVersionCheckSpec extends Specification {
 
     void "ignores older or equal version" () {
         def provider = Stub GitHubVersionProvider
-        provider.version >>> [new GitHubVersion(name: "2022.3"), new GitHubVersion(name: "2022.2")]
+        provider.getVersion() >>> [
+                new GitHubVersion("2022.3", Instant.now(), "newer"),
+                new GitHubVersion("2022.2", Instant.now(), "newer")
+        ]
 
         when:
         def check = new GitHubVersionCheck(provider, "2023.1")
@@ -37,7 +41,7 @@ class GitHubVersionCheckSpec extends Specification {
 
     void "ignores newer snapshot version" () {
         def provider = Stub GitHubVersionProvider
-        provider.version >> new GitHubVersion(name: "2023.2-SNAPSHOT")
+        provider.getVersion() >> new GitHubVersion("2023.2-SNAPSHOT", Instant.now(), "snapshot")
 
         when:
         def check = new GitHubVersionCheck(provider, "2023.1")
@@ -49,7 +53,7 @@ class GitHubVersionCheckSpec extends Specification {
 
     void "ignores error"() {
         def provider = Stub GitHubVersionProvider
-        provider.version >> { throw new GitHubVersionException(null, null) }
+        provider.getVersion() >> { throw new GitHubVersionException(new URI("/bad"), new Exception()) }
 
         when:
         def check = new GitHubVersionCheck(provider, "any")

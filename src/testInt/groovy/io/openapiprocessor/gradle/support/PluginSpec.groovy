@@ -49,6 +49,7 @@ abstract class PluginSpec extends Specification {
             .withArguments(getGradleArguments ())
             .withPluginClasspath ([
                 new File("${projectDir}/build/classes/groovy/main/"),
+                new File("${projectDir}/build/classes/kotlin/main/"),
                 new File("${projectDir}/build/classes/java/main/"),
                 new File("${projectDir}/build/resources/main/")
             ])

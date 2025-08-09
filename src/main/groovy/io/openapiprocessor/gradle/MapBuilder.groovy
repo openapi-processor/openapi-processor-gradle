@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.gradle
 
+import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory
  * def map = builder.get()
  * </pre>
  */
+@CompileStatic
 class MapBuilder {
     Logger log = LoggerFactory.getLogger (MapBuilder)
 
@@ -51,7 +53,7 @@ class MapBuilder {
      */
     @Override
     Object invokeMethod(String methodName, Object args) {
-        def value = args[0]
+        def value = (args as Collection<Object>)[0]
         if (value instanceof Closure) {
             def builder = new MapBuilder()
             builder.with value
@@ -59,6 +61,8 @@ class MapBuilder {
         } else {
             setProperty (methodName, value)
         }
+
+        return null
     }
 
     /**
@@ -80,5 +84,4 @@ class MapBuilder {
 
         props.put (propertyName, value)
     }
-
 }

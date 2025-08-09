@@ -5,7 +5,6 @@
 
 package io.openapiprocessor.gradle
 
-import org.gradle.api.provider.ProviderFactory
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 

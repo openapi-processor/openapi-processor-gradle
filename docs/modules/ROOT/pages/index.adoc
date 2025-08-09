@@ -20,16 +20,23 @@ link:{oapj-license}[image:{badge-license}[]]
 a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any openapi-processor without an explicit dependency on the processor.
 
 
-[cols="2*",options="header"]
+[cols="3*",options="header"]
 |===
 | plugin version
-| required gradle version
+| minimum gradle version
+| minimum java version
 
-| 2022.1 or newer
+| 2025.x
+| 7.2
+| 17
+
+| 2022.x, 2023.x
 | 7.0+
+|
 
 | 2021.3
 | 5.5+ with groovy dsl, 6.5 with kotlin dsl
+|
 |===
 
 NOTE: unfortunately it may be necessary to configure a few xref:oap::jdk.adoc[additional jvm parameter] to run the processor with JDK 16+. This is only necessary to format the generated source code with google code format.
