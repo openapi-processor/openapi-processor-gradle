@@ -72,4 +72,17 @@ class GroovyDslSpec extends PluginSpec {
         where:
         gradleVersion << Gradle.VERSIONS_8.reverse ()
     }
+
+    @Unroll
+    void "test groovy (method) dsl with with gradle 9 (#gradleVersion)" () {
+        when:
+        def result = build(gradleVersion)
+
+        then:
+        result.task(':processV1').outcome == SUCCESS
+        result.output.contains("processor v1 did run !")
+
+        where:
+        gradleVersion << Gradle.VERSIONS_9.reverse ()
+    }
 }
