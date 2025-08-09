@@ -29,7 +29,7 @@ class SnapshotsRepositorySpec extends PluginSpec {
         ['--stacktrace', '--debug']
     }
 
-    void "does not add snapshot repository if ot enabled or disabled" () {
+    void "does not add snapshot repository if enabled or disabled" () {
         when:
         def result = build("8.5", """\
             """.stripIndent())
