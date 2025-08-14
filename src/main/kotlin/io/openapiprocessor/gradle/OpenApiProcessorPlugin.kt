@@ -76,7 +76,7 @@ class OpenApiProcessorPlugin: Plugin<Project> {
             override fun execute(project: Project) {
                 val extension = getExtension(project)
                 extension.processors.get().forEach { entry ->
-                    val name = "process${entry.key.capitalize()}"
+                    val name = "process${entry.key.replaceFirstChar { it.uppercase() }}"
                     val action = createTaskBuilderAction(entry.key, entry.value)
                     project.tasks.register(name, OpenApiProcessorTask::class.java, action)
                 }
@@ -143,7 +143,7 @@ class OpenApiProcessorPlugin: Plugin<Project> {
 
                 cfg.isVisible = false
                 cfg.isTransitive = true
-                cfg.description = "the dependencies of the process${name.capitalize ()} task."
+                cfg.description = "the dependencies of the process${name.replaceFirstChar { it.uppercase() }} task."
                 task.getDependencies().from (cfg)
             }
         }
