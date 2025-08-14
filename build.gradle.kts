@@ -5,18 +5,23 @@ import io.openapiprocessor.build.core.dsl.sonatype
 
 plugins {
     `kotlin-dsl`
-    id("openapiprocessor.version")
     alias(libs.plugins.versions)
+    alias(libs.plugins.publish)
+    alias(libs.plugins.central)
+    alias(libs.plugins.create)
     id("compile")
-    id("com.dorongold.task-tree") version "4.0.1"
-    id("io.openapiprocessor.build.plugin.publish-central") version "2025.1-SNAPSHOT"
 }
 
 group = projectGroupId()
 version = libs.versions.project.get()
 
-// todo
-extra["api"] = libs.versions.api.get()
+versions {
+    packageName = "io.openapiprocessor.gradle"
+    entries = mapOf(
+        "version" to libs.versions.project.get(),
+        "api" to libs.versions.api.get()
+    )
+}
 
 java {
     toolchain {

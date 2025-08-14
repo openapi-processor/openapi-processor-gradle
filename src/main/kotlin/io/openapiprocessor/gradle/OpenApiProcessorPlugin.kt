@@ -132,7 +132,7 @@ class OpenApiProcessorPlugin: Plugin<Project> {
                     task.logger.warn ("'${EXTENSION_NAME_DEFAULT}.${name}.processor' not set!")
                 }
 
-                dependencies.add (handler.create("io.openapiprocessor:openapi-processor-api:${Version.api}"))
+                dependencies.add (handler.create("io.openapiprocessor:openapi-processor-api:${Versions.api}"))
 
                 processor.dependencies.forEach {
                     dependencies.add (handler.create (it))
@@ -150,7 +150,7 @@ class OpenApiProcessorPlugin: Plugin<Project> {
     }
 
     private fun checkLatestRelease(): Boolean {
-        return GitHubVersionCheck(GitHubVersionProvider(), Version.version).check()
+        return GitHubVersionCheck(GitHubVersionProvider(), Versions.version).check()
     }
 
     companion object {
