@@ -1,40 +1,22 @@
+import io.openapiprocessor.build.core.dsl.initForProcessor
+import io.openapiprocessor.build.core.dsl.projectGroupId
+import io.openapiprocessor.build.core.dsl.signPublication
+import io.openapiprocessor.build.core.dsl.sonatype
+
 plugins {
     `kotlin-dsl`
-    id("signing")
     id("openapiprocessor.version")
-    id("openapiprocessor.publish")
-    alias(libs.plugins.publish)
-    alias(libs.plugins.nexus)
     alias(libs.plugins.versions)
-    id("groovy")
+    id("compile")
+    id("com.dorongold.task-tree") version "4.0.1"
+    id("io.openapiprocessor.build.plugin.publish-central") version "2025.1-SNAPSHOT"
 }
 
 group = projectGroupId()
-version = projectVersion()
+version = libs.versions.project.get()
+
+// todo
 extra["api"] = libs.versions.api.get()
-
-allprojects {
-    apply(plugin = "groovy")
-
-    repositories {
-        mavenCentral()
-
-        maven {
-            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-            content {
-               includeGroup("io.openapiprocessor")
-            }
-            mavenContent {
-                snapshotsOnly()
-            }
-        }
-    }
-
-    dependencies {
-        compileOnly(rootProject.libs.openapi.processor.api)
-        implementation(localGroovy())
-    }
-}
 
 java {
     toolchain {
@@ -85,6 +67,10 @@ tasks.compileKotlin {
 }
 //
 
+tasks.named("publishToMavenCentral") {
+    dependsOn("publishPluginMavenPublicationToStagingRepository")
+}
+
 tasks.named<Test>("testInt") {
     shouldRunAfter(tasks.named("test"))
 
@@ -120,11 +106,35 @@ gradlePlugin {
     }
 }
 
-nexusPublishing {
-    repositories {
-        sonatype {
-            username = getPublishUser()
-            password = getPublishKey()
+afterEvaluate {
+    publishing {
+        publications {
+            // update java-gradle-plugin publication
+            named<MavenPublication>("pluginMaven") {
+                pom.initForProcessor(project)
+            }
+        }
+
+        repositories {
+            sonatype(project)
         }
     }
+
+    signing {
+        signPublication(publishing.publications["pluginMaven"])
+    }
 }
+
+/*
+afterEvaluate {
+    components.forEach { component ->
+        println("component ${component.name}")
+        println(component.toString())
+    }
+
+    publishing.publications.forEach { publication ->
+        println("publication: ${publication.name}")
+        println(publication.toString())
+    }
+}
+ */
