@@ -50,8 +50,13 @@ abstract class VersionTask: DefaultTask() {
 
             package io.openapiprocessor.gradle;
 
+            /**
+             * the version of this release
+             */
             public class Version {
+                /** the plugin version */
                 public static final String version = "$pluginVersion";
+                /** the api version */
                 public static final String api = "$apiVersion";
             }
         """.trimIndent())
