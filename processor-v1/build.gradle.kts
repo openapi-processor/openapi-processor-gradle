@@ -1,4 +1,6 @@
-// configured by root project
+plugins {
+    id("compile")
+}
 
 java {
     toolchain {
