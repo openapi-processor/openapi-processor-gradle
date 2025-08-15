@@ -4,7 +4,16 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        mavenLocal()
+//        mavenLocal()
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots")
+//            content {
+//               includeGroup("io.openapiprocessor")
+//            }
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
     }
 }
 

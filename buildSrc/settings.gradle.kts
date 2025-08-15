@@ -4,6 +4,9 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
+//        maven {
+//            url = uri("https://central.sonatype.com/repository/maven-snapshots")
+//        }
     }
 }
 
@@ -16,8 +19,11 @@ dependencyResolutionManagement {
 
     repositories {
         mavenCentral()
-        maven {
-          url = uri("https://plugins.gradle.org/m2/")
-        }
+//        maven {
+//            url = uri("https://central.sonatype.com/repository/maven-snapshots")
+//        }
+//        maven {
+//          url = uri("https://plugins.gradle.org/m2/")
+//        }
     }
 }

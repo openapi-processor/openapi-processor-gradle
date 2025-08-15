@@ -1,6 +1,6 @@
 import io.openapiprocessor.build.core.dsl.initForProcessor
+import io.openapiprocessor.build.core.dsl.initSignKey
 import io.openapiprocessor.build.core.dsl.projectGroupId
-import io.openapiprocessor.build.core.dsl.signPublication
 import io.openapiprocessor.build.core.dsl.sonatype
 
 plugins {
@@ -113,20 +113,21 @@ gradlePlugin {
 
 afterEvaluate {
     publishing {
-        publications {
-            // update java-gradle-plugin publication
-            named<MavenPublication>("pluginMaven") {
-                pom.initForProcessor(project)
-            }
-        }
-
         repositories {
             sonatype(project)
         }
     }
 
+    val mavenPublications = publishing.publications.withType<MavenPublication>()
+    mavenPublications.all {
+        pom {
+            pom.initForProcessor(project)
+        }
+    }
+
     signing {
-        signPublication(publishing.publications["pluginMaven"])
+        initSignKey()
+        sign(*mavenPublications.toTypedArray<Publication>())
     }
 }
 
