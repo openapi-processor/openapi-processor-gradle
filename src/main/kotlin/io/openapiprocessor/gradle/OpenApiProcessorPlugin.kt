@@ -122,8 +122,8 @@ class OpenApiProcessorPlugin: Plugin<Project> {
                 task.description = "process openapi with openapi-processor-${processor.name}"
 
                 copyApiPath (task)
-                task.getApiDir().set(getInputDirectory())
-                task.getTargetDir().set(getOutputDirectory())
+                task.getApiDir().set(project.layout.projectDirectory.dir(getInputDirectory()))
+                task.getTargetDir().set(project.layout.projectDirectory.dir(getOutputDirectory()))
 
                 val handler = project.dependencies
                 val dependencies = ArrayList<Dependency>()
