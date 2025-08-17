@@ -1,7 +1,8 @@
-import io.openapiprocessor.build.core.dsl.initForProcessor
+import io.openapiprocessor.build.core.dsl.initFrom
 import io.openapiprocessor.build.core.dsl.initSignKey
 import io.openapiprocessor.build.core.dsl.projectGroupId
 import io.openapiprocessor.build.core.dsl.sonatype
+import io.openapiprocessor.build.core.getPomProperties
 
 plugins {
     `kotlin-dsl`
@@ -121,7 +122,7 @@ afterEvaluate {
     val mavenPublications = publishing.publications.withType<MavenPublication>()
     mavenPublications.all {
         pom {
-            pom.initForProcessor(project)
+            pom.initFrom(getPomProperties(project))
         }
     }
 
