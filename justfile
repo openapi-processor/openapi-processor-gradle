@@ -7,3 +7,7 @@ wrapper version="8.14.2":
 
 cache:
     ./gradlew --configuration-cache help
+
+# publish snapshot (if version has '-SNAPSHOT' suffix) or release
+publish:
+    ./gradlew publishToMavenCentral
