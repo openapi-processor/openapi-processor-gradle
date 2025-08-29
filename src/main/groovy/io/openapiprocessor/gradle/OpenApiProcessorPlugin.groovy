@@ -120,6 +120,10 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 task.apiDir.set (inputDirectory)
                 task.targetDir.set (outputDirectory)
 
+                processor.getOther().get ("mapping")?.with { mapping ->
+                    task.inputFiles.value (Set.of (mapping))
+                }
+
                 def handler = project.getDependencies ()
                 List<Dependency> dependencies = []
 
