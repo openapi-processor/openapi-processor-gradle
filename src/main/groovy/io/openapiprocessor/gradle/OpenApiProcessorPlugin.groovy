@@ -120,8 +120,11 @@ class OpenApiProcessorPlugin implements Plugin<Project> {
                 task.apiDir.set (inputDirectory)
                 task.targetDir.set (outputDirectory)
 
+                // Even though the processor may accept an inlined string mapping,
+                // we only support a file mapping here. It doesn't seem to make sense
+                // to inline the mapping in the Gradle build script.
                 processor.getOther().get ("mapping")?.with { mapping ->
-                    task.inputFiles.value (Set.of (mapping))
+                    task.mappingFile.set (mapping)
                 }
 
                 def handler = project.getDependencies ()
