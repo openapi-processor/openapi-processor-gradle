@@ -39,7 +39,7 @@ abstract public class OpenApiProcessorTask extends DefaultTask {
     /**
      * A reference to the mapping.yaml file. Used by gradle for the up-to-date check.
      *
-     * @return the input files
+     * @return the input mapping file
      */
     @InputFile
     abstract public Property<String> getMappingFile();
