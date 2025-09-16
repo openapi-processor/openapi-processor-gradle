@@ -48,22 +48,22 @@ class OpenApiProcessorExtensionSpec extends Specification {
 
     void "creates processor from string" () {
         when:
-        ex.test {
-            processor("a processor")
-        }
+        ex.process("test", {
+            processor("/a processor")
+        })
 
         then:
-        ex.processors.get ().test.dependencies.first() == "a processor"
+        ex.processors.get().test.dependencies.first() == "/a processor"
     }
 
     void "creates processor from file" () {
         when:
-        ex.test {
+        ex.process("test") {
             processor(project.file("processor"))
         }
 
         then:
-        ex.processors.get ().test.dependencies.first().name == "processor"
+        ex.processors.get().test.dependencies.first().name == "processor"
     }
 
     void "converts processor properties to map via process()/prop() methods" () {

@@ -86,6 +86,18 @@ class MultipleConfigurationsDifferentProcessorsSpec extends PluginSpec {
         gradleVersion << Gradle.VERSIONS_8.reverse ()
     }
 
+    @Unroll
+    void "process task runs processor from gradle 9 (#gradleVersion)" () {
+        when:
+        def result = build(gradleVersion)
+
+        then:
+        assertResult (result)
+
+        where:
+        gradleVersion << Gradle.VERSIONS_9.reverse ()
+    }
+
     private void assertResult(BuildResult result) {
         assert result.task(':processV1').outcome == SUCCESS
         assert result.output.contains("processor v1 did run !")

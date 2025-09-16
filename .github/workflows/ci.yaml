@@ -27,7 +27,6 @@ jobs:
         distribution: 'temurin'
         java-version: |
           17
-          11
 
     - name: build & publish (sonatype)
       env:
@@ -38,6 +37,6 @@ jobs:
         ORG_GRADLE_PROJECT_signPwd: ${{ secrets.SIGN_PWD }}
         PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
-      run: ./gradlew build publishToSonatype -s
+      run: ./gradlew build publishToMavenCentral --stacktrace
 
 # -i -d

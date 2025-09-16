@@ -1,43 +1,27 @@
 plugins {
     `kotlin-dsl`
-    id("signing")
-    id("openapiprocessor.version")
-    id("openapiprocessor.publish")
+    `maven-publish`
+    signing
+    alias(libs.plugins.pubplug)
     alias(libs.plugins.publish)
-    alias(libs.plugins.nexus)
     alias(libs.plugins.versions)
+    id("compile")
 }
 
-group = projectGroupId()
-version = projectVersion()
-extra["api"] = libs.versions.api.get()
+group = "io.openapiprocessor"
+version = libs.versions.project.get()
 
-allprojects {
-    apply(plugin = "groovy")
+versions {
+    packageName = "io.openapiprocessor.gradle"
+    entries = mapOf(
+        "version" to libs.versions.project.get(),
+        "api" to libs.versions.api.get()
+    )
+}
 
-    repositories {
-        mavenCentral()
-
-        maven {
-            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-            content {
-               includeGroup("io.openapiprocessor")
-            }
-            mavenContent {
-                snapshotsOnly()
-            }
-        }
-
-        java {
-            toolchain {
-                languageVersion.set(JavaLanguageVersion.of(11))
-            }
-        }
-    }
-
-    dependencies {
-        compileOnly(rootProject.libs.openapi.processor.api)
-        implementation(localGroovy())
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
@@ -46,7 +30,6 @@ java {
     withSourcesJar()
 }
 
-@Suppress("UnstableApiUsage")
 testing {
     suites {
         val test by getting(JvmTestSuite::class) {
@@ -75,9 +58,14 @@ testing {
     }
 }
 
-//tasks.updateDaemonJvm {
-//    jvmVersion = JavaVersion.VERSION_17
-//}
+// compile groovy before kotlin
+tasks.compileGroovy {
+    classpath = sourceSets.main.get().compileClasspath
+}
+
+tasks.compileKotlin {
+    libraries.from(sourceSets.main.get().groovy.classesDirectory)
+}
 
 tasks.named<Test>("testInt") {
     shouldRunAfter(tasks.named("test"))
@@ -107,18 +95,14 @@ gradlePlugin {
         create("processorPlugin") {
             id = "io.openapiprocessor.openapi-processor"
             displayName = "Gradle openapi-processor plugin"
-            description = "plugin to run openapi-processor-*, e.g. openapi-processor-spring (requires gradle 7.0+, with gradle 5.5+ use 2021.3)"
+            description = "plugin to run openapi-processor-*, e.g. openapi-processor-spring (requires gradle 7.2+)"
             tags.set(listOf("openapi", "openapi-processor"))
             implementationClass = "io.openapiprocessor.gradle.OpenApiProcessorPlugin"
         }
     }
 }
 
-nexusPublishing {
-    repositories {
-        sonatype {
-            username = getPublishUser()
-            password = getPublishKey()
-        }
-    }
+publishingCentral {
+    deploymentName = "gradle"
+    waitFor = "VALIDATED"
 }

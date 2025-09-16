@@ -1,7 +1,0 @@
-rootProject.name = 'openapi-processor-gradle'
-
-include 'processor-one'
-include 'processor-two'
-include 'processor-v1'
-
-//includeBuild '../openapi-processor-api'
