@@ -27,7 +27,6 @@ jobs:
         distribution: 'temurin'
         java-version: |
           17
-          11
 
     - name: build & publish (sonatype)
       env:

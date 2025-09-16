@@ -1,19 +1,13 @@
-import io.openapiprocessor.build.core.dsl.initFrom
-import io.openapiprocessor.build.core.dsl.initSignKey
-import io.openapiprocessor.build.core.dsl.projectGroupId
-import io.openapiprocessor.build.core.dsl.sonatype
-import io.openapiprocessor.build.core.getPomProperties
-
 plugins {
     `kotlin-dsl`
-    alias(libs.plugins.versions)
+    `maven-publish`
+    signing
     alias(libs.plugins.publish)
-    alias(libs.plugins.central)
-    alias(libs.plugins.create)
+    alias(libs.plugins.versions)
     id("compile")
 }
 
-group = projectGroupId()
+group = "io.openapiprocessor"
 version = libs.versions.project.get()
 
 versions {
@@ -73,9 +67,9 @@ tasks.compileKotlin {
 }
 //
 
-tasks.named("publishToMavenCentral") {
-    dependsOn("publishPluginMavenPublicationToStagingRepository")
-}
+//tasks.named("publishToMavenCentral") {
+//    dependsOn("publishPluginMavenPublicationToStagingRepository")
+//}
 
 tasks.named<Test>("testInt") {
     shouldRunAfter(tasks.named("test"))
@@ -112,25 +106,34 @@ gradlePlugin {
     }
 }
 
-afterEvaluate {
-    publishing {
-        repositories {
-            sonatype(project)
-        }
-    }
 
-    val mavenPublications = publishing.publications.withType<MavenPublication>()
-    mavenPublications.all {
-        pom {
-            pom.initFrom(getPomProperties(project))
-        }
-    }
+publishing {
 
-    signing {
-        initSignKey()
-        sign(*mavenPublications.toTypedArray<Publication>())
-    }
 }
+
+publishingCentral {
+    deploymentName = "gradle"
+    waitFor = "VALIDATED"
+}
+
+
+//    publishing {
+//        repositories {
+//            sonatype(project)
+//        }
+//    }
+//
+//    val mavenPublications = publishing.publications.withType<MavenPublication>()
+//    mavenPublications.all {
+//        pom {
+//            pom.initFrom(getPomProperties(project))
+//        }
+//    }
+//
+//    signing {
+//        initSignKey()
+//        sign(*mavenPublications.toTypedArray<Publication>())
+//    }
 
 /*
 afterEvaluate {
