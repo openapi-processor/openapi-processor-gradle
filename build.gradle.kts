@@ -2,6 +2,7 @@ plugins {
     `kotlin-dsl`
     `maven-publish`
     signing
+    alias(libs.plugins.pubplug)
     alias(libs.plugins.publish)
     alias(libs.plugins.versions)
     id("compile")
@@ -65,11 +66,6 @@ tasks.compileGroovy {
 tasks.compileKotlin {
     libraries.from(sourceSets.main.get().groovy.classesDirectory)
 }
-//
-
-//tasks.named("publishToMavenCentral") {
-//    dependsOn("publishPluginMavenPublicationToStagingRepository")
-//}
 
 tasks.named<Test>("testInt") {
     shouldRunAfter(tasks.named("test"))
@@ -106,31 +102,7 @@ gradlePlugin {
     }
 }
 
-
-publishing {
-
-}
-
 publishingCentral {
     deploymentName = "gradle"
     waitFor = "VALIDATED"
 }
-
-
-//    publishing {
-//        repositories {
-//            sonatype(project)
-//        }
-//    }
-//
-//    val mavenPublications = publishing.publications.withType<MavenPublication>()
-//    mavenPublications.all {
-//        pom {
-//            pom.initFrom(getPomProperties(project))
-//        }
-//    }
-//
-//    signing {
-//        initSignKey()
-//        sign(*mavenPublications.toTypedArray<Publication>())
-//    }
