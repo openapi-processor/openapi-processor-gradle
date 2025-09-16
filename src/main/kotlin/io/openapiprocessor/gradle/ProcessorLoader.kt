@@ -3,6 +3,8 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
+@file:Suppress("DEPRECATION")
+
 package io.openapiprocessor.gradle
 
 import com.github.hauner.openapi.api.OpenApiProcessor
