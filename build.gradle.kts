@@ -134,17 +134,3 @@ publishingCentral {
 //        initSignKey()
 //        sign(*mavenPublications.toTypedArray<Publication>())
 //    }
-
-/*
-afterEvaluate {
-    components.forEach { component ->
-        println("component ${component.name}")
-        println(component.toString())
-    }
-
-    publishing.publications.forEach { publication ->
-        println("publication: ${publication.name}")
-        println(publication.toString())
-    }
-}
- */
