@@ -116,7 +116,7 @@ class OpenApiProcessorPlugin: Plugin<Project> {
             override fun execute(task: OpenApiProcessorTask) {
                 val project = task.project
 
-                task.getProcessorName().set (processor.name)
+                task.getProcessorName().set(processor.name)
                 task.getProcessorProps().set(processor.other)
                 task.group = "openapi processor"
                 task.description = "process openapi with openapi-processor-${processor.name}"
