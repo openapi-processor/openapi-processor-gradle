@@ -124,6 +124,7 @@ class OpenApiProcessorPlugin: Plugin<Project> {
                 copyApiPath (task)
                 task.getApiDir().set(project.layout.projectDirectory.dir(getInputDirectory()))
                 task.getTargetDir().set(project.layout.projectDirectory.dir(getOutputDirectory()))
+                processor.getMapping()?.let { task.getMapping().set(project.file(it)) }
 
                 val handler = project.dependencies
                 val dependencies = ArrayList<Dependency>()

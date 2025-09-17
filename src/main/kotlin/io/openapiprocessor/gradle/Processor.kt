@@ -110,6 +110,10 @@ open class Processor(configName: String): ProcessorBase() {
         other[API_PATH] = apiPath.toString()
     }
 
+    fun getMapping(): String? {
+        return other["mapping"]?.toString()
+    }
+
     fun prop(props: Map<String, Any>) {
         other.putAll(props)
     }
