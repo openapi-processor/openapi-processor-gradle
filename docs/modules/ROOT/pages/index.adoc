@@ -39,7 +39,7 @@ a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 |
 |===
 
-NOTE: unfortunately it may be necessary to configure a few xref:oap::jdk.adoc[additional jvm parameter] to run the processor with JDK 16+. This is only necessary to format the generated source code with google code format.
+NOTE: In case the generated source should be formatted with google code format, it is necessary to configure a few xref:oap::jdk.adoc[additional jvm parameter] to maka google code format work when running the processor with JDK 16+.
 
 
 == gradle dsl
@@ -63,23 +63,6 @@ To configure a processor, for example xref:spring:ROOT:index.adoc[openapi-proces
 
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-// build.gradle
-
-openapiProcessor {
-
-    // the path to the open api yaml file.
-    apiPath "${projectDir}/src/api/openapi.yaml"
-
-    spring {
-        ... options of openapi-processor-spring
-    }
-
-}
-----
 Kotlin::
 +
 [source,kotlin]
@@ -97,6 +80,23 @@ openapiProcessor {
 
 }
 ----
+Groovy::
++
+[source,groovy]
+----
+// build.gradle
+
+openapiProcessor {
+
+    // the path to the open api yaml file.
+    apiPath "${projectDir}/src/api/openapi.yaml"
+
+    spring {
+        ... options of openapi-processor-spring
+    }
+
+}
+----
 ====
 
 
@@ -104,6 +104,30 @@ In case another processor (e.g. json) is required place its configuration into t
 
 [tabs]
 ====
+Kotlin::
++
+[source,kotlin]
+----
+// build.gradle.kts
+
+openapiProcessor {
+
+    // the path to the open api yaml file.
+    apiPath("${projectDir}/src/api/openapi.yaml")
+    // alternatives, since 2025.1
+    apiPath(file("$projectDir/src/api/openapi.yaml"))
+    apiPath(layout.projectDirectory.file("src/api/openapi.yaml"))
+
+    process("spring") {
+        ... options of openapi-processor-spring
+    }
+
+    process("json") {
+        ... options of openapi-processor-json
+    }
+
+}
+----
 Groovy::
 +
 [source,groovy]
@@ -125,27 +149,6 @@ openapiProcessor {
 
 }
 ----
-Kotlin::
-+
-[source,kotlin]
-----
-// build.gradle.kts
-
-openapiProcessor {
-
-    // the path to the open api yaml file.
-    apiPath("${projectDir}/src/api/openapi.yaml")
-
-    process("spring") {
-        ... options of openapi-processor-spring
-    }
-
-    process("json") {
-        ... options of openapi-processor-json
-    }
-
-}
-----
 ====
 
 The configuration of a single processor has a few pre-defined properties, and it can have any number of additional parameters defined by the processor (all options will be passed in a map to the processor with the option name as the key).
@@ -158,14 +161,6 @@ Example using the preferred shortcut nation:
 +
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-spring {
-    processor 'io.openapiprocessor:openapi-processor-spring:<version>'
-}
-----
 Kotlin::
 +
 [source,kotlin]
@@ -174,26 +169,34 @@ process("spring") {
     processor("io.openapiprocessor:openapi-processor-spring:<version>")
 }
 ----
+Groovy::
++
+[source,groovy]
+----
+spring {
+    processor 'io.openapiprocessor:openapi-processor-spring:<version>'
+}
+----
 ====
 +
 or like this to use an un-published processor:
 +
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-spring {
-    processor files('... path to processor jar')
-}
-----
 Kotlin::
 +
 [source,kotlin]
 ----
 process("spring") {
     processor(files("... path to processor jar"))
+}
+----
+Groovy::
++
+[source,groovy]
+----
+spring {
+    processor files('... path to processor jar')
 }
 ----
 ====
@@ -205,15 +208,6 @@ For example, the java generating processors depend on `openapi-processor-core`. 
 +
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-spring {
-   processor 'io.openapiprocessor:openapi-processor-core:2021.3-SNAPSHOT'
-   processor 'io.openapiprocessor:openapi-processor-spring:2021.1'
-}
-----
 Kotlin::
 +
 [source,kotlin]
@@ -221,6 +215,15 @@ Kotlin::
 process("spring") {
    processor("io.openapiprocessor:openapi-processor-core:2021.3-SNAPSHOT")
    processor("io.openapiprocessor:openapi-processor-spring:2021.1")
+}
+----
+Groovy::
++
+[source,groovy]
+----
+spring {
+   processor 'io.openapiprocessor:openapi-processor-core:2021.3-SNAPSHOT'
+   processor 'io.openapiprocessor:openapi-processor-spring:2021.1'
 }
 ----
 ====
@@ -232,20 +235,20 @@ process("spring") {
 +
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-spring {
-  mapping "..path.."
-}
-----
 Kotlin::
 +
 [source,kotlin]
 ----
 process("spring") {
    prop("mapping", "..path..")
+}
+----
+Groovy::
++
+[source,groovy]
+----
+spring {
+  mapping "..path.."
 }
 ----
 ====
@@ -258,13 +261,6 @@ The plugin does not add the `process<Name>` task to the build lifecycle. To auto
 
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-// generate api before compiling
-compileJava.dependsOn ('processSpring')
-----
 Kotlin::
 +
 [source,kotlin]
@@ -273,18 +269,19 @@ tasks.compileJava {
   dependsOn("processSpring")
 }
 ----
+Groovy::
++
+[source,groovy]
+----
+// generate api before compiling
+compileJava.dependsOn ('processSpring')
+----
 ====
 
 to run openapi-processor-json when processing the resources:
 
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-processResources.dependsOn ('processJson')
-----
 Kotlin::
 +
 [source,kotlin]
@@ -292,6 +289,12 @@ Kotlin::
 tasks.processResources {
     dependsOn("processJson")
 }
+----
+Groovy::
++
+[source,groovy]
+----
+processResources.dependsOn ('processJson')
 ----
 ====
 
@@ -325,20 +328,6 @@ For example to compile the java source files created by openapi-processor-spring
 
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-// add the targetDir of the processor as additional source folder to java.
-sourceSets {
-    main {
-        java {
-            // add generated files
-            srcDir 'build/openapi'
-        }
-    }
-}
-----
 Kotlin::
 +
 [source,kotlin]
@@ -353,25 +342,26 @@ sourceSets {
     }
 }
 ----
+Groovy::
++
+[source,groovy]
+----
+// add the targetDir of the processor as additional source folder to java.
+sourceSets {
+    main {
+        java {
+            // add generated files
+            srcDir 'build/openapi'
+        }
+    }
+}
+----
 ====
 
 To add the json file created by the openapi-processor-json to the final artifact jar as resource add the `targetDir` of the processor to the java `resources` source set:
 
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-// add the targetDir of the processor as additional resource folder.
-sourceSets {
-    main {
-        resources {
-            srcDir "$buildDir/json"
-        }
-    }
-}
-----
 Kotlin::
 +
 [source,kotlin]
@@ -381,6 +371,19 @@ sourceSets {
     main {
         resources {
             srcDir("$buildDir/json")
+        }
+    }
+}
+----
+Groovy::
++
+[source,groovy]
+----
+// add the targetDir of the processor as additional resource folder.
+sourceSets {
+    main {
+        resources {
+            srcDir "$buildDir/json"
         }
     }
 }
@@ -399,28 +402,6 @@ To achieve this it is possible to use user selected names for the `processor` bl
 
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-// build.gradle
-
-openapiProcessor {
-    apiOne { // <1>
-      processorName "spring" // <2>
-
-      apiPath "${projectDir}/src/api-one/openapi.yaml"
-        ... options of openapi-processor-spring
-    }
-
-    apiTwo { // <1>
-      processorName "spring" // <2>
-
-      apiPath "${projectDir}/src/api-two/openapi.yaml"
-        ... options of openapi-processor-spring
-    }
-}
-----
 Kotlin::
 +
 [source,kotlin]
@@ -440,6 +421,28 @@ openapiProcessor {
 
       apiPath("${projectDir}/src/api-two/openapi.yaml")
         ... options of openapi-processor-json
+    }
+}
+----
+Groovy::
++
+[source,groovy]
+----
+// build.gradle
+
+openapiProcessor {
+    apiOne { // <1>
+      processorName "spring" // <2>
+
+      apiPath "${projectDir}/src/api-one/openapi.yaml"
+        ... options of openapi-processor-spring
+    }
+
+    apiTwo { // <1>
+      processorName "spring" // <2>
+
+      apiPath "${projectDir}/src/api-two/openapi.yaml"
+        ... options of openapi-processor-spring
     }
 }
 ----
@@ -490,56 +493,6 @@ Here is a full example that configures xref:spring:ROOT:index.adoc[openapi-proce
 
 [tabs]
 ====
-Groovy::
-+
-[source,groovy]
-----
-// build.gradle
-
-openapiProcessor {
-
-    // the path to the open api yaml file. Usually the same for all processors.
-    //
-    apiPath "${projectDir}/src/api/openapi.yaml"
-
-    // based on the name of a processor configuration the plugin creates a gradle task with name
-    // "process${name of processor}"  (in this case "processSpring") to run the processor.
-    //
-    spring {
-        // the openapi-processor-spring dependency (mandatory)
-        //
-        processor 'io.openapiprocessor:openapi-processor-spring:<version>'
-
-        // setting api path inside a processor configuration overrides the one at the top.
-        //
-        // apiPath "${projectDir}/src/api/openapi.yaml"
-
-        // the destination folder for generating interfaces & models. This is the parent of the
-        // {package-name} folder tree configured in the mapping file. (mandatory)
-        //
-        targetDir "${projectDir}/build/openapi"
-
-        //// openapi-processor-spring specific options
-
-        // file name of the mapping yaml configuration file. Note that the yaml file name must end
-        // with either {@code .yaml} or {@code .yml}.
-        //
-        mapping "${projectDir}/src/api/mapping.yaml"
-    }
-
-    // applying the rule described above the task to run this one is "processJson".
-    //
-    json {
-        // the openapi-processor-json dependency (mandatory)
-        //
-        processor 'io.openapiprocessor:openapi-processor-json:<version>'
-
-        // the destination folder for the json file. (mandatory)
-        targetDir "${buildDir}/json"
-    }
-
-}
-----
 Kotlin::
 +
 [source,kotlin]
@@ -592,12 +545,6 @@ openapiProcessor {
 
 }
 ----
-====
-
-without the comments it is not that long:
-
-[tabs]
-====
 Groovy::
 +
 [source,groovy]
@@ -605,20 +552,56 @@ Groovy::
 // build.gradle
 
 openapiProcessor {
+
+    // the path to the open api yaml file. Usually the same for all processors.
+    //
     apiPath "${projectDir}/src/api/openapi.yaml"
 
+    // based on the name of a processor configuration the plugin creates a gradle task with name
+    // "process${name of processor}"  (in this case "processSpring") to run the processor.
+    //
     spring {
+        // the openapi-processor-spring dependency (mandatory)
+        //
         processor 'io.openapiprocessor:openapi-processor-spring:<version>'
+
+        // setting api path inside a processor configuration overrides the one at the top.
+        //
+        // apiPath "${projectDir}/src/api/openapi.yaml"
+
+        // the destination folder for generating interfaces & models. This is the parent of the
+        // {package-name} folder tree configured in the mapping file. (mandatory)
+        //
         targetDir "${projectDir}/build/openapi"
+
+        //// openapi-processor-spring specific options
+
+        // file name of the mapping yaml configuration file. Note that the yaml file name must end
+        // with either {@code .yaml} or {@code .yml}.
+        //
         mapping "${projectDir}/src/api/mapping.yaml"
     }
 
+    // applying the rule described above the task to run this one is "processJson".
+    //
     json {
+        // the openapi-processor-json dependency (mandatory)
+        //
         processor 'io.openapiprocessor:openapi-processor-json:<version>'
+
+        // the destination folder for the json file. (mandatory)
         targetDir "${buildDir}/json"
     }
+
 }
 ----
+
+====
+
+without the comments it is not that long:
+
+[tabs]
+====
 Kotlin::
 +
 [source,kotlin]
@@ -637,6 +620,27 @@ openapiProcessor {
     process("json") {
         processor("io.openapiprocessor:openapi-processor-json:<version>")
         targetDir("${buildDir}/json")
+    }
+}
+----
+Groovy::
++
+[source,groovy]
+----
+// build.gradle
+
+openapiProcessor {
+    apiPath "${projectDir}/src/api/openapi.yaml"
+
+    spring {
+        processor 'io.openapiprocessor:openapi-processor-spring:<version>'
+        targetDir "${projectDir}/build/openapi"
+        mapping "${projectDir}/src/api/mapping.yaml"
+    }
+
+    json {
+        processor 'io.openapiprocessor:openapi-processor-json:<version>'
+        targetDir "${buildDir}/json"
     }
 }
 ----
