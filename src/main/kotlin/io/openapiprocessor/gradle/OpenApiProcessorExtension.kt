@@ -12,6 +12,7 @@ import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import java.io.File
 
 /**
@@ -106,7 +107,19 @@ abstract class OpenApiProcessorExtension(private val project: Project): OpenApiP
      * set apiPath.
      */
     fun apiPath(apiPath: String) {
-        this.api.fileValue(File(apiPath))
+        api.fileValue(File(apiPath))
+    }
+
+    fun apiPath(apiPath: File) {
+        api.fileValue(apiPath)
+    }
+
+    fun apiPath(apiPath: RegularFile) {
+        api.value(apiPath)
+    }
+
+    fun apiPath(apiPath: Provider<RegularFile>) {
+        api.value(apiPath.get())
     }
 
     /**

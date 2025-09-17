@@ -115,10 +115,16 @@ open class Processor(configName: String): ProcessorBase() {
     }
 
     fun prop(key: String, value: Any) {
-        if (value is RegularFile) {
-            other[key] = value.toString()
-        } else {
-            other[key] = value
+        when (value) {
+            is RegularFile -> {
+                other[key] = value.toString()
+            }
+            is Provider<*> -> {
+                prop(key, value.get())
+            }
+            else -> {
+                other[key] = value
+            }
         }
     }
 
