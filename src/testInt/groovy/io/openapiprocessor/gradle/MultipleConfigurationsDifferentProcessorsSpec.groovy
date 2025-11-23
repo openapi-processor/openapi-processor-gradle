@@ -71,7 +71,9 @@ class MultipleConfigurationsDifferentProcessorsSpec extends PluginSpec {
         assertResult (result)
 
         where:
-        gradleVersion << Gradle.VERSIONS_7.reverse ()
+        gradleVersion << Gradle.VERSIONS_7
+                .findAll { it.groovy }
+                .collect { it.version }
     }
 
     @Unroll

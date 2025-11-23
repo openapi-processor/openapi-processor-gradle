@@ -6,6 +6,15 @@
 package io.openapiprocessor.gradle.support
 
 class Gradle {
+    static class Version {
+        String version
+        boolean groovy
+        boolean kotlin
+    }
+
+    static private Version version(String version, boolean runsWithGroovy, boolean runsWithKotlin) {
+        return new Version(version: version, groovy: runsWithGroovy, kotlin: runsWithKotlin)
+    }
 
     static List<String> VERSIONS_9 = [
         '9.0.0',
@@ -31,17 +40,15 @@ class Gradle {
         /* '8.14', '8.14.1', '8.14.2' */ '8.14.3'
     ]
 
-    static List<String> VERSIONS_7 = [
-        '7.2',
-        /* '7.3', '7.3.1', '7.3.2', */ '7.3.3',
-        /* '7.4', '7.4.1', */ '7.4.2',
-        /* '7.5', */ '7.5.1',
-        /* '7.6', '7.6.1', '7.6.2', '7.6.3', '7.6.4', '7.6.5' */ '7.6.6'
-    ]
-
-    // these only work with java 11
-    static List<String> VERSIONS_7_JDK11 = [
-        /* '7.0', '7.0.1', */ '7.0.2',
-        /* '7.1', */ '7.1.1'
+    static List<Version> VERSIONS_7 = [
+        // don't run since 9.2.1 with kotlin
+        version('7.6.6', true, false),
+        version('7.5.1', true, false),
+        version('7.4.2', true, false),
+        version('7.3.3', true, false),
+        version('7.2', true, false),
+        // jdk 11 only
+        version('7.1.1', false, false),
+        version('7.0.2', false, false)
     ]
 }

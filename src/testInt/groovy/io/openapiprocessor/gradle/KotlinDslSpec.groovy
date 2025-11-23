@@ -7,6 +7,7 @@ package io.openapiprocessor.gradle
 
 import io.openapiprocessor.gradle.support.Gradle
 import io.openapiprocessor.gradle.support.PluginSpec
+import spock.lang.Ignore
 import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -47,6 +48,7 @@ class KotlinDslSpec extends PluginSpec {
         ['--stacktrace', 'processV1']
     }
 
+    @Ignore("does not run since gradle 9.2.1")
     @Unroll
     void "test kotlin dsl with with gradle 7 (#gradleVersion)" () {
         when:
@@ -57,7 +59,9 @@ class KotlinDslSpec extends PluginSpec {
         result.output.contains("processor v1 did run !")
 
         where:
-        gradleVersion << Gradle.VERSIONS_7.reverse ()
+        gradleVersion << Gradle.VERSIONS_7
+            .findAll { it.kotlin }
+            .collect { it.version }
     }
 
     @Unroll
