@@ -80,7 +80,9 @@ class MultipleConfigurationsSameProcessorSpec extends PluginSpec {
         assertResult (result)
 
         where:
-        gradleVersion << Gradle.VERSIONS_8.reverse ()
+        gradleVersion << Gradle.VERSIONS_8
+                .findAll { it.groovy }
+                .collect { it.version }
     }
 
     @Unroll
@@ -92,7 +94,9 @@ class MultipleConfigurationsSameProcessorSpec extends PluginSpec {
         assertResult (result)
 
         where:
-        gradleVersion << Gradle.VERSIONS_9.reverse ()
+        gradleVersion << Gradle.VERSIONS_9
+                .findAll { it.groovy }
+                .collect { it.version }
     }
 
     private void assertResult(BuildResult result) {

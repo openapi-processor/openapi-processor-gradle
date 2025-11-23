@@ -74,7 +74,9 @@ class KotlinDslSpec extends PluginSpec {
         result.output.contains("processor v1 did run !")
 
         where:
-        gradleVersion << Gradle.VERSIONS_8.reverse ()
+        gradleVersion << Gradle.VERSIONS_8
+                .findAll { it.kotlin }
+                .collect { it.version }
     }
 
     @Unroll
@@ -87,6 +89,8 @@ class KotlinDslSpec extends PluginSpec {
         result.output.contains("processor v1 did run !")
 
         where:
-        gradleVersion << Gradle.VERSIONS_9.reverse ()
+        gradleVersion << Gradle.VERSIONS_9
+                .findAll { it.kotlin }
+                .collect { it.version }
     }
 }
