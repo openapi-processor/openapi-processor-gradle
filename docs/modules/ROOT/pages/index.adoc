@@ -27,7 +27,8 @@ a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 | minimum java version
 
 | 2025.x
-| 7.2
+| 8.2+ with kotlin dsl +
+7.2+ with groovy dsl
 | 17
 
 | 2022.x, 2023.x
@@ -35,7 +36,8 @@ a gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 |
 
 | 2021.3
-| 5.5+ with groovy dsl, 6.5 with kotlin dsl
+| 6.5 with kotlin dsl +
+5.5+ with groovy dsl
 |
 |===
 
