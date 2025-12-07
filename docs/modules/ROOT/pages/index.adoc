@@ -57,10 +57,10 @@ Apart from that there are only two options that are recognized inside the config
 processors and placing it directly into the `openapiProcessor` block sets it for all processors.
 
 * `checkUpdates`, which allows to enable a version check for the Gradle plugin itself and any processor that supports a version check. It can have one of 3 values:
-+
-* `never`, this is the default and disables all update checks.
-* `daily`, this will check once a day if there is a newer version available. The plugin remembers the last check by writing a timestamp to `build/openapiprocessor/<processor>.yaml`. Without that file the check will run, e.g. after a clean checkout or after running the `clean` task.
-* `always`, this will check on any run of Gradle or a processor task if a newer version is available.
+
+** `never`, this is the default and disables all update checks.
+** `daily`, this will check once a day if there is a newer version available. The plugin remembers the last check by writing a timestamp to `build/openapiprocessor/<processor>.yaml`. Without that file the check will run, e.g. after a clean checkout or after running the `clean` task.
+** `always`, this will check on any run of Gradle or a processor task if a newer version is available.
 
 To configure a processor, for example xref:spring:ROOT:index.adoc[openapi-processor-spring], place a `spring` configuration into the `openapiProcessor` block. The name of the configuration is used to create a Gradle task `process<Name>` to run the corresponding processor.
 
@@ -76,6 +76,9 @@ openapiProcessor {
 
     // the path to the open api YAML file.
     apiPath("${projectDir}/src/api/openapi.yaml")
+    // alternatives, since 2025.1
+    // apiPath(file("$projectDir/src/api/openapi.yaml"))
+    // apiPath(layout.projectDirectory.file("src/api/openapi.yaml"))
 
     process("spring") {
         // ... options of openapi-processor-spring
@@ -93,6 +96,9 @@ openapiProcessor {
 
     // the path to the open api YAML file.
     apiPath "${projectDir}/src/api/openapi.yaml"
+    // alternatives, since 2025.1
+    //apiPath file("$projectDir/src/api/openapi.yaml")
+    //apiPath layout.projectDirectory.file("src/api/openapi.yaml")
 
     spring {
         // ... options of openapi-processor-spring
@@ -118,8 +124,8 @@ openapiProcessor {
     // the path to the open api YAML file.
     apiPath("${projectDir}/src/api/openapi.yaml")
     // alternatives, since 2025.1
-    apiPath(file("$projectDir/src/api/openapi.yaml"))
-    apiPath(layout.projectDirectory.file("src/api/openapi.yaml"))
+    // apiPath(file("$projectDir/src/api/openapi.yaml"))
+    // apiPath(layout.projectDirectory.file("src/api/openapi.yaml"))
 
     process("spring") {
         // ... options of openapi-processor-spring
@@ -141,6 +147,9 @@ openapiProcessor {
 
     // the path to the open api YAML file.
     apiPath "${projectDir}/src/api/openapi.yaml"
+    // alternatives, since 2025.1
+    // apiPath file("$projectDir/src/api/openapi.yaml")
+    // apiPath layout.projectDirectory.file("src/api/openapi.yaml")
 
     spring {
         // ... options of openapi-processor-spring
@@ -207,7 +216,14 @@ spring {
 +
 It is possible to use multiple `processor` entries to control the dependencies of an openapi-processor.
 +
-For example, the java generating processors depend on `openapi-processor-core`. The `core` library provides most of the logic of a processor, and it is usually enough to update the `core` library to get bugfixes or new features. To find 'SNAPSHOT' versions the plugin automatically adds the snapshot repository to the `repositories`. ([.badge .badge-since]+since 2022.2+, In case you don't want this it is possible to disable adding the snapshot repository by adding `openapi-processor-gradle.snapshots = false` to `gradle.properties`).
+For example, the java generating processors depend on `openapi-processor-core`. The `core` library provides most of the logic of a processor, and it is usually enough to update the `core` library to get bugfixes or new features.
++
+[NOTE]
+====
+To find 'SNAPSHOT' versions the plugin automatically adds the snapshot repository to the `repositories`.
+
+[.badge .badge-since]+since 2022.2+ In case you don't want this it is possible to disable adding the snapshot repository by adding `openapi-processor-gradle.snapshots = false` to `gradle.properties`).
+====
 +
 [tabs]
 ====
@@ -265,11 +281,16 @@ The plugin does not add the `process<Name>` task to the build lifecycle.
 To automatically run it
 
 * add a task dependency in the `build.gradle` file
-* or use the task output when configuring the additional `SourceSet` directories (see xref:_using_the_processor_output[])
+* or use the task output when configuring the additional `SourceSet` directories (see xref:_using_the_task_output[])
 
 The second way is the newer and preferred way.
 
 === `dependOn` a processing task
+
+[NOTE]
+====
+This will continue to work but xref:_using_the_task_output[] is the better and preferred configuration.
+====
 
 To automatically run a processing task, e.g. `processSpring`, it is necessary to create a dependency on the task.
 
@@ -304,7 +325,7 @@ compileJava.dependsOn ('processSpring')
 
 ==== using the task name
 
-The Gradle plugin creates the processing tasks inside an `afterEvaluate` block (because its name is configurable). To directly use its name, like in the example below, teh configuration needs to be in an `afterEvaluate` block.
+The Gradle plugin creates the processing tasks inside an `afterEvaluate` block (because its name is configurable). To directly use its name, like in the example below, the configuration needs to be in an `afterEvaluate` block.
 
 [source,groovy]
 ----
@@ -320,8 +341,8 @@ afterEvaluate {
 }
 ----
 
-[#_using_the_processor_output]
-== using the processor output
+[#_using_the_task_output]
+== using the task output
 
 In case the processor creates java sources it is necessary to compile them as part of the build process.
 
@@ -329,8 +350,8 @@ To compile the java source files created by openapi-processor-spring add the `ta
 
 There are two ways to configure it:
 
-* using a path string, which requires a `dependsOn` configuration
-* or using the task output, which does not need `dependsOn`
+* using a path string which will need the `dependsOn` configuration to trigger the processor before compilation
+* or using the task output, which will avoid the need for `dependsOn`. Gradle will automatically detect that it has to run the processor first.
 
 === by path string
 
@@ -338,6 +359,7 @@ Using a path string it is simply added as an additional `srcDir`:
 
 [tabs]
 ====
+
 Kotlin::
 +
 [source,kotlin]
@@ -348,6 +370,7 @@ sourceSets {
         java {
             // add generated files
             srcDir("build/openapi")
+            //srcDir(layout.buildDirectory.dir("openapi"))
         }
     }
 }
@@ -362,6 +385,7 @@ sourceSets {
         java {
             // add generated files
             srcDir 'build/openapi'
+            //srcDir layout.buildDirectory.dir("openapi")
         }
     }
 }
@@ -402,6 +426,8 @@ sourceSets {
 
 === by task output
 
+[.badge .badge-since]+since 2025.1+
+
 A preferred approach to avoid `dependsOn` and to support lazy configuration is to use the task output to configure the additional `SourceSet` directories.
 
 [tabs]
@@ -412,15 +438,24 @@ Kotlin::
 ----
 import io.openapiprocessor.gradle.OpenApiProcessorTask
 
-afterEvaluate {
-    sourceSets {
-        create("api") {
-            resources {
-                // add api resources
-                srcDir("${projectDir}/src/api")
+sourceSets {
+    create("api") {
+        resources {
+            // add api resources
+            srcDir("${projectDir}/src/api")
+        }
+    }
+
+    afterEvaluate {
+        // if the processor generates java files only, directly to targetDir
+        main {
+            java {
+                // add generated files
+                srcDir(tasks.named("processSpring"))
             }
         }
 
+        // if the processor generates java and resource files to the targetDir it is necessary to select the subfolder
         main {
             java {
                 // add generated files
@@ -521,7 +556,7 @@ This is possible by configuring the repositories checked for plugins using a `pl
 // build.gradle
 
 plugins {
-    id 'io.openapiprocessor.openapi-processor" version "2022.2-SNAPSHOT'
+    id 'io.openapiprocessor.openapi-processor" version "2025.6-SNAPSHOT'
 }
 
 
@@ -530,7 +565,7 @@ plugins {
 pluginManagement {
     repositories {
         maven {
-            url 'https://oss.sonatype.org/content/repositories/snapshots'
+            url 'https://central.sonatype.com/repository/maven-snapshots'
         }
         gradlePluginPortal()
     }
@@ -555,7 +590,8 @@ openapiProcessor {
 
     // the path to the open api YAML file. Usually the same for all processors.
     //
-    apiPath("${projectDir}/src/api/openapi.yaml")
+    //apiPath("${projectDir}/src/api/openapi.yaml")
+    apiPath(layout.projectDirectory.file("src/api/openapi.yaml"))
 
     // based on the name of a processor configuration the plugin creates a Gradle task with name
     // "process${name of processor}"  (in this case "processSpring") to run the processor.
@@ -572,7 +608,8 @@ openapiProcessor {
         // the destination folder for generating interfaces & models. This is the parent of the
         // {package-name} folder tree configured in the mapping file. (mandatory)
         //
-        targetDir("${projectDir}/build/openapi")
+        //targetDir("${projectDir}/build/openapi")
+        targetDir(layout.buildDirectory.dir("openapi"))
 
         //// openapi-processor-spring specific options
         //// in a kotlin build script it is necessary to use the prop(key, value) or prop(map)
@@ -581,7 +618,8 @@ openapiProcessor {
         // file name of the mapping YAML configuration file. Note that the YAML file name must end
         // with either {@code .yaml} or {@code .yml}.
         //
-        prop("mapping", "${projectDir}/src/api/mapping.yaml")
+        //prop("mapping", "${projectDir}/src/api/mapping.yaml")
+        prop("mapping", layout.projectDirectory.file("src/api/mapping.yaml"))
     }
 
     // applying the rule described above the task to run this one is "processJson".
@@ -592,9 +630,9 @@ openapiProcessor {
         processor("'io.openapiprocessor:openapi-processor-json:<version>")
 
         // the destination folder for the JSON file. (mandatory)
-        targetDir("${buildDir}/json")
+        //targetDir("${buildDir}/json")
+        targetDir(layout.buildDirectory.dir("json"))
     }
-
 }
 ----
 Groovy::
@@ -607,7 +645,8 @@ openapiProcessor {
 
     // the path to the open api yaml file. Usually the same for all processors.
     //
-    apiPath "${projectDir}/src/api/openapi.yaml"
+    // apiPath "${projectDir}/src/api/openapi.yaml"
+    apiPath layout.projectDirectory.file("src/api/openapi.yaml")
 
     // based on the name of a processor configuration the plugin creates a gradle task with name
     // "process${name of processor}"  (in this case "processSpring") to run the processor.
@@ -624,14 +663,16 @@ openapiProcessor {
         // the destination folder for generating interfaces & models. This is the parent of the
         // {package-name} folder tree configured in the mapping file. (mandatory)
         //
-        targetDir "${projectDir}/build/openapi"
+        //targetDir "${projectDir}/build/openapi"
+        targetDir layout.buildDirectory.dir("openapi")
 
         //// openapi-processor-spring specific options
 
         // file name of the mapping yaml configuration file. Note that the yaml file name must end
         // with either {@code .yaml} or {@code .yml}.
         //
-        mapping "${projectDir}/src/api/mapping.yaml"
+        //mapping "${projectDir}/src/api/mapping.yaml"
+        mapping layout.projectDirectory.file("src/api/mapping.yaml")
     }
 
     // applying the rule described above the task to run this one is "processJson".
@@ -642,7 +683,8 @@ openapiProcessor {
         processor 'io.openapiprocessor:openapi-processor-json:<version>'
 
         // the destination folder for the json file. (mandatory)
-        targetDir "${buildDir}/json"
+        //targetDir "${buildDir}/json"
+        targetDir layout.buildDirectory.dir("json")
     }
 
 }
@@ -661,17 +703,17 @@ Kotlin::
 // build.gradle.kts
 
 openapiProcessor {
-    apiPath("${projectDir}/src/api/openapi.yaml")
+    apiPath(layout.projectDirectory.file("src/api/openapi.yaml"))
 
     process("spring") {
         processor("io.openapiprocessor:openapi-processor-spring:<version>")
-        targetDir("${projectDir}/build/openapi")
-        prop("mapping", "${projectDir}/src/api/mapping.yaml")
+        targetDir(layout.buildDirectory.dir("openapi"))
+        prop("mapping", layout.projectDirectory.file("src/api/mapping.yaml"))
     }
 
     process("json") {
         processor("io.openapiprocessor:openapi-processor-json:<version>")
-        targetDir("${buildDir}/json")
+        targetDir(layout.buildDirectory.dir("json"))
     }
 }
 ----
@@ -682,17 +724,17 @@ Groovy::
 // build.gradle
 
 openapiProcessor {
-    apiPath "${projectDir}/src/api/openapi.yaml"
+    apiPath layout.projectDirectory.file("src/api/openapi.yaml")
 
     spring {
-        processor 'io.openapiprocessor:openapi-processor-spring:<version>'
-        targetDir "${projectDir}/build/openapi"
-        mapping "${projectDir}/src/api/mapping.yaml"
+        processor "io.openapiprocessor:openapi-processor-spring:<version>"
+        targetDir layout.buildDirectory.dir("openapi")
+        mapping layout.projectDirectory.file("src/api/mapping.yaml")
     }
 
     json {
-        processor 'io.openapiprocessor:openapi-processor-json:<version>'
-        targetDir "${buildDir}/json"
+        processor "io.openapiprocessor:openapi-processor-json:<version>"
+        targetDir layout.buildDirectory.dir("json")
     }
 }
 ----
