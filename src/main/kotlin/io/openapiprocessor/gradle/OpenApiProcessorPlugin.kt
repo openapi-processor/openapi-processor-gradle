@@ -77,7 +77,7 @@ class OpenApiProcessorPlugin: Plugin<Project> {
                 val extension = getExtension(project)
                 extension.processors.get().forEach { entry ->
                     val name = "process${entry.key.replaceFirstChar { it.uppercase() }}"
-                    val action = createTaskBuilderAction(entry.key, entry.value)
+                    val action = createTaskBuilderAction(entry.key, entry.value, extension)
                     project.tasks.register(name, OpenApiProcessorTask::class.java, action)
                 }
             }
@@ -87,14 +87,15 @@ class OpenApiProcessorPlugin: Plugin<Project> {
     /**
      * Creates an Action that configures a 'process{ProcessorName}' task from its configuration.
      */
-    private fun createTaskBuilderAction(name: String, processor: Processor): Action<OpenApiProcessorTask> {
+    private fun createTaskBuilderAction(name: String, processor: Processor, extension: OpenApiProcessorExtension):
+        Action<OpenApiProcessorTask> {
+
         return object: Action<OpenApiProcessorTask> {
             // copy common api path to openapi-processor props if not set
             fun copyApiPath (task: OpenApiProcessorTask) {
                 if(processor.hasApiPath ())
                     return
 
-                val extension = getExtension(task.project)
                 if (!extension.api.isPresent) {
                     task.logger.warn ("'${EXTENSION_NAME_DEFAULT}.apiPath'!")
                     return
@@ -116,8 +117,11 @@ class OpenApiProcessorPlugin: Plugin<Project> {
             override fun execute(task: OpenApiProcessorTask) {
                 val project = task.project
 
+                task.getRootDir().set(project.rootDir.absolutePath)
+                task.getCheckUpdates().set(extension.checkUpdates)
                 task.getProcessorName().set(processor.name)
                 task.getProcessorProps().set(processor.other)
+
                 task.group = "openapi processor"
                 task.description = "process openapi with openapi-processor-${processor.name}"
 

@@ -37,7 +37,7 @@ abstract class OpenApiProcessorTask: DefaultTask() {
     abstract fun getApiDir(): DirectoryProperty
 
     /**
-     * mapping.yaml input file. Used by gradle for the up-to-date check.
+     * mapping.yaml input file. Used by Gradle for the up-to-date check.
      *
      * @return mapping.yaml
      */
@@ -77,6 +77,12 @@ abstract class OpenApiProcessorTask: DefaultTask() {
     @Internal
     abstract fun getProcessorProps(): MapProperty<String, Any>
 
+    @Internal
+    abstract fun getCheckUpdates(): Property<String>
+
+    @Internal
+    abstract fun getRootDir(): Property<String>
+
     @Inject
     abstract fun getWorkerExecutor(): WorkerExecutor
 
@@ -85,18 +91,19 @@ abstract class OpenApiProcessorTask: DefaultTask() {
      */
     @TaskAction
     fun runProcessor() {
+        val theRootDir = getRootDir()
+        val theCheckUpdates = getCheckUpdates()
         val theProcessorName = getProcessorName()
         val theProcessorProps = getProcessorProps()
-        val extension = OpenApiProcessorExtensionUtils.getExtension(project)
 
         getWorkerExecutor().classLoaderIsolation {
             classpath.from(getDependencies())
 
         }.submit(OpenApiProcessorWorker::class.java) {
+            getRootDir().set(theRootDir)
+            getCheckUpdates().set(theCheckUpdates)
             getProcessorName().set(theProcessorName)
             getProcessorProps().set(theProcessorProps)
-            getRootDir().set(project.rootDir.absolutePath)
-            getCheckUpdates().set(extension.checkUpdates)
         }
     }
 }
