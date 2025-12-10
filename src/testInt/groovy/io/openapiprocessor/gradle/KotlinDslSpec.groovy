@@ -82,7 +82,7 @@ class KotlinDslSpec extends PluginSpec {
     @Unroll
     void "test kotlin dsl with with gradle 9 (#gradleVersion)" () {
         when:
-        def result = build(gradleVersion)
+        def result = build(gradleVersion, "org.gradle.configuration-cache=true")
 
         then:
         result.task(':processV1').outcome == SUCCESS
