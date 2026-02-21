@@ -64,7 +64,7 @@ abstract class OpenApiProcessorExtension(project: Project, objects: ObjectFactor
      *          processor "...:...:..."
      *          targetDir "..."
      *
-     *          // ... other
+     *          // ... other properties
      *          prop "abc"
      *          prop "xyz"
      *      }
