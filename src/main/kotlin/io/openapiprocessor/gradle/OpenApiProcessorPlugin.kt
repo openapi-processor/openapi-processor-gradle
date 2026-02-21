@@ -146,7 +146,8 @@ class OpenApiProcessorPlugin: Plugin<Project> {
                 val deps = dependencies.toTypedArray()
                 val cfg = project.configurations.detachedConfiguration(*deps)
 
-                cfg.isVisible = false
+                cfg.isCanBeResolved = true
+                cfg.isCanBeConsumed = false
                 cfg.isTransitive = true
                 cfg.description = "the dependencies of the process${name.replaceFirstChar { it.uppercase() }} task."
                 task.getDependencies().from (cfg)
