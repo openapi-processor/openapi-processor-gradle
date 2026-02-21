@@ -45,13 +45,13 @@ import java.io.File
 abstract class OpenApiProcessorExtension(project: Project, objects: ObjectFactory): OpenApiProcessorExtensionBase() {
 
     /**
-     * the path to the openapi yaml file. Used for all processors if not set in a nested processor
+     * The path to the openapi YAML file. Used for all processors if not set in a nested processor
      * configuration.
      */
     val api: RegularFileProperty = project.objects.fileProperty()
 
     /**
-     * check automatically for updates. Can be "never"|"daily"|"always". Default is "never".
+     * Check automatically for updates. Can be "never"|"daily"|"always". Default is "never".
      */
     val checkUpdates: Property<String> = project.objects.property(String::class.java)
 
