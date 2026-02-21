@@ -7,7 +7,6 @@ package io.openapiprocessor.gradle
 
 import io.openapiprocessor.gradle.OpenApiProcessorExtensionUtils.Companion.EXTENSION_NAME_DEFAULT
 import io.openapiprocessor.gradle.OpenApiProcessorExtensionUtils.Companion.createExtension
-import io.openapiprocessor.gradle.OpenApiProcessorExtensionUtils.Companion.getExtension
 import io.openapiprocessor.gradle.version.GitHubVersionCheck
 import io.openapiprocessor.gradle.version.GitHubVersionProvider
 import io.openapiprocessor.gradle.version.VersionCheck
@@ -29,10 +28,10 @@ class OpenApiProcessorPlugin: Plugin<Project> {
 
         addOpenApiProcessorRepository(project)
 
-        createExtension(project)
+        val extension = createExtension(project)
+        createProcessingTasks(project, extension)
 
-        project.afterEvaluate(createCheckUpdatesAction())
-        project.afterEvaluate(createTasksBuilderAction())
+        checkUpdates(project, extension)
     }
 
     private fun addOpenApiProcessorRepository (project: Project) {
@@ -51,37 +50,34 @@ class OpenApiProcessorPlugin: Plugin<Project> {
     }
 
     /**
-     * Provides an Action that checks for plugin updates.
+     * Check for plugin updates.
      */
-    private fun createCheckUpdatesAction(): Action<Project> {
-        return object : Action<Project> {
-            override fun execute(project: Project) {
-                val extension = getExtension(project)
-                val interval = extension.checkUpdates.get()
+    private fun checkUpdates(project: Project, extension: OpenApiProcessorExtension) {
+        val interval = extension.checkUpdates.get()
 
-                val version = VersionCheck(project.rootDir.absolutePath, interval)
-                if (!version.canCheck("gradle"))
-                    return
+        val version = VersionCheck(project.rootDir.absolutePath, interval)
+        if (!version.canCheck("gradle"))
+            return
 
-                checkLatestRelease()
-            }
-        }
+        checkLatestRelease()
     }
 
     /**
-     * Provides an Action that create a 'process{ProcessorName}' task for each configured processor.
+     * Create a 'process{ProcessorName}' task for each configured processor.
      */
-    private fun createTasksBuilderAction(): Action<Project> {
-        return object : Action<Project> {
-            override fun execute(project: Project) {
-                val extension = getExtension(project)
-                extension.processors.get().forEach { entry ->
-                    val name = "process${entry.key.replaceFirstChar { it.uppercase() }}"
-                    val action = createTaskBuilderAction(entry.key, entry.value, extension)
-                    project.tasks.register(name, OpenApiProcessorTask::class.java, action)
+    fun createProcessingTasks(project: Project, extension: OpenApiProcessorExtension) {
+        extension.processors.configureEach(
+            object : Action<Processor> {
+                override fun execute(processor: Processor) {
+                    val name = "process${processor.name.replaceFirstChar { it.uppercase() }}"
+
+                    project.tasks.register(
+                        name,
+                        OpenApiProcessorTask::class.java,
+                        createTaskBuilderAction(name, processor, extension)
+                    )
                 }
-            }
-        }
+            })
     }
 
     /**

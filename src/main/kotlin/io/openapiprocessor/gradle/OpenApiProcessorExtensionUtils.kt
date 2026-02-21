@@ -12,7 +12,7 @@ class OpenApiProcessorExtensionUtils {
         const val EXTENSION_NAME_DEFAULT = "openapiProcessor"
         const val EXTENSION_NAME_ALTERNATIVE = "openapi"
 
-        fun createExtension (project: Project) {
+        fun createExtension (project: Project): OpenApiProcessorExtension {
             val extension = project.extensions.create (
                     EXTENSION_NAME_DEFAULT,
                     OpenApiProcessorExtension::class.java,
@@ -20,10 +20,7 @@ class OpenApiProcessorExtensionUtils {
 
             // make same extension object available under alternative name
             project.extensions.add(EXTENSION_NAME_ALTERNATIVE, extension)
-        }
-
-        fun getExtension(project: Project): OpenApiProcessorExtension {
-            return project.extensions.getByName (EXTENSION_NAME_DEFAULT) as OpenApiProcessorExtension
+            return extension
         }
     }
 }
