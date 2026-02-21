@@ -42,7 +42,7 @@ import java.io.File
  * }
  * </pre>
  */
-abstract class OpenApiProcessorExtension(private val project: Project, objects: ObjectFactory): OpenApiProcessorExtensionBase() {
+abstract class OpenApiProcessorExtension(project: Project, objects: ObjectFactory): OpenApiProcessorExtensionBase() {
 
     /**
      * the path to the openapi yaml file. Used for all processors if not set in a nested processor
