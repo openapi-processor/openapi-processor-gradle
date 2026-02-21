@@ -8,6 +8,7 @@ package io.openapiprocessor.gradle
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
+@SuppressWarnings('ConfigurationAvoidance')
 class ProcessorSpec extends Specification {
 
     void "gets & sets named props" () {
@@ -100,7 +101,7 @@ class ProcessorSpec extends Specification {
 
         then:
         def ext = project.extensions.findByType(OpenApiProcessorExtension)
-        def processor = ext.getProcessors().getting("any").get()
+        def processor = ext.processors.getByName("any")
 
         processor.targetDir == project.layout.buildDirectory.dir("openapi").get().toString()
     }
@@ -118,7 +119,7 @@ class ProcessorSpec extends Specification {
 
         then:
         def ext = project.extensions.findByType(OpenApiProcessorExtension)
-        def processor = ext.getProcessors().getting("any").get()
+        def processor = ext.processors.getByName("any")
 
         processor.targetDir == project.layout.buildDirectory.dir("openapi").get().toString()
     }
@@ -136,7 +137,7 @@ class ProcessorSpec extends Specification {
 
         then:
         def ext = project.extensions.findByType(OpenApiProcessorExtension)
-        def processor = ext.getProcessors().getting("any").get()
+        def processor = ext.processors.getByName("any")
 
         processor.targetDir == project.layout.buildDirectory.dir("openapi").get().toString()
     }
@@ -154,7 +155,7 @@ class ProcessorSpec extends Specification {
 
         then:
         def ext = project.extensions.findByType(OpenApiProcessorExtension)
-        def processor = ext.getProcessors().getting("any").get()
+        def processor = ext.processors.getByName("any")
 
         processor.other.mapping == project.layout.projectDirectory.file("src/api/mapping.yaml").toString()
     }

@@ -9,12 +9,13 @@ import groovy.lang.GString
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.Provider
+import javax.inject.Inject
 
 /**
  * represents an openapi-processor configured in [OpenApiProcessorExtension]
  */
 
-open class Processor(configName: String): ProcessorBase() {
+open class Processor @Inject constructor(configName: String): ProcessorBase() {
 
     companion object {
         const val API_PATH = "apiPath"

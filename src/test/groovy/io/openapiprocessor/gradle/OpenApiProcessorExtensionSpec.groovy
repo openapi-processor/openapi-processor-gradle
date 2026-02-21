@@ -9,6 +9,7 @@ import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
+@SuppressWarnings('ConfigurationAvoidance')
 class OpenApiProcessorExtensionSpec extends Specification {
 
     Project project
@@ -40,10 +41,10 @@ class OpenApiProcessorExtensionSpec extends Specification {
         }
 
         then:
-        ex.processors.get ().test.other.one == "a"
-        ex.processors.get ().test.other.two == "b"
-        ex.processors.get ().test2.other.one == "a2"
-        ex.processors.get ().test2.other.two == "b2"
+        ex.processors.getByName("test").other.one == "a"
+        ex.processors.getByName("test").other.two == "b"
+        ex.processors.getByName("test2").other.one == "a2"
+        ex.processors.getByName("test2").other.two == "b2"
     }
 
     void "creates processor from string" () {
@@ -53,7 +54,7 @@ class OpenApiProcessorExtensionSpec extends Specification {
         })
 
         then:
-        ex.processors.get().test.dependencies.first() == "/a processor"
+        ex.processors.getByName("test").dependencies.first() == "/a processor"
     }
 
     void "creates processor from file" () {
@@ -63,7 +64,7 @@ class OpenApiProcessorExtensionSpec extends Specification {
         }
 
         then:
-        ex.processors.get().test.dependencies.first().name == "processor"
+        ex.processors.getByName("test").dependencies.first().name == "processor"
     }
 
     void "converts processor properties to map via process()/prop() methods" () {
@@ -78,10 +79,10 @@ class OpenApiProcessorExtensionSpec extends Specification {
         }
 
         then:
-        ex.processors.get ().test.other.one == "a"
-        ex.processors.get ().test.other.two == "b"
-        ex.processors.get ().test2.other.one == "a2"
-        ex.processors.get ().test2.other.two == "b2"
+        ex.processors.getByName("test").other.one == "a"
+        ex.processors.getByName("test").other.two == "b"
+        ex.processors.getByName("test2").other.one == "a2"
+        ex.processors.getByName("test2").other.two == "b2"
     }
 
     void "set apiPath from GString" () {

@@ -7,10 +7,11 @@ package io.openapiprocessor.gradle
 
 import groovy.lang.GString
 import org.gradle.api.Action
+import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.provider.MapProperty
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import java.io.File
@@ -41,7 +42,7 @@ import java.io.File
  * }
  * </pre>
  */
-abstract class OpenApiProcessorExtension(private val project: Project): OpenApiProcessorExtensionBase() {
+abstract class OpenApiProcessorExtension(private val project: Project, objects: ObjectFactory): OpenApiProcessorExtensionBase() {
 
     /**
      * the path to the openapi yaml file. Used for all processors if not set in a nested processor
@@ -71,9 +72,10 @@ abstract class OpenApiProcessorExtension(private val project: Project): OpenApiP
      *  }
      * </pre>
      */
-    val processors: MapProperty<String, Processor> = project.objects.mapProperty(
-        String::class.java,
-        Processor::class.java)
+    val processors: NamedDomainObjectContainer<Processor> =
+        objects.domainObjectContainer(Processor::class.java) { name ->
+            objects.newInstance(Processor::class.java, name)
+        }
 
     init {
         checkUpdates.set("never")
@@ -93,9 +95,8 @@ abstract class OpenApiProcessorExtension(private val project: Project): OpenApiP
      * @return the new processor
      */
     fun process(name: String, action: Action<Processor>): Processor {
-        val processor = Processor(name)
+        val processor = processors.create(name)
         action.execute (processor)
-        processors.put (name, processor)
         return processor
     }
 

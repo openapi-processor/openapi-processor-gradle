@@ -38,17 +38,11 @@ class OpenApiProcessorExtensionBase {
 
         // expecting a nested processor configuration
         if (arg instanceof Closure) {
-            def processor = createProcessor(name)
+            def processor = this.processors.create(name)
             processor.with(arg)
-            processors.put(name, processor)
             return processor
         }
 
         throw new MissingMethodException(name, OpenApiProcessorExtension, args)
-    }
-
-    GroovyObject createProcessor(String name) {
-        return Class.forName("io.openapiprocessor.gradle.Processor")
-                .getDeclaredConstructor(String).newInstance(name) as GroovyObject
     }
 }
