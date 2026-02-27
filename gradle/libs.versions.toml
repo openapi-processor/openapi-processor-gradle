@@ -2,7 +2,7 @@
 project = "2026.1-SNAPSHOT"
 
 api = "2024.2"
-snakeyaml = "2.5"
+snakeyaml = "2.6"
 spock = "2.4-M6-groovy-4.0"
 bytebuddy = "1.18.5"
 
