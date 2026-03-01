@@ -33,7 +33,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #        SIGN_KEY: ${{ secrets.SIGN_KEY }}
 #        SIGN_PWD: ${{ secrets.SIGN_PWD }}
-        ORG_GRADLE_PROJECT_signKey: ${{ secrets.SIGN_KEY }}
+        ORG_GRADLE_PROJECT_signKey: |
+          ${{ secrets.SIGN_KEY }}
         ORG_GRADLE_PROJECT_signPwd: ${{ secrets.SIGN_PWD }}
         PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
