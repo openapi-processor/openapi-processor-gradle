@@ -1,5 +1,5 @@
 [versions]
-project = "2026.1-SNAPSHOT"
+project = "2026.2-SNAPSHOT"
 
 api = "2024.2"
 snakeyaml = "2.6"
