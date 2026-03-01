@@ -24,10 +24,10 @@ a Gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 [cols="3*",options="header"]
 |===
 | plugin version
-| minimum gradle version
-| minimum java version
+| minimum Gradle version
+| minimum Java version
 
-| 2025.x
+| 2026.x, 2025.x
 | 8.2+ with kotlin dsl +
 7.2+ with groovy dsl
 | 17
@@ -42,10 +42,10 @@ a Gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 |
 |===
 
-NOTE: In case the generated source should be formatted with google code format, it is necessary to configure a few xref:oap::jdk.adoc[additional jvm parameter] to make google code format work when running the processor with JDK 16+.
+NOTE: In case the generated source should be formatted with google code format, it is necessary to configure a few xref:oap::jdk.adoc[additional jvm parameters] to make google code format work when running the processor with JDK 16+.
 
 
-== gradle dsl
+== Gradle dsl
 
 An xref:spring:ROOT:index.adoc[openapi-processor-spring] spring specific description is available in xref:spring:ROOT:gradle.adoc[Gradle Integration].
 
@@ -53,16 +53,15 @@ The plugin adds a new configuration block `openapiProcessor` to the Gradle proje
 
 Apart from that there are only two options that are recognized inside the configuration block:
 
-* `apiPath`, which defines the path to the openapi YAML file. This is usually the same for all
-processors and placing it directly into the `openapiProcessor` block sets it for all processors.
+* `apiPath`, which defines the path to the openapi YAML file. This is usually the same for all processors and placing it directly into the `openapiProcessor` block sets it for all processors.
 
-* `checkUpdates`, which allows to enable a version check for the Gradle plugin itself and any processor that supports a version check. It can have one of 3 values:
+* `checkUpdates`, which allows enabling a version check for the Gradle plugin itself and any processor that supports a version check. It can have one of three values:
 
 ** `never`, this is the default and disables all update checks.
 ** `daily`, this will check once a day if there is a newer version available. The plugin remembers the last check by writing a timestamp to `build/openapiprocessor/<processor>.yaml`. Without that file the check will run, e.g. after a clean checkout or after running the `clean` task.
 ** `always`, this will check on any run of Gradle or a processor task if a newer version is available.
 
-To configure a processor, for example xref:spring:ROOT:index.adoc[openapi-processor-spring], place a `spring` configuration into the `openapiProcessor` block. The name of the configuration is used to create a Gradle task `process<Name>` to run the corresponding processor.
+To configure a processor, for example, xref:spring:ROOT:index.adoc[openapi-processor-spring], place a `spring` configuration into the `openapiProcessor` block. The name of the configuration is used to create a Gradle task `process<Name>` to run the corresponding processor.
 
 [tabs]
 ====
@@ -109,7 +108,7 @@ openapiProcessor {
 ====
 
 
-In case another processor (e.g. JSON) is required place its configuration into the `openapiProcessor` block in the same way:
+In case another processor (e.g., JSON) is required place its configuration into the `openapiProcessor` block in the same way:
 
 [tabs]
 ====
@@ -191,7 +190,7 @@ spring {
 ----
 ====
 +
-or like this to use an un-published processor:
+or like this to use an unpublished processor:
 +
 [tabs]
 ====
@@ -220,9 +219,9 @@ For example, the java generating processors depend on `openapi-processor-core`. 
 +
 [NOTE]
 ====
-To find 'SNAPSHOT' versions the plugin automatically adds the snapshot repository to the `repositories`.
+To find 'SNAPSHOT' versions, the plugin automatically adds the snapshot repository to the `repositories`.
 
-[.badge .badge-since]+since 2022.2+ In case you don't want this it is possible to disable adding the snapshot repository by adding `openapi-processor-gradle.snapshots = false` to `gradle.properties`).
+[.badge .badge-since]+since 2022.2+ In case you don't want this, it is possible to disable adding the snapshot repository by adding `openapi-processor-gradle.snapshots = false` to `gradle.properties`).
 ====
 +
 [tabs]
@@ -232,8 +231,8 @@ Kotlin::
 [source,kotlin]
 ----
 process("spring") {
-   processor("io.openapiprocessor:openapi-processor-core:2021.3-SNAPSHOT")
-   processor("io.openapiprocessor:openapi-processor-spring:2021.1")
+   processor("io.openapiprocessor:openapi-processor-core:2026.3-SNAPSHOT")
+   processor("io.openapiprocessor:openapi-processor-spring:2026.2")
 }
 ----
 Groovy::
@@ -241,8 +240,8 @@ Groovy::
 [source,groovy]
 ----
 spring {
-   processor 'io.openapiprocessor:openapi-processor-core:2021.3-SNAPSHOT'
-   processor 'io.openapiprocessor:openapi-processor-spring:2021.1'
+   processor 'io.openapiprocessor:openapi-processor-core:2026.3-SNAPSHOT'
+   processor 'io.openapiprocessor:openapi-processor-spring:2026.2'
 }
 ----
 ====
@@ -250,7 +249,7 @@ spring {
 
 * `targetDir` (mandatory): the target folder for the processor. The processor will write its output to this directory.
 
-* `prop(key, value)` or `prop(Map<String, ?>)` (optional): used to configure processor specific options. It just fills a map that is passed to the processor. It is not needed in a groovy dsl which automatically adds any unknown property to the processor options map.
+* `prop(key, value)` or `prop(Map<String, ?>)` (optional): used to configure processor-specific options. It just fills a map passed to the processor. It is unnecessary in a groovy dsl which automatically adds any unknown property to the processor options map.
 +
 [tabs]
 ====
@@ -272,7 +271,7 @@ spring {
 ----
 ====
 
-== gradle tasks
+== Gradle tasks
 
 The plugin creates a single Gradle task for each processor configuration that will run the corresponding processor. By default, the name gets derived from the name of the processor: `process<Name>`.
 
@@ -323,30 +322,12 @@ compileJava.dependsOn ('processSpring')
 ----
 ====
 
-==== using the task name
-
-The Gradle plugin creates the processing tasks inside an `afterEvaluate` block (because its name is configurable). To directly use its name, like in the example below, the configuration needs to be in an `afterEvaluate` block.
-
-[source,groovy]
-----
-// groovy
-tasks.register('prepareProcessing') {
-    doLast {
-        println 'preparing processing...'
-    }
-}
-
-afterEvaluate {
-    tasks.processSpring.dependsOn('prepareProcessing')
-}
-----
-
 [#_using_the_task_output]
 == using the task output
 
-In case the processor creates java sources it is necessary to compile them as part of the build process.
+In case the processor creates Java sources, it is necessary to compile them as part of the build process.
 
-To compile the java source files created by openapi-processor-spring add the `targetDir` of the processor to the java `sourceSets`.
+To compile the Java source files created by openapi-processor-spring, add the `targetDir` of the processor to the java `sourceSets`.
 
 There are two ways to configure it:
 
@@ -355,7 +336,7 @@ There are two ways to configure it:
 
 === by path string
 
-Using a path string it is simply added as an additional `srcDir`:
+Using a path string, it is simply added as an additional `srcDir`:
 
 [tabs]
 ====
@@ -430,6 +411,8 @@ sourceSets {
 
 A preferred approach to avoid `dependsOn` and to support lazy configuration is to use the task output to configure the additional `SourceSet` directories.
 
+NOTE: [.badge .badge-since]+since 2026.1+ In previous versions, it was necessary to use an `afterEvaluate` block to access the processor tasks. This is no longer necessary.
+
 [tabs]
 ====
 Kotlin::
@@ -446,25 +429,23 @@ sourceSets {
         }
     }
 
-    afterEvaluate {
-        // if the processor generates java files only, directly to targetDir
-        main {
-            java {
-                // add generated files
-                srcDir(tasks.named("processSpring"))
-            }
+    // if the processor generates java files only, directly to targetDir
+    main {
+        java {
+            // add generated files
+            srcDir(tasks.named("processSpring"))
         }
+    }
 
-        // if the processor generates java and resource files to the targetDir it is necessary to select the subfolder
-        main {
-            java {
-                // add generated files
-                srcDir(tasks.named<OpenApiProcessorTask>("processSpring").map { it.getTargetDir().dir("java") })
-            }
-            resources {
-                // add generated resources
-                srcDir(tasks.named<OpenApiProcessorTask>("processSpring").map { it.getTargetDir().dir("resources") })
-            }
+    // if the processor generates java and resource files to the targetDir it is necessary to select the subfolder
+    main {
+        java {
+            // add generated files
+            srcDir(tasks.named<OpenApiProcessorTask>("processSpring").map { it.getTargetDir().dir("java") })
+        }
+        resources {
+            // add generated resources
+            srcDir(tasks.named<OpenApiProcessorTask>("processSpring").map { it.getTargetDir().dir("resources") })
         }
     }
 }
@@ -481,11 +462,11 @@ sourceSets {
 
 //[.badge .badge-since]+since 2022.1+
 
-By default, the name of a `processor` configuration block is used to select the processor library. Each processor library has a name and the plugin tries to load the processor library with that name.
+By default, the name of a `processor` configuration block is used to select the processor library. Each processor library has a name, and the plugin tries to load the processor library with that name.
 
 This way it is not possible to process multiple distinct openapi descriptions with the same processor.
 
-To achieve this it is possible to use user selected names for the `processor` blocks and explicitly configure the processor name using `processorName()`:
+To achieve this, it is possible to use user selected names for the `processor` blocks and explicitly configure the processor name using `processorName()`:
 
 [tabs]
 ====
@@ -535,19 +516,18 @@ openapiProcessor {
 ----
 ====
 
-<1> user selected name for the configuration. It is used to create the task name (in this case `processApiOne` & `processApiTwo`).
+<1> a user selected name for the configuration. It is used to create the task name (in this case `processApiOne` & `processApiTwo`).
 
 <2> explicit name of the processor to use.
 
 
+The plugin configures the parent directory of the openapi file (i.e. `apiPath`) and the `targetDir` for the up-to-date check of each `processXX` gradle task. If the inputs and outputs are unchanged, Gradle will not re-run the task.
 
-The plugin configures the parent directory of the openapi file (i.e. `apiPath`) and the `targetDir` for the up-to-date check of each `processXX` gradle task. If the inputs and outputs are unchanged Gradle will not re-run the task.
-
-To keep this working and to avoid unnecessary re-runs of the processor tasks it is recommended to use distinct folders for each api file.
+To keep this working and to avoid unnecessary re-runs of the processor tasks, it is recommended to use distinct folders for each api file.
 
 == using plugin snapshots
 
-Sometimes it is useful to try a special plugin version instead of the published plugin from the plugin portal. For example to try a snapshot or test version of the plugin.
+Sometimes it is useful to try a special plugin version instead of the published plugin from the plugin portal. For example, to try a snapshot or test version of the plugin.
 
 This is possible by configuring the repositories checked for plugins using a `pluginManagement` block in `settings.gradle` (this must be at the top of the file). The example below adds the snapshot repository of the Gradle plugin.
 
