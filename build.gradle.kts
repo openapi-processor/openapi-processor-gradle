@@ -95,7 +95,7 @@ gradlePlugin {
         create("processorPlugin") {
             id = "io.openapiprocessor.openapi-processor"
             displayName = "Gradle openapi-processor plugin"
-            description = "plugin to run openapi-processor-*, e.g. openapi-processor-spring (requires gradle 7.2+)"
+            description = "plugin to run openapi-processor-*, e.g. openapi-processor-spring (requires gradle 8.7+)"
             tags.set(listOf("openapi", "openapi-processor"))
             implementationClass = "io.openapiprocessor.gradle.OpenApiProcessorPlugin"
         }

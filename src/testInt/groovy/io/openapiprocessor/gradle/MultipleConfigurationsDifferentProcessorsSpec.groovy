@@ -63,20 +63,6 @@ class MultipleConfigurationsDifferentProcessorsSpec extends PluginSpec {
     }
 
     @Unroll
-    void "process task runs processor from gradle 7 (#gradleVersion)" () {
-        when:
-        def result = build(gradleVersion)
-
-        then:
-        assertResult (result)
-
-        where:
-        gradleVersion << Gradle.VERSIONS_7
-                .findAll { it.groovy }
-                .collect { it.version }
-    }
-
-    @Unroll
     void "process task runs processor from gradle 8 (#gradleVersion)" () {
         when:
         def result = build(gradleVersion)

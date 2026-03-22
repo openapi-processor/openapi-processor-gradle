@@ -11,9 +11,11 @@ import io.openapiprocessor.gradle.version.GitHubVersionCheck
 import io.openapiprocessor.gradle.version.GitHubVersionProvider
 import io.openapiprocessor.gradle.version.VersionCheck
 import org.gradle.api.Action
+import org.gradle.api.NamedDomainObjectProvider
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Dependency
+import org.gradle.api.artifacts.ResolvableConfiguration
+import org.gradle.util.GradleVersion
 import java.io.File
 
 /**
@@ -36,7 +38,7 @@ class OpenApiProcessorPlugin: Plugin<Project> {
 
     private fun addOpenApiProcessorRepository (project: Project) {
         val snapshots = project.findProperty ("openapi-processor-gradle.snapshots")
-        if (snapshots == null || snapshots != "true") {
+        if ((snapshots == null) || (snapshots != "true")) {
             project.logger.debug("openapi-processor: snapshot repository disabled")
             return
         }
@@ -65,16 +67,31 @@ class OpenApiProcessorPlugin: Plugin<Project> {
     /**
      * Create a 'process{ProcessorName}' task for each configured processor.
      */
+    @Suppress("UnstableApiUsage")
     fun createProcessingTasks(project: Project, extension: OpenApiProcessorExtension) {
         extension.processors.configureEach(
             object : Action<Processor> {
                 override fun execute(processor: Processor) {
                     val name = "process${processor.name.replaceFirstChar { it.uppercase() }}"
 
+                    val scope = project.configurations.dependencyScope("${processor.name}Scope") {
+                        fromDependencyCollector(processor.dependencies.process)
+                    }
+
+                    project.dependencies.add(
+                        scope.name,
+                        "io.openapiprocessor:openapi-processor-api:${Versions.api}")
+
+                    val resolvable = project.configurations.resolvable("${processor.name}Classpath") {
+                            extendsFrom(scope.get())
+                            isCanBeResolved = true
+                            isCanBeConsumed = false
+                        }
+
                     project.tasks.register(
                         name,
                         OpenApiProcessorTask::class.java,
-                        createTaskBuilderAction(name, processor, extension)
+                        createTaskBuilderAction(processor, extension, resolvable)
                     )
                 }
             })
@@ -83,8 +100,12 @@ class OpenApiProcessorPlugin: Plugin<Project> {
     /**
      * Creates an Action that configures a 'process{ProcessorName}' task from its configuration.
      */
-    private fun createTaskBuilderAction(name: String, processor: Processor, extension: OpenApiProcessorExtension):
-        Action<OpenApiProcessorTask> {
+    @Suppress("UnstableApiUsage")
+    private fun createTaskBuilderAction(
+        processor: Processor,
+        extension: OpenApiProcessorExtension,
+        processorClasspath: NamedDomainObjectProvider<ResolvableConfiguration>
+    ): Action<OpenApiProcessorTask> {
 
         return object: Action<OpenApiProcessorTask> {
             // copy common api path to openapi-processor props if not set
@@ -121,32 +142,12 @@ class OpenApiProcessorPlugin: Plugin<Project> {
                 task.group = "openapi processor"
                 task.description = "process openapi with openapi-processor-${processor.name}"
 
-                copyApiPath (task)
+                copyApiPath(task)
                 task.getApiDir().set(project.layout.projectDirectory.dir(getInputDirectory()))
                 task.getTargetDir().set(project.layout.projectDirectory.dir(getOutputDirectory()))
                 processor.getMapping()?.let { task.getMapping().set(project.file(it)) }
 
-                val handler = project.dependencies
-                val dependencies = ArrayList<Dependency>()
-
-                if (processor.dependencies.isEmpty()) {
-                    task.logger.warn ("'${EXTENSION_NAME_DEFAULT}.${name}.processor' not set!")
-                }
-
-                dependencies.add (handler.create("io.openapiprocessor:openapi-processor-api:${Versions.api}"))
-
-                processor.dependencies.forEach {
-                    dependencies.add (handler.create (it))
-                }
-
-                val deps = dependencies.toTypedArray()
-                val cfg = project.configurations.detachedConfiguration(*deps)
-
-                cfg.isCanBeResolved = true
-                cfg.isCanBeConsumed = false
-                cfg.isTransitive = true
-                cfg.description = "the dependencies of the process${name.replaceFirstChar { it.uppercase() }} task."
-                task.getDependencies().from (cfg)
+                task.getDependencies().from(processorClasspath)
             }
         }
     }
@@ -157,11 +158,12 @@ class OpenApiProcessorPlugin: Plugin<Project> {
 
     companion object {
         private fun isSupportedGradleVersion(project: Project): Boolean {
-            val version: String = project.gradle.gradleVersion
+            val currentVersion = GradleVersion.current()
+            val minVersion = GradleVersion.version("8.7")
 
-            if (version < "7.0") {
-                project.logger.error ("the current gradle version is $version")
-                project.logger.error ("openapi-processor-gradle requires gradle 7.0+")
+            if (currentVersion < minVersion) {
+                project.logger.error ("the current gradle version is $currentVersion")
+                project.logger.error ("openapi-processor-gradle requires gradle $minVersion+")
                 return false
             }
 

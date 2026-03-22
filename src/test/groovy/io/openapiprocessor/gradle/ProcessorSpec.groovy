@@ -5,14 +5,17 @@
 
 package io.openapiprocessor.gradle
 
+import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
 @SuppressWarnings('ConfigurationAvoidance')
 class ProcessorSpec extends Specification {
 
+    Project project = ProjectBuilder.builder().build()
+
     void "gets & sets named props" () {
-        def processor = new Processor('test')
+        def processor = new Processor('test', project.objects)
 
         when:
         processor."${prop}" (value)
@@ -27,7 +30,7 @@ class ProcessorSpec extends Specification {
     }
 
     void "maps unknown properties via methodMissing" () {
-        def processor = new Processor('test')
+        def processor = new Processor('test', project.objects)
 
         when:
         processor.unknown ('foo')
@@ -37,7 +40,7 @@ class ProcessorSpec extends Specification {
     }
 
     void "maps nested properties via methodMissing" () {
-        def processor = new Processor('test')
+        def processor = new Processor('test', project.objects)
 
         when:
         processor.test {
@@ -57,7 +60,7 @@ class ProcessorSpec extends Specification {
     }
 
     void "maps unknown properties via prop()" () {
-        def processor = new Processor('test')
+        def processor = new Processor('test', project.objects)
 
         when:
         processor.prop ('foo', "any")
@@ -69,7 +72,7 @@ class ProcessorSpec extends Specification {
     }
 
     void "maps nested properties via prop()" () {
-        def processor = new Processor('test')
+        def processor = new Processor('test', project.objects)
 
         when:
         processor.prop("test", [
@@ -89,7 +92,6 @@ class ProcessorSpec extends Specification {
     }
 
     void "accept targetDir when given as Directory" () {
-        def project = ProjectBuilder.builder().build()
         project.pluginManager.apply(OpenApiProcessorPlugin)
 
         when:
@@ -107,7 +109,6 @@ class ProcessorSpec extends Specification {
     }
 
     void "accept targetDir when given as Provider<Directory>" () {
-        def project = ProjectBuilder.builder().build()
         project.pluginManager.apply(OpenApiProcessorPlugin)
 
         when:
@@ -125,7 +126,6 @@ class ProcessorSpec extends Specification {
     }
 
     void "accept targetDir assignment with Provider<Directory>" () {
-        def project = ProjectBuilder.builder().build()
         project.pluginManager.apply(OpenApiProcessorPlugin)
 
         when:
@@ -143,7 +143,6 @@ class ProcessorSpec extends Specification {
     }
 
     void "accept mapping property when given as RegularFile" () {
-        def project = ProjectBuilder.builder().build()
         project.pluginManager.apply(OpenApiProcessorPlugin)
 
         when:

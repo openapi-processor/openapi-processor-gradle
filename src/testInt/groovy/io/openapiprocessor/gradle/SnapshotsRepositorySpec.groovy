@@ -31,7 +31,7 @@ class SnapshotsRepositorySpec extends PluginSpec {
 
     void "does not add snapshot repository if enabled or disabled" () {
         when:
-        def result = build("8.5", """\
+        def result = build("8.7", """\
             """.stripIndent())
 
         then:
@@ -40,7 +40,7 @@ class SnapshotsRepositorySpec extends PluginSpec {
 
     void "does not add snapshot repository if disabled" () {
         when:
-        def result = build("8.5", """\
+        def result = build("8.7", """\
             openapi-processor-gradle.snapshots = false
             """.stripIndent())
 
@@ -50,7 +50,7 @@ class SnapshotsRepositorySpec extends PluginSpec {
 
     void "adds snapshot repository" () {
         when:
-        def result = build("8.5", """\
+        def result = build("8.7", """\
             openapi-processor-gradle.snapshots = true
             """.stripIndent())
 

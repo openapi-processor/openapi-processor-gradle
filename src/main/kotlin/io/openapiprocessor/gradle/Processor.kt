@@ -6,30 +6,47 @@
 package io.openapiprocessor.gradle
 
 import groovy.lang.GString
+import org.gradle.api.Action
+import org.gradle.api.artifacts.Dependency
+import org.gradle.api.artifacts.dsl.DependencyCollector
 import org.gradle.api.file.Directory
+import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.Nested
+import java.io.File
 import javax.inject.Inject
 
 /**
  * represents an openapi-processor configured in [OpenApiProcessorExtension]
  */
 
-open class Processor @Inject constructor(configName: String): ProcessorBase() {
+open class Processor @Inject constructor(configName: String, val objects: ObjectFactory): ProcessorBase() {
 
     companion object {
         const val API_PATH = "apiPath"
         const val TARGET_DIR = "targetDir"
     }
 
+    interface ProcessorDependencies {
+        val process: DependencyCollector
+    }
+
     var name: String
     val config: String
     val other: MutableMap<String, Any> = mutableMapOf()
-    val dependencies: MutableCollection<Any> = mutableListOf()
 
     init {
         name = configName
         config = configName
+    }
+
+    @get:Nested
+    val dependencies: ProcessorDependencies = objects.newInstance(ProcessorDependencies::class.java)
+
+    fun dependencies(action: Action<in ProcessorDependencies>) {
+        action.execute(dependencies)
     }
 
     fun processorName(processorName: String) {
@@ -40,8 +57,17 @@ open class Processor @Inject constructor(configName: String): ProcessorBase() {
         this.name = processorName.toString()
     }
 
+    //@Deprecated("use dependencies { process(dependency) } instead")
     fun processor(dependency: Any) {
-        dependencies.add(dependency)
+        @Suppress("UNCHECKED_CAST")
+        when (dependency) {
+            is CharSequence -> dependencies.process.add(dependency)
+            is File -> dependencies.process.add(objects.fileCollection().from(dependency))
+            is FileCollection -> dependencies.process.add(dependency)
+            is Dependency -> dependencies.process.add(dependency)
+            is Provider<*> -> dependencies.process.add(dependency as Provider<out Dependency>)
+            else -> dependencies.process.add(dependency.toString())
+        }
     }
 
     fun getTargetDir(): String {
@@ -77,7 +103,7 @@ open class Processor @Inject constructor(configName: String): ProcessorBase() {
     }
 
     /**
-     * allow to assign targetDir like
+     * allow assigning targetDir like
      *
      * {@code targetDir = layout.buildDirectory.dir("openapi")}
      *

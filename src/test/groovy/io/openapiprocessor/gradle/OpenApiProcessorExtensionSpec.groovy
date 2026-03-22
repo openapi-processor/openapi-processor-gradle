@@ -6,6 +6,7 @@
 package io.openapiprocessor.gradle
 
 import org.gradle.api.Project
+import org.gradle.api.artifacts.FileCollectionDependency
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
@@ -50,21 +51,32 @@ class OpenApiProcessorExtensionSpec extends Specification {
     void "creates processor from string" () {
         when:
         ex.process("test", {
-            processor("/a processor")
+            processor("io.openapiprocessor:processor:1.0.0")
         })
 
         then:
-        ex.processors.getByName("test").dependencies.first() == "/a processor"
+        def processor = ex.processors.getByName("test")
+        def dependencies = processor.dependencies.process.dependencies.get()
+            .collect {
+                return "${it.group}:${it.name}:${it.version}" as String
+            }
+
+        dependencies.first() == "io.openapiprocessor:processor:1.0.0"
     }
 
     void "creates processor from file" () {
         when:
         ex.process("test") {
-            processor(project.file("processor"))
+            processor(project.file("processor.jar"))
         }
 
         then:
-        ex.processors.getByName("test").dependencies.first().name == "processor"
+        def processor = ex.processors.getByName("test")
+        def dependencies = processor.dependencies.process.dependencies.get()
+            .collect {(it as FileCollectionDependency).files.files }
+            .flatten() as List<File>
+
+        dependencies.first().name.endsWith("processor.jar")
     }
 
     void "converts processor properties to map via process()/prop() methods" () {
@@ -117,5 +129,21 @@ class OpenApiProcessorExtensionSpec extends Specification {
 
         then:
         ex.api.get().asFile == project.file("src/api/openapi.yaml")
+    }
+
+    void "add processor specific dependency"() {
+        when:
+        ex.process ("test") {
+            dependencies {
+                process("com.google.googlejavaformat:google-java-format:1.24.0")
+            }
+        }
+
+        then:
+        def config = project.configurations.getByName("testScope")
+        def dependencies = config.dependencies.collect { "${it.group}:${it.name}:${it.version}" as String }
+
+        dependencies.contains("io.openapiprocessor:openapi-processor-api:${Versions.api}" as String)
+        dependencies.contains("com.google.googlejavaformat:google-java-format:1.24.0")
     }
 }
