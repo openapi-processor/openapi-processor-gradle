@@ -27,7 +27,11 @@ a Gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 | minimum Gradle version
 | minimum Java version
 
-| 2026.x, 2025.x
+| 2026.2+
+| 8.7+
+| 17
+
+| 2026.1, 2025.x
 | 8.2+ with kotlin dsl +
 7.2+ with groovy dsl
 | 17
@@ -47,7 +51,7 @@ NOTE: In case the generated source should be formatted with google code format, 
 
 == Gradle dsl
 
-An xref:spring:ROOT:index.adoc[openapi-processor-spring] spring specific description is available in xref:spring:ROOT:gradle.adoc[Gradle Integration].
+// An xref:spring:ROOT:index.adoc[openapi-processor-spring] spring specific description is available in xref:spring:ROOT:gradle.adoc[Gradle Integration].
 
 The plugin adds a new configuration block `openapiProcessor` to the Gradle project. Each processor is configurable by a nested configuration block.
 
@@ -164,9 +168,13 @@ openapiProcessor {
 
 The configuration of a single processor has a few pre-defined properties, and it can have any number of additional parameters defined by the processor. All options will be passed in a map to the processor with the option name as the key.
 
-* `processor` (mandatory): the `processor` dependency. Uses the same dependency notations allowed in the gradle `dependencies` block.
+* `dependencies { process(...) }` (mandatory, [.badge .badge-since]+since 2025.1+): the processor dependency(ies).
++
+This is a Gradle custom `dependencies` block. It accepts all dependency notations that the standard Gradle `dependencies` block accepts.
 +
 The processor library is configured here to avoid any side effect on the build dependencies of the project.
++
+NOTE: This replaces the obsolete dependency configuration using `processor` (which still works). The new configuration is using standard Gradle APIs.
 +
 Example using the preferred shortcut nation:
 +
@@ -177,7 +185,9 @@ Kotlin::
 [source,kotlin]
 ----
 process("spring") {
-    processor("io.openapiprocessor:openapi-processor-spring:<version>")
+    dependencies {
+        process("io.openapiprocessor:openapi-processor-spring:<version>")
+    }
 }
 ----
 Groovy::
@@ -185,35 +195,14 @@ Groovy::
 [source,groovy]
 ----
 spring {
-    processor 'io.openapiprocessor:openapi-processor-spring:<version>'
+    dependencies {
+        processor 'io.openapiprocessor:openapi-processor-spring:<version>'
+    }
 }
 ----
 ====
 +
-or like this to use an unpublished processor:
-+
-[tabs]
-====
-Kotlin::
-+
-[source,kotlin]
-----
-process("spring") {
-    processor(files("... path to processor jar"))
-}
-----
-Groovy::
-+
-[source,groovy]
-----
-spring {
-    processor files('... path to processor jar')
-}
-----
-====
-
-+
-It is possible to use multiple `processor` entries to control the dependencies of an openapi-processor.
+It is possible to use multiple `process` entries to control the dependencies of an openapi-processor.
 +
 For example, the java generating processors depend on `openapi-processor-core`. The `core` library provides most of the logic of a processor, and it is usually enough to update the `core` library to get bugfixes or new features.
 +
@@ -221,7 +210,7 @@ For example, the java generating processors depend on `openapi-processor-core`. 
 ====
 To find 'SNAPSHOT' versions, the plugin automatically adds the snapshot repository to the `repositories`.
 
-[.badge .badge-since]+since 2022.2+ In case you don't want this, it is possible to disable adding the snapshot repository by adding `openapi-processor-gradle.snapshots = false` to `gradle.properties`).
+In case you don't want this, it is possible to disable adding the snapshot repository by adding `openapi-processor-gradle.snapshots = false` to `gradle.properties`).
 ====
 +
 [tabs]
@@ -231,8 +220,10 @@ Kotlin::
 [source,kotlin]
 ----
 process("spring") {
-   processor("io.openapiprocessor:openapi-processor-core:2026.3-SNAPSHOT")
-   processor("io.openapiprocessor:openapi-processor-spring:2026.2")
+    dependencies {
+        processor("io.openapiprocessor:openapi-processor-spring:2026.2")
+        processor("io.openapiprocessor:openapi-processor-core:2026.2.1")
+    }
 }
 ----
 Groovy::
@@ -240,11 +231,18 @@ Groovy::
 [source,groovy]
 ----
 spring {
-   processor 'io.openapiprocessor:openapi-processor-core:2026.3-SNAPSHOT'
-   processor 'io.openapiprocessor:openapi-processor-spring:2026.2'
+    dependencies {
+       processor 'io.openapiprocessor:openapi-processor-spring:2026.2'
+       processor 'io.openapiprocessor:openapi-processor-core:2026.2.1'
+    }
 }
 ----
 ====
+
+* `processor` (obsolete): the `processor` dependency. Uses the same dependency notations allowed in the gradle `dependencies` block.
++
+NOTE: it does still work but will go away in a future version in favor of the configuration in the processor specific `dependencies` block.
+
 * `apiPath` (optional): the path to the open api YAML file. If set inside a processor configuration it overrides the parent `apiPath`.
 
 * `targetDir` (mandatory): the target folder for the processor. The processor will write its output to this directory.
