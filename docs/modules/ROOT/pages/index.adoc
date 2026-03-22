@@ -196,7 +196,7 @@ Groovy::
 ----
 spring {
     dependencies {
-        processor 'io.openapiprocessor:openapi-processor-spring:<version>'
+        process 'io.openapiprocessor:openapi-processor-spring:<version>'
     }
 }
 ----
