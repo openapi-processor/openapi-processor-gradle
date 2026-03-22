@@ -26,14 +26,14 @@ import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
 
 /**
- * processor task. Uses a worker executor to run the processor with an isolated "openapiProcessor"
+ * "processor" task. Uses a worker executor to run the processor with an isolated "openapiProcessor"
  * configuration classpath.
  */
 @CacheableTask
 abstract class OpenApiProcessorTask: DefaultTask() {
 
     /**
-     * Source directory (i.e. parent) of the openapi.yaml input file. Used by Gradle for the up-to-date check.
+     * Source directory (i.e., parent) of the openapi.yaml input file. Used by Gradle for the up-to-date check.
      *
      * @return parent directory of the openapi.yaml
      */

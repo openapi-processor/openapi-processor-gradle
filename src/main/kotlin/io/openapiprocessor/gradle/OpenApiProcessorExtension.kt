@@ -24,14 +24,18 @@ import java.io.File
  *     apiPath "...."
  *
  *     spring {
- *       processor "...:...:..."
+ *       dependencies {
+ *           process "...:...:..."
+ *       }
  *       targetDir "..."
  *
  *       ... other
  *     }
  *
  *     json {
- *       processor "...:...:..."
+ *       dependencies {
+ *           process "...:...:..."
+ *       }
  *       targetDir "..."
  *
  *       ... other
