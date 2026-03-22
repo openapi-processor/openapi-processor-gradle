@@ -27,11 +27,11 @@ a Gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 | minimum Gradle version
 | minimum Java version
 
-| 2026.x
+| 2026.2+
 | 8.7+
 | 17
 
-| 2025.x
+| 2026.1, 2025.x
 | 8.2+ with kotlin dsl +
 7.2+ with groovy dsl
 | 17
