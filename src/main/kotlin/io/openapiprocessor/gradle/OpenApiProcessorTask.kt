@@ -11,12 +11,15 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.workers.WorkerExecutor
 
@@ -26,6 +29,7 @@ import javax.inject.Inject
  * processor task. Uses a worker executor to run the processor with an isolated "openapiProcessor"
  * configuration classpath.
  */
+@CacheableTask
 abstract class OpenApiProcessorTask: DefaultTask() {
 
     /**
@@ -34,6 +38,7 @@ abstract class OpenApiProcessorTask: DefaultTask() {
      * @return parent directory of the openapi.yaml
      */
     @InputDirectory
+    @PathSensitive(PathSensitivity.ABSOLUTE)
     abstract fun getApiDir(): DirectoryProperty
 
     /**
@@ -43,6 +48,7 @@ abstract class OpenApiProcessorTask: DefaultTask() {
      */
     @Optional
     @InputFile
+    @PathSensitive(PathSensitivity.ABSOLUTE)
     abstract fun getMapping(): RegularFileProperty
 
     /**
