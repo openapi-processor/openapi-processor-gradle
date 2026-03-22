@@ -27,11 +27,11 @@ a Gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 | minimum Gradle version
 | minimum Java version
 
-| 2026.2+
+| 2026.x
 | 8.7+
 | 17
 
-| 2026.1, 2025.x
+| 2025.x
 | 8.2+ with kotlin dsl +
 7.2+ with groovy dsl
 | 17
@@ -577,7 +577,9 @@ openapiProcessor {
     process("spring") {
         // the openapi-processor-spring dependency (mandatory)
         //
-        processor("io.openapiprocessor:openapi-processor-spring:<version>")
+        dependencies {
+             process("io.openapiprocessor:openapi-processor-spring:<version>")
+        }
 
         // setting api path inside a processor configuration overrides the one at the top.
         //
@@ -605,7 +607,9 @@ openapiProcessor {
     process("json") {
         // the openapi-processor-json dependency (mandatory)
         //
-        processor("'io.openapiprocessor:openapi-processor-json:<version>")
+        dependencies {
+            process("'io.openapiprocessor:openapi-processor-json:<version>")
+        }
 
         // the destination folder for the JSON file. (mandatory)
         //targetDir("${buildDir}/json")
@@ -632,7 +636,9 @@ openapiProcessor {
     spring {
         // the openapi-processor-spring dependency (mandatory)
         //
-        processor 'io.openapiprocessor:openapi-processor-spring:<version>'
+        dependencies {
+            process 'io.openapiprocessor:openapi-processor-spring:<version>'
+        }
 
         // setting api path inside a processor configuration overrides the one at the top.
         //
@@ -658,7 +664,9 @@ openapiProcessor {
     json {
         // the openapi-processor-json dependency (mandatory)
         //
-        processor 'io.openapiprocessor:openapi-processor-json:<version>'
+        dependencies {
+            processor 'io.openapiprocessor:openapi-processor-json:<version>'
+        }
 
         // the destination folder for the json file. (mandatory)
         //targetDir "${buildDir}/json"
@@ -684,13 +692,19 @@ openapiProcessor {
     apiPath(layout.projectDirectory.file("src/api/openapi.yaml"))
 
     process("spring") {
-        processor("io.openapiprocessor:openapi-processor-spring:<version>")
+        dependencies {
+            process("io.openapiprocessor:openapi-processor-spring:<version>")
+        }
+
         targetDir(layout.buildDirectory.dir("openapi"))
         prop("mapping", layout.projectDirectory.file("src/api/mapping.yaml"))
     }
 
     process("json") {
-        processor("io.openapiprocessor:openapi-processor-json:<version>")
+        dependencies {
+            process("io.openapiprocessor:openapi-processor-json:<version>")
+        }
+
         targetDir(layout.buildDirectory.dir("json"))
     }
 }
@@ -705,13 +719,19 @@ openapiProcessor {
     apiPath layout.projectDirectory.file("src/api/openapi.yaml")
 
     spring {
-        processor "io.openapiprocessor:openapi-processor-spring:<version>"
+        dependencies {
+            process "io.openapiprocessor:openapi-processor-spring:<version>"
+        }
+
         targetDir layout.buildDirectory.dir("openapi")
         mapping layout.projectDirectory.file("src/api/mapping.yaml")
     }
 
     json {
-        processor "io.openapiprocessor:openapi-processor-json:<version>"
+        dependencies {
+            process "io.openapiprocessor:openapi-processor-json:<version>"
+        }
+
         targetDir layout.buildDirectory.dir("json")
     }
 }
