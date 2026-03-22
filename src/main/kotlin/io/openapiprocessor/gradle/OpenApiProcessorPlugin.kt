@@ -136,6 +136,7 @@ class OpenApiProcessorPlugin: Plugin<Project> {
 
                 task.getRootDir().set(project.rootDir.absolutePath)
                 task.getCheckUpdates().set(extension.checkUpdates)
+                task.getLogClasspath().set(extension.logClasspath)
                 task.getProcessorName().set(processor.name)
                 task.getProcessorProps().set(processor.other)
 

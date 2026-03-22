@@ -39,6 +39,7 @@ import java.io.File
  *     ...
  *
  *     checkUpdates "never"|"daily"|"always"
+ *     logClasspath true|false
  * }
  * </pre>
  */
@@ -54,6 +55,11 @@ abstract class OpenApiProcessorExtension(project: Project, objects: ObjectFactor
      * Check automatically for updates. Can be "never"|"daily"|"always". Default is "never".
      */
     val checkUpdates: Property<String> = project.objects.property(String::class.java)
+
+    /**
+     * Log the classpath of a processor task. Default is false.
+     */
+    val logClasspath: Property<Boolean> = project.objects.property(Boolean::class.java)
 
     /**
      * properties of the nested processor configurations by processor name, e.g.
@@ -79,6 +85,7 @@ abstract class OpenApiProcessorExtension(project: Project, objects: ObjectFactor
 
     init {
         checkUpdates.set("never")
+        logClasspath.set(false)
     }
 
     /**

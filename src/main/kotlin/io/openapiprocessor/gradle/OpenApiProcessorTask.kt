@@ -87,6 +87,9 @@ abstract class OpenApiProcessorTask: DefaultTask() {
     abstract fun getCheckUpdates(): Property<String>
 
     @Internal
+    abstract fun getLogClasspath(): Property<Boolean>
+
+    @Internal
     abstract fun getRootDir(): Property<String>
 
     @Inject
@@ -97,6 +100,13 @@ abstract class OpenApiProcessorTask: DefaultTask() {
      */
     @TaskAction
     fun runProcessor() {
+        if (getLogClasspath().get()) {
+            logger.lifecycle("classpath of processor ${getProcessorName().get()}:")
+            getDependencies().files.forEach { file ->
+                logger.lifecycle("  - ${file.name}")
+            }
+        }
+
         val theRootDir = getRootDir()
         val theCheckUpdates = getCheckUpdates()
         val theProcessorName = getProcessorName()
