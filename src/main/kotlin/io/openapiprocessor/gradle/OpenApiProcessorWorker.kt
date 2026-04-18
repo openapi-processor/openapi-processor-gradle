@@ -120,7 +120,7 @@ abstract class OpenApiProcessorWorker: WorkAction<OpenApiProcessorWorkParameters
 
     companion object {
         private fun waitForLogging () {
-            // without waiting gradle does not reliably log a processor error/exception.
+            // without waiting, gradle does not reliably log a processor error/exception.
             try {
                 Thread.sleep (1000)
             } catch (e: InterruptedException) {
