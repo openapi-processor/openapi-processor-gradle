@@ -46,7 +46,11 @@ a Gradle plugin based on the link:{oap-api}[openapi-processor-api] to handle any
 |
 |===
 
-NOTE: In case the generated source should be formatted with google code format, it is necessary to configure a few xref:oap::jdk.adoc[additional jvm parameters] to make google code format work when running the processor with JDK 16+.
+NOTE: In case the generated source should be formatted with https://github.com/google/google-java-format[google-java-format], it is necessary to configure a few xref:oap::jdk.adoc[additional jvm parameters] to make google code format work when running the processor with JDK 16+.
+ +
+ +
+ An alternative is to use the eclipse formatter that does not need additional jvm parameters.
+
 
 
 == Gradle dsl
