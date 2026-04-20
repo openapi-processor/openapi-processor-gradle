@@ -15,7 +15,32 @@ on:
 
 jobs:
 
+  check-publish:
+    name: check publish
+    runs-on: ubuntu-latest
+    outputs:
+      BUILD_VERSION: ${{ env.BUILD_VERSION }}
+      BUILD_SNAPSHOT: ${{ env.BUILD_SNAPSHOT }}
+      BUILD_PUBLISH: ${{ env.BUILD_PUBLISH }}
+
+    steps:
+      - name: get version
+        id: get-version
+        uses: openapi-processor/openapi-processor-base/.github/actions/version@main
+        with:
+          version-file: 'gradle/libs.versions.toml'
+          version-path: 'versions.project'
+
+      - name: set version outputs
+        shell: bash
+        run: |
+          echo BUILD_VERSION="${{steps.get-version.outputs.version}}" >> $GITHUB_ENV
+          echo BUILD_SNAPSHOT="${{steps.get-version.outputs.snapshot}}" >> $GITHUB_ENV
+          echo BUILD_PUBLISH="${{steps.get-version.outputs.publish}}" >> $GITHUB_ENV
+          cat $GITHUB_ENV
+
   build:
+    name: build & test
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +52,7 @@ jobs:
         distribution: 'temurin'
         java-version: 17
 
-    - name: build & publish (sonatype)
+    - name: build
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ORG_GRADLE_PROJECT_signKey: ${{ secrets.SIGN_KEY }}
@@ -36,22 +61,12 @@ jobs:
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
       run: ./gradlew check --stacktrace
 
-  check-publish:
-    needs: [build]
-    name: check publish
-
-    runs-on: ubuntu-latest
-    if: >-
-      github.actor != 'dependabot[bot]' &&
-      github.actor == 'hauner' && contains(needs.version.outputs.BUILD_VERSION, 'SNAPSHOT')
-
-    steps:
-      - run: echo "should publish ..."
-
-
   publish:
-    needs: [check-publish]
+    needs: [check-publish, build]
+    name: publish (maven central)
+
     runs-on: ubuntu-latest
+    if: needs.check-publish.outputs.BUILD_PUBLISH == 'true'
 
     steps:
     - uses: actions/checkout@v6
