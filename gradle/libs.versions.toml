@@ -7,7 +7,7 @@ spock = "2.4-M6-groovy-4.0"
 bytebuddy = "1.18.8"
 
 # plugins
-updates = "0.53.0"
+updates = "0.54.0"
 build-plugins = "2026.3"
 pubplug = "2.1.1"
 
