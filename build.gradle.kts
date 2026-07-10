@@ -32,11 +32,11 @@ java {
 
 testing {
     suites {
-        val test by getting(JvmTestSuite::class) {
+        val test = getByName<JvmTestSuite>("test") {
             useJUnitJupiter()
         }
 
-        val testInt by registering(JvmTestSuite::class) {
+        val testInt = register<JvmTestSuite>("testInt") {
             sources {
                 java {
                     setSrcDirs(listOf("src/testInt/groovy"))
