@@ -23,4 +23,4 @@ pubplug = { id = "com.gradle.plugin-publish", version.ref = "pubplug" }
 updates = { id = "com.github.ben-manes.versions", version.ref = "updates" }
 publish = { id = "io.openapiprocessor.build.plugin.publish", version.ref = "build-plugins" }
 versions = { id = "io.openapiprocessor.build.plugin.create-versions", version.ref = "build-plugins" }
-tasktree = {id = "com.dorongold.task-tree", version = "4.0.1" }
+tasktree = {id = "com.dorongold.task-tree", version = "4.0.2" }
