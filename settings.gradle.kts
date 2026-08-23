@@ -34,6 +34,10 @@ dependencyResolutionManagement {
     }
 }
 
+plugins {
+  id("io.github.ben-manes.versions.settings") version "0.61.0"
+}
+
 include("processor-one")
 include("processor-two")
 include("processor-v1")
