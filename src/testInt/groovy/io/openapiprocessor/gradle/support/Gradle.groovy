@@ -17,7 +17,7 @@ class Gradle {
     }
 
     static List<Version> VERSIONS_9 = [
-        version('9.9.1', true, true),
+        version('9.9.2', true, true),
         version('9.8.2', true, true),
         version('9.7.1', true, true),
         version('9.6.1', true, true),
